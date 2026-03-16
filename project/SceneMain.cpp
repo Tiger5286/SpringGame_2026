@@ -34,8 +34,8 @@ void SceneMain::Draw()
 {
 	DrawGrid();
 
-	DrawString(0,0,"SceneMain",0xffffff);
-	DrawFormatString(0, 16, 0xffffff, "FRAME:%d", m_frameCount);
+	DrawString(0,0,L"SceneMain",0xffffff);
+	DrawFormatString(0, 16, 0xffffff, L"FRAME:%d", m_frameCount);
 }
 
 void SceneMain::DrawGrid()

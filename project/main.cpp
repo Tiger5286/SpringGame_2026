@@ -8,7 +8,7 @@
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	ChangeWindowMode(true); // ウインドウモードで起動
-	SetMainWindowText("ゲーム名"); // ウインドウのタイトルを設定
+	SetMainWindowText(L"SpringGame2026"); // ウインドウのタイトルを設定
 	SetGraphMode(Game::kScreenWidth, Game::kScreenHeight, Game::kColorBitNum); // 画面サイズと色数を設定
 	if (DxLib_Init() == -1)		// ＤＸライブラリ初期化処理
 	{
