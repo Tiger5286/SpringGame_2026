@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# Other
+*.vs
+*SpringGame_2026
+*x64
+Log.txt
