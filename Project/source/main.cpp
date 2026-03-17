@@ -2,7 +2,7 @@
 #include "Game.h"
 #include <memory>
 
-#include "SceneMain.h"
+#include "Scenes/SceneMain.h"
 
 // ƒvƒƒOƒ‰ƒ€‚Í WinMain ‚©‚çn‚Ü‚é
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
