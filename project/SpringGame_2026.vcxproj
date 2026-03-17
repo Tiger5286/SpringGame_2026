@@ -29,7 +29,6 @@
     <ClCompile Include="source\Utility\Quaternion.cpp" />
     <ClCompile Include="source\Utility\Sphere.cpp" />
     <ClCompile Include="source\Utility\Vector3.cpp" />
-    <ClCompile Include="source\Utility\Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\System\Input.h" />
@@ -43,7 +42,6 @@
     <ClInclude Include="source\Utility\Quaternion.h" />
     <ClInclude Include="source\Utility\Sphere.h" />
     <ClInclude Include="source\Utility\Vector3.h" />
-    <ClInclude Include="source\Utility\Vector2.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -77,7 +75,7 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">

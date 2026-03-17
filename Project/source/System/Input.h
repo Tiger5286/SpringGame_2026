@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "DxLib.h"
-#include "../Utility/Vector2.h"
+#include "../Utility/Vector3.h"
 
 enum class LR
 {
@@ -35,7 +35,7 @@ public:
 	/// </summary>
 	/// <param name="lr">左右どちらの入力を取得するか</param>
 	/// <returns>スティック入力値</returns>
-	Vector2 GetStickInput(LR lr);
+	Vector3 GetStickInput(LR lr);
 
 	/// <summary>
 	/// トリガー入力を取得する
@@ -46,11 +46,11 @@ public:
 
 private:
 	/// <summary>
-	/// 生スティック入力を0.0~1.0の扱いやすい形にする
+	/// 生スティック入力を-1.0~1.0の扱いやすい形にする
 	/// </summary>
 	/// <param name="stick">生スティック入力</param>
 	/// <returns>加工後のスティック入力値</returns>
-	Vector2 ConvertStickInput(Vector2 stick);
+	Vector3 ConvertStickInput(Vector3 stick);
 
 	/// <summary>
 	/// 生トリガー入力を0.0~1.0の扱いやすい形にする
