@@ -1,4 +1,4 @@
-#include "ModelManager.h"
+﻿#include "ModelManager.h"
 #include "Dxlib.h"
 #include <cassert>
 
@@ -16,8 +16,9 @@ void ModelManager::End()
 	// すべてのロードしたモデルを削除
 	for (auto& handle : m_modelHandles)
 	{
-		this->DeleteModel(handle.first);
+		MV1DeleteModel(handle.second);
 	}
+	m_modelHandles.clear();
 	m_isEnd = true;
 }
 
@@ -26,7 +27,7 @@ void ModelManager::LoadModel(std::wstring fileName, std::wstring key)
 	// キー重複チェック
 	if (m_modelHandles.contains(key))
 	{
-		assert("同じ名前のモデルをロードしようとしています");
+		assert(false && "同じ名前のモデルをロードしようとしています。");
 		return;
 	}
 	// モデルをロードして登録
@@ -40,11 +41,25 @@ void ModelManager::DeleteModel(std::wstring key)
 	// 存在しないキーをチェック
 	if (!m_modelHandles.contains(key))
 	{
-		assert("存在しないモデルを削除しようとしています");
+		assert(false && "存在しないモデルを削除しようとしています");
 		return;
 	}
 	// モデルを削除してキーを除外
 	auto check = MV1DeleteModel(m_modelHandles[key]);
 	assert(check != -1 && "モデルが正しく削除されませんでした");
 	m_modelHandles.erase(key);
+}
+
+int ModelManager::DuplicateModel(std::wstring key)
+{
+	// 存在しないキーをチェック
+	if (!m_modelHandles.contains(key))
+	{
+		assert(false && "存在しないモデルを複製しようとしています");
+		return -1;
+	}
+	// モデルを複製してハンドルを返す
+	auto handle = MV1DuplicateModel(m_modelHandles[key]);
+	assert(handle != -1 && "モデルが正しく複製されませんでした");
+	return handle;
 }

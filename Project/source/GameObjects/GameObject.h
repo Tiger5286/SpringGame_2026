@@ -12,6 +12,10 @@ public:
 	virtual void Update() abstract;
 	virtual void Draw() abstract;
 
-private:
+	// Init()より前に実行する
+	void SetHandle(int handle);
+
+protected:
 	Vector3 m_pos;
+	int m_modelHandle = -1;
 };

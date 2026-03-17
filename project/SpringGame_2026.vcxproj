@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\GameObjects\Player.cpp" />
+    <ClCompile Include="source\Managers\ModelManager.cpp" />
     <ClCompile Include="source\GameObjects\GameObject.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\Scenes\SceneMain.cpp" />
@@ -28,6 +30,8 @@
     <ClCompile Include="source\Utility\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\GameObjects\Player.h" />
+    <ClInclude Include="source\Managers\ModelManager.h" />
     <ClInclude Include="source\Game.h" />
     <ClInclude Include="source\GameObjects\GameObject.h" />
     <ClInclude Include="source\Scenes\SceneMain.h" />
