@@ -47,15 +47,22 @@ public:
 	/// </summary>
 	/// <param name="lr">左右どちらの入力を取得するか</param>
 	/// <returns>トリガー入力値</returns>
-	unsigned char GetTriggerInput(LR lr);
+	float GetTriggerInput(LR lr);
 
 private:
 	/// <summary>
 	/// 生スティック入力を0.0~1.0の扱いやすい形にする
 	/// </summary>
 	/// <param name="stick">生スティック入力</param>
-	/// <returns>加工後のスティック入力</returns>
+	/// <returns>加工後のスティック入力値</returns>
 	StickInput ConvertStickInput(StickInput stick);
+
+	/// <summary>
+	/// 生トリガー入力を0.0~1.0の扱いやすい形にする
+	/// </summary>
+	/// <param name="trigger">生トリガー入力</param>
+	/// <returns>加工後のトリガー入力値</returns>
+	float ConvertTriggerInput(unsigned char trigger);
 
 private:
 	XINPUT_STATE m_nowPadInput;
