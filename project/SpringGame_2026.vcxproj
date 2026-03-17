@@ -29,6 +29,7 @@
     <ClCompile Include="source\Utility\Quaternion.cpp" />
     <ClCompile Include="source\Utility\Sphere.cpp" />
     <ClCompile Include="source\Utility\Vector3.cpp" />
+    <ClCompile Include="source\Utility\Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\System\Input.h" />
@@ -42,6 +43,7 @@
     <ClInclude Include="source\Utility\Quaternion.h" />
     <ClInclude Include="source\Utility\Sphere.h" />
     <ClInclude Include="source\Utility\Vector3.h" />
+    <ClInclude Include="source\Utility\Vector2.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -136,6 +138,7 @@
       <AdditionalIncludeDirectories>../DxLib_h</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -151,13 +154,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>c:\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../DxLib_h</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>c:\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../DxLib_h</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
