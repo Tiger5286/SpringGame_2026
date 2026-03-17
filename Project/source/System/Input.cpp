@@ -36,9 +36,9 @@ bool Input::IsTriggerd(int button)
 	return m_nowPadInput.Buttons[button] && !m_prevPadInput.Buttons[button];
 }
 
-StickInput Input::GetStickInput(LR lr)
+Vector2 Input::GetStickInput(LR lr)
 {
-	StickInput stick;
+	Vector2 stick;
 	if (lr == LR::Left)
 	{
 		stick.x = m_nowPadInput.ThumbLX;
@@ -67,7 +67,7 @@ float Input::GetTriggerInput(LR lr)
 	return 0;
 }
 
-StickInput Input::ConvertStickInput(StickInput stick)
+Vector2 Input::ConvertStickInput(Vector2 stick)
 {
 	// スティック入力のデッドゾーンを設定
 	if (stick.x < kMinStickValue) stick.x = kMinStickValue;

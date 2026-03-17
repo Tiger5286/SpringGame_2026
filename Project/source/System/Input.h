@@ -1,16 +1,11 @@
 ﻿#pragma once
 #include "DxLib.h"
+#include "../Utility/Vector2.h"
 
 enum class LR
 {
 	Left,
 	Right
-};
-
-struct StickInput
-{
-	float x = 0.0f;
-	float y = 0.0f;
 };
 
 class Input
@@ -40,7 +35,7 @@ public:
 	/// </summary>
 	/// <param name="lr">左右どちらの入力を取得するか</param>
 	/// <returns>スティック入力値</returns>
-	StickInput GetStickInput(LR lr);
+	Vector2 GetStickInput(LR lr);
 
 	/// <summary>
 	/// トリガー入力を取得する
@@ -55,7 +50,7 @@ private:
 	/// </summary>
 	/// <param name="stick">生スティック入力</param>
 	/// <returns>加工後のスティック入力値</returns>
-	StickInput ConvertStickInput(StickInput stick);
+	Vector2 ConvertStickInput(Vector2 stick);
 
 	/// <summary>
 	/// 生トリガー入力を0.0~1.0の扱いやすい形にする
