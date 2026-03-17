@@ -1,6 +1,8 @@
 #include "SceneMain.h"
 #include "DxLib.h"
 
+#include "../Managers/ModelManager.h"
+
 SceneMain::SceneMain() :
 	m_frameCount(0)
 {
@@ -12,17 +14,13 @@ SceneMain::~SceneMain()
 
 void SceneMain::Init()
 {
-	// カリングの設定
-	SetUseBackCulling(true);
-
-	// Zバッファの設定
-	SetUseZBuffer3D(true);	// Zバッファを使います
-	SetWriteZBuffer3D(true);	// 描画する物体はZバッファにも距離を書き込む
-
 	// カメラの設定
 	SetCameraPositionAndTarget_UpVecY(VGet(0.0f, 300.0f, -700.0f), VGet(0.0f, 0.0f, 0.0f));
 	SetupCamera_Perspective(DX_PI_F / 3.0f);
 	SetCameraNearFar(200.0f, 1500.0f);
+
+	// オブジェクトの生成
+	m_pModelManager = std::make_shared<ModelManager>();
 }
 
 void SceneMain::Update()
@@ -33,7 +31,6 @@ void SceneMain::Update()
 void SceneMain::Draw()
 {
 	DrawGrid();
-
 	DrawString(0,0,L"SceneMain",0xffffff);
 	DrawFormatString(0, 16, 0xffffff, L"FRAME:%d", m_frameCount);
 }

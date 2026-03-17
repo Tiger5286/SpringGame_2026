@@ -17,6 +17,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// 描画対象をバックバッファに変更
 	SetDrawScreen(DX_SCREEN_BACK);
 
+	// カリングの設定
+	SetUseBackCulling(true);
+
+	// Zバッファの設定
+	SetUseZBuffer3D(true);	// Zバッファを使います
+	SetWriteZBuffer3D(true);	// 描画する物体はZバッファにも距離を書き込む
+
 	auto pScene = std::make_shared<SceneMain>();
 	pScene->Init();
 

@@ -24,14 +24,17 @@
     <ClCompile Include="source\Scenes\SceneMain.cpp" />
     <ClCompile Include="source\Utility\Matrix4x4.cpp" />
     <ClCompile Include="source\Utility\Quaternion.cpp" />
+    <ClCompile Include="source\Utility\Sphere.cpp" />
     <ClCompile Include="source\Utility\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Game.h" />
     <ClInclude Include="source\GameObjects\GameObject.h" />
     <ClInclude Include="source\Scenes\SceneMain.h" />
+    <ClInclude Include="source\Geometry.h" />
     <ClInclude Include="source\Utility\Matrix4x4.h" />
     <ClInclude Include="source\Utility\Quaternion.h" />
+    <ClInclude Include="source\Utility\Sphere.h" />
     <ClInclude Include="source\Utility\Vector3.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

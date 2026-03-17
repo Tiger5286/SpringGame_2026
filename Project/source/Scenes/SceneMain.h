@@ -1,4 +1,8 @@
 #pragma once
+#include <memory>
+
+class ModelManager;
+
 class SceneMain
 {
 public:
@@ -13,5 +17,7 @@ private:
 
 private:
 	int m_frameCount;
+
+	std::shared_ptr<ModelManager> m_pModelManager = nullptr;
 };
 
