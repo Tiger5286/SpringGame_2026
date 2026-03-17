@@ -19,6 +19,7 @@ void Player::End()
 
 void Player::Update()
 {
+	
 }
 
 void Player::Draw()
