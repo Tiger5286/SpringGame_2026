@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "Scenes/SceneMain.h"
+#include "System/Input.h"
 
 // プログラムは WinMain から始まる
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -24,7 +25,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetUseZBuffer3D(true);	// Zバッファを使います
 	SetWriteZBuffer3D(true);	// 描画する物体はZバッファにも距離を書き込む
 
-	auto pScene = std::make_shared<SceneMain>();
+	Input input;
+
+	auto pScene = std::make_shared<SceneMain>(input);
 	pScene->Init();
 
 	while (ProcessMessage() != -1)
@@ -32,6 +35,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		LONGLONG start = GetNowHiPerformanceCount(); // フレーム開始時間を取得
 		ClearDrawScreen(); // 画面をクリア
 
+		input.Update();
 		pScene->Update();
 		pScene->Draw();
 

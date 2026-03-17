@@ -1,7 +1,6 @@
 #pragma once
 #include <memory>
-
-class Input;
+#include "../System/Input.h"
 
 class ModelManager;
 
@@ -10,7 +9,7 @@ class Player;
 class SceneMain
 {
 public:
-	SceneMain();
+	SceneMain(Input& input);
 	~SceneMain();
 
 	void Init();
@@ -22,8 +21,7 @@ private:
 
 private:
 	int m_frameCount = 0;
-
-	std::shared_ptr<Input> m_pInput = nullptr;
+	Input& m_input;
 
 	std::shared_ptr<ModelManager> m_pModelManager = nullptr;
 

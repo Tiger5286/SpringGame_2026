@@ -17,7 +17,8 @@ namespace
 	};
 }
 
-SceneMain::SceneMain()
+SceneMain::SceneMain(Input& input) :
+	m_input(input)
 {
 }
 
@@ -32,9 +33,6 @@ void SceneMain::Init()
 	SetupCamera_Perspective(DX_PI_F / 3.0f);
 	SetCameraNearFar(200.0f, 1500.0f);
 
-	// インプットクラスの生成
-	m_pInput = std::make_shared<Input>();
-
 	// モデルのロードをモデルマネージャーに依頼
 	m_pModelManager = std::make_shared<ModelManager>();
 	for (auto& names : kModelNames)
@@ -43,7 +41,7 @@ void SceneMain::Init()
 	}
 
 	// プレイヤーの生成
-	m_pPlayer = std::make_shared<Player>();
+	m_pPlayer = std::make_shared<Player>(m_input);
 	m_pPlayer->SetHandle(m_pModelManager->DuplicateModel(L"Player"));
 	m_pPlayer->Init();
 }
@@ -60,8 +58,6 @@ void SceneMain::End()
 void SceneMain::Update()
 {
 	m_frameCount++;
-
-	m_pInput->Update();
 
 	m_pPlayer->Update();
 }

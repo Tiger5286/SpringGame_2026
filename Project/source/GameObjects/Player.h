@@ -1,11 +1,12 @@
 #pragma once
 #include "GameObject.h"
+#include "../System/Input.h"
 
 class Player :
     public GameObject
 {
 public:
-    Player();
+    Player(Input& input);
     virtual ~Player() override;
 
     void Init() override;
@@ -14,6 +15,5 @@ public:
     void Draw() override;
 
 private:
-
+    Input& m_input;
 };
-

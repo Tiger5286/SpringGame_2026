@@ -1,6 +1,7 @@
 #include "Player.h"
 
-Player::Player()
+Player::Player(Input& input) :
+	m_input(input)
 {
 }
 
