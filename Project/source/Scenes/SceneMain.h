@@ -1,6 +1,8 @@
 #pragma once
 #include <memory>
 
+class Input;
+
 class ModelManager;
 
 class Player;
@@ -20,6 +22,8 @@ private:
 
 private:
 	int m_frameCount = 0;
+
+	std::shared_ptr<Input> m_pInput = nullptr;
 
 	std::shared_ptr<ModelManager> m_pModelManager = nullptr;
 

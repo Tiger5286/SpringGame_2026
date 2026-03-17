@@ -1,6 +1,8 @@
 #include "SceneMain.h"
 #include "DxLib.h"
 
+#include "../System/Input.h"
+
 #include "../Managers/ModelManager.h"
 
 #include "../GameObjects/Player.h"
@@ -30,6 +32,9 @@ void SceneMain::Init()
 	SetupCamera_Perspective(DX_PI_F / 3.0f);
 	SetCameraNearFar(200.0f, 1500.0f);
 
+	// インプットクラスの生成
+	m_pInput = std::make_shared<Input>();
+
 	// モデルのロードをモデルマネージャーに依頼
 	m_pModelManager = std::make_shared<ModelManager>();
 	for (auto& names : kModelNames)
@@ -55,6 +60,8 @@ void SceneMain::End()
 void SceneMain::Update()
 {
 	m_frameCount++;
+
+	m_pInput->Update();
 
 	m_pPlayer->Update();
 }
