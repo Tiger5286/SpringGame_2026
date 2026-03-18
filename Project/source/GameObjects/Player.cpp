@@ -1,10 +1,11 @@
 ﻿#include "Player.h"
 #include "../Geometry.h"
+#include "../Game.h"
 #include <cmath>
 
 namespace
 {
-	constexpr float kMoveSpeed = 5.0f;
+	constexpr float kMoveSpeed = 8.0f;
 }
 
 Player::Player(Input& input) :
@@ -25,6 +26,21 @@ void Player::End()
 }
 
 void Player::Update()
+{
+	Move();
+
+	if (m_pos.x > Game::kFieldSize) m_pos.x = Game::kFieldSize;
+	if (m_pos.x < -Game::kFieldSize) m_pos.x = -Game::kFieldSize;
+	if (m_pos.z > Game::kFieldSize) m_pos.z = Game::kFieldSize;
+	if (m_pos.z < -Game::kFieldSize) m_pos.z = -Game::kFieldSize;
+}
+
+void Player::Draw()
+{
+	MV1DrawModel(m_modelHandle);
+}
+
+void Player::Move()
 {
 	// 左スティックの入力を取得
 	const auto leftStick = m_input.GetStickInput(LR::Left);
@@ -52,9 +68,4 @@ void Player::Update()
 	auto mtx = transMtx * rotYMtx;
 	// プレイヤーのモデルに行列を適用
 	MV1SetMatrix(m_modelHandle, mtx.ToDxLib());
-}
-
-void Player::Draw()
-{
-	MV1DrawModel(m_modelHandle);
 }

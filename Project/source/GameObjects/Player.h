@@ -17,6 +17,9 @@ public:
     void SetCameraAngleY(float angle) { m_cameraAngleY = angle; }
 
 private:
+    void Move();
+
+private:
     Input& m_input;
 
     float m_cameraAngleY = 0.0f;

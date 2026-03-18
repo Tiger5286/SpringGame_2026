@@ -1,4 +1,4 @@
-#include "Camera.h"
+﻿#include "Camera.h"
 #include <cmath>
 
 #include "../GameObjects/Player.h"
@@ -11,15 +11,15 @@ namespace
 	// 視野角
 	constexpr float kFov = DX_PI_F / 3.0f;	// 60度
 	// NearFar
-	constexpr float kNear = 200.0f;
-	constexpr float kFar = 1500.0f;
+	constexpr float kNear = 100.0f;
+	constexpr float kFar = 4000.0f;
 
 	// オフセット
-	const Vector3 kTargetOffset = { 0.0f,100.0f,0.0f };
-	const Vector3 kPosOffset = { 0.0f,300.0f,0.0f };
+	const Vector3 kTargetOffset = { 0.0f,300.0f,0.0f };
+	const Vector3 kPosOffset = { 0.0f,400.0f,0.0f };
 
 	// 注視点との距離
-	constexpr float kTargetDis = 800.0f;
+	constexpr float kTargetDis = 1000.0f;
 }
 
 Camera::Camera(Input& input):

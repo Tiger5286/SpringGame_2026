@@ -1,5 +1,6 @@
 ﻿#include "SceneMain.h"
 #include "DxLib.h"
+#include "../Game.h"
 
 #include "../System/Input.h"
 
@@ -8,15 +9,20 @@
 #include "../Managers/ModelManager.h"
 
 #include "../GameObjects/Player.h"
+#include "../GameObjects/Enemy.h"
 
 namespace
 {
-	std::pair<std::wstring, std::wstring> kModelNames[4] = {
+	// 使用するモデルのファイル名と登録名
+	const std::pair<std::wstring, std::wstring> kModelNames[4] = {
 		{L"data/Player.MV1",L"Player"},
 		{L"data/Enemy.MV1",L"Enemy"},
 		{L"data/Chest.MV1",L"Chest"},
 		{L"data/Coin.MV1",L"Coin"},
 	};
+
+	// 地面の色
+	constexpr unsigned int kGroundColor = 0x44cc44;
 }
 
 SceneMain::SceneMain(Input& input) :
@@ -37,14 +43,19 @@ void SceneMain::Init()
 		m_pModelManager->LoadModel(names.first, names.second);
 	}
 
+	// カメラの生成と初期化
+	m_pCamera = std::make_shared<Camera>(m_input);
+	m_pCamera->Init();
+
 	// プレイヤーの生成と初期化
 	m_pPlayer = std::make_shared<Player>(m_input);
 	m_pPlayer->SetHandle(m_pModelManager->DuplicateModel(L"Player"));
 	m_pPlayer->Init();
 
-	// カメラの生成と初期化
-	m_pCamera = std::make_shared<Camera>(m_input);
-	m_pCamera->Init();
+	// 敵の生成と初期化
+	m_pEnemy = std::make_shared<Enemy>(*m_pPlayer);
+	m_pEnemy->SetHandle(m_pModelManager->DuplicateModel(L"Enemy"));
+	m_pEnemy->Init();
 }
 
 void SceneMain::End()
@@ -54,6 +65,9 @@ void SceneMain::End()
 
 	// プレイヤーの終了処理
 	m_pPlayer->End();
+
+	// 敵の終了処理
+	m_pEnemy->End();
 }
 
 void SceneMain::Update()
@@ -65,15 +79,23 @@ void SceneMain::Update()
 
 	m_pCamera->Update();
 	m_pPlayer->Update();
+	m_pEnemy->Update();
 }
 
 void SceneMain::Draw()
 {
 	m_pPlayer->Draw();
+	m_pEnemy->Draw();
 
+	// 床の描画
+	DrawTriangle3D({ -Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,-Game::kFieldSize }, kGroundColor, true);
+	DrawTriangle3D({ -Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,-Game::kFieldSize }, { -Game::kFieldSize,0,-Game::kFieldSize }, kGroundColor, true);
+
+#ifdef _DEBUG
 	DrawGrid();
 	DrawString(0,0,L"SceneMain",0xffffff);
 	DrawFormatString(0, 16, 0xffffff, L"FRAME:%d", m_frameCount);
+#endif
 }
 
 void SceneMain::DrawGrid()

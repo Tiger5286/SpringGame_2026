@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\GameObjects\Enemy.cpp" />
     <ClCompile Include="source\System\Camera.cpp" />
     <ClCompile Include="source\System\Input.cpp" />
     <ClCompile Include="source\GameObjects\Player.cpp" />
@@ -32,6 +33,7 @@
     <ClCompile Include="source\Utility\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\GameObjects\Enemy.h" />
     <ClInclude Include="source\System\Camera.h" />
     <ClInclude Include="source\System\Input.h" />
     <ClInclude Include="source\GameObjects\Player.h" />

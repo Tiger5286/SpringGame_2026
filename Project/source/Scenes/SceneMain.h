@@ -7,6 +7,7 @@ class Camera;
 class ModelManager;
 
 class Player;
+class Enemy;
 
 class SceneMain
 {
@@ -30,5 +31,6 @@ private:
 	std::shared_ptr<ModelManager> m_pModelManager = nullptr;
 
 	std::shared_ptr<Player> m_pPlayer = nullptr;
+	std::shared_ptr<Enemy> m_pEnemy = nullptr;
 };
 
