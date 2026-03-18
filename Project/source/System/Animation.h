@@ -1,15 +1,16 @@
 ﻿#pragma once
+#include <string>
+
 class Animation
 {
 public:
 	Animation();
 	virtual ~Animation();
 
-	void Init(int modelHandle);
-	void End();
+	void Init(int modelHandle,std::wstring animName);
 	void Update();
 
-	void ChangeAnim(int animHandle);
+	void ChangeAnim(std::wstring animName);
 
 private:
 	// アニメーションを行うモデルのハンドル

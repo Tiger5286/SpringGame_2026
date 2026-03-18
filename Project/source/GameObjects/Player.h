@@ -2,6 +2,12 @@
 #include "GameObject.h"
 #include "../System/Input.h"
 
+enum class PlayerState
+{
+    Idle,
+    Move,
+};
+
 class Player :
     public GameObject
 {
@@ -21,6 +27,11 @@ private:
 
 private:
     Input& m_input;
+
+	PlayerState m_state = PlayerState::Idle;
+	PlayerState m_prevState = PlayerState::Idle;
+
+    Animation m_animation;
 
     float m_cameraAngleY = 0.0f;
 

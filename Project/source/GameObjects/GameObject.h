@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "../Geometry.h"
+#include "../System/Animation.h"
 
 class GameObject
 {
