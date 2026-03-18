@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\System\Camera.cpp" />
     <ClCompile Include="source\System\Input.cpp" />
     <ClCompile Include="source\GameObjects\Player.cpp" />
     <ClCompile Include="source\Managers\ModelManager.cpp" />
@@ -31,6 +32,7 @@
     <ClCompile Include="source\Utility\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\System\Camera.h" />
     <ClInclude Include="source\System\Input.h" />
     <ClInclude Include="source\GameObjects\Player.h" />
     <ClInclude Include="source\Managers\ModelManager.h" />

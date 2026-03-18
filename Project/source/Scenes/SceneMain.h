@@ -2,6 +2,8 @@
 #include <memory>
 #include "../System/Input.h"
 
+class Camera;
+
 class ModelManager;
 
 class Player;
@@ -22,6 +24,8 @@ private:
 private:
 	int m_frameCount = 0;
 	Input& m_input;
+
+	std::shared_ptr<Camera> m_pCamera = nullptr;
 
 	std::shared_ptr<ModelManager> m_pModelManager = nullptr;
 

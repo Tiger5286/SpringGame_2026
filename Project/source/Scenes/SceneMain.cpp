@@ -3,6 +3,8 @@
 
 #include "../System/Input.h"
 
+#include "../System/Camera.h"
+
 #include "../Managers/ModelManager.h"
 
 #include "../GameObjects/Player.h"
@@ -28,22 +30,21 @@ SceneMain::~SceneMain()
 
 void SceneMain::Init()
 {
-	// カメラの設定
-	SetCameraPositionAndTarget_UpVecY(VGet(0.0f, 300.0f, -700.0f), VGet(0.0f, 0.0f, 0.0f));
-	SetupCamera_Perspective(DX_PI_F / 3.0f);
-	SetCameraNearFar(200.0f, 1500.0f);
-
-	// モデルのロードをモデルマネージャーに依頼
+	// モデルマネージャーを生成しモデルのロードを依頼
 	m_pModelManager = std::make_shared<ModelManager>();
 	for (auto& names : kModelNames)
 	{
 		m_pModelManager->LoadModel(names.first, names.second);
 	}
 
-	// プレイヤーの生成
+	// プレイヤーの生成と初期化
 	m_pPlayer = std::make_shared<Player>(m_input);
 	m_pPlayer->SetHandle(m_pModelManager->DuplicateModel(L"Player"));
 	m_pPlayer->Init();
+
+	// カメラの生成と初期化
+	m_pCamera = std::make_shared<Camera>(*m_pPlayer);
+	m_pCamera->Init();
 }
 
 void SceneMain::End()
@@ -58,6 +59,8 @@ void SceneMain::End()
 void SceneMain::Update()
 {
 	m_frameCount++;
+
+	m_pCamera->Update();
 
 	m_pPlayer->Update();
 }
