@@ -1,4 +1,4 @@
-#include "Enemy.h"
+﻿#include "Enemy.h"
 #include "Dxlib.h"
 #include <cmath>
 #include <string>

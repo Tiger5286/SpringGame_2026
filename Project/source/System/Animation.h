@@ -1,11 +1,11 @@
-#pragma once
+﻿#pragma once
 class Animation
 {
 public:
 	Animation();
 	virtual ~Animation();
 
-	void Init();
+	void Init(int modelHandle);
 	void End();
 	void Update();
 
