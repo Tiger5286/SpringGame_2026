@@ -16,4 +16,6 @@ public:
 
 private:
     Input& m_input;
+
+    float m_angle = 0.0f;
 };
