@@ -38,8 +38,8 @@ Matrix4x4 Matrix4x4::Zero()
 
 Matrix4x4 Matrix4x4::GetRotXMatrix(float angle)
 {
-	float cos = cosf(DX_TWO_PI_F / 360 * angle);
-	float sin = sinf(DX_TWO_PI_F / 360 * angle);
+	float cos = cosf(angle);
+	float sin = sinf(angle);
 	return Matrix4x4(1.0f, 0.0f, 0.0f, 0.0f,
 					 0.0f, cos, -sin, 0.0f,
 					 0.0f, sin, cos, 0.0f,
@@ -48,8 +48,8 @@ Matrix4x4 Matrix4x4::GetRotXMatrix(float angle)
 
 Matrix4x4 Matrix4x4::GetRotYMatrix(float angle)
 {
-	float cos = cosf(DX_TWO_PI_F / 360 * angle);
-	float sin = sinf(DX_TWO_PI_F / 360 * angle);
+	float cos = cosf(angle);
+	float sin = sinf(angle);
 	return Matrix4x4(cos, 0.0f, sin, 0.0f,
 					 0.0f, 1.0f, 0.0f, 0.0f,
 					 -sin, 0.0f, cos, 0.0f,
@@ -58,8 +58,8 @@ Matrix4x4 Matrix4x4::GetRotYMatrix(float angle)
 
 Matrix4x4 Matrix4x4::GetRotZMatrix(float angle)
 {
-	float cos = cosf(DX_TWO_PI_F / 360 * angle);
-	float sin = sinf(DX_TWO_PI_F / 360 * angle);
+	float cos = cosf(angle);
+	float sin = sinf(angle);
 	return Matrix4x4(cos, -sin, 0.0f, 0.0f,
 					 sin, cos, 0.0f, 0.0f,
 					 0.0f, 0.0f, 1.0f, 0.0f,

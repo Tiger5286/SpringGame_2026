@@ -16,12 +16,11 @@ public:
 	// すべての要素が0の行列を生成する関数。
 	static Matrix4x4 Zero();
 
-	// 角度から回転行列を生成する関数。angleは度数法で指定する。
-	// X軸回転行列を生成する
+	// X軸回転行列を生成する。angleは弧度法で指定する。
 	static Matrix4x4 GetRotXMatrix(float angle);
-	// Y軸回転行列を生成する
+	// Y軸回転行列を生成する。angleは弧度法で指定する。
 	static Matrix4x4 GetRotYMatrix(float angle);
-	// Z軸回転行列を生成する
+	// Z軸回転行列を生成する。angleは弧度法で指定する。
 	static Matrix4x4 GetRotZMatrix(float angle);
 
 	// 平行移動行列を生成する関数。
