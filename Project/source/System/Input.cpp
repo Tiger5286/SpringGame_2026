@@ -22,8 +22,6 @@ void Input::Update()
 	m_prevPadInput = m_nowPadInput;
 
 	GetJoypadXInputState(DX_INPUT_PAD1, &m_nowPadInput);
-
-	DrawFormatString(100, 100, 0xffffff, L"%.2f", GetTriggerInput(LR::Left));
 }
 
 bool Input::IsPressed(int button)
