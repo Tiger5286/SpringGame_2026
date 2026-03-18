@@ -15,6 +15,8 @@ public:
 	// Init()より前に実行する
 	void SetHandle(int handle);
 
+	Vector3 GetPos() const;
+
 protected:
 	Vector3 m_pos;
 	int m_modelHandle = -1;

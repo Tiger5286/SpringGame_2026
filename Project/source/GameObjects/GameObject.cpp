@@ -13,3 +13,8 @@ void GameObject::SetHandle(int handle)
 {
 	m_modelHandle = handle;
 }
+
+Vector3 GameObject::GetPos() const
+{
+	return m_pos;
+}

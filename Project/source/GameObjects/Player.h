@@ -14,8 +14,12 @@ public:
     void Update() override;
     void Draw() override;
 
+    void SetCameraAngleY(float angle) { m_cameraAngleY = angle; }
+
 private:
     Input& m_input;
+
+    float m_cameraAngleY = 0.0f;
 
     float m_angle = 0.0f;
 };

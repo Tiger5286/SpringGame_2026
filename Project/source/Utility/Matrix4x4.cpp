@@ -121,12 +121,9 @@ void Matrix4x4::operator*=(Matrix4x4 m)
 
 Vector3 Matrix4x4::operator*(Vector3 v) const
 {
-	Matrix4x4 m(v.x, 0.0f, 0.0f, 0.0f,
-		v.y, 0.0f, 0.0f, 0.0f,
-		v.z, 0.0f, 0.0f, 0.0f,
-		1.0f, 0.0f, 0.0f, 0.0f);
-	m = *this * m;
-	return Vector3(v.x, v.y, v.z);
+	return Vector3(v.x * m00 + v.y * m01 + v.z * m02 + m03,
+				   v.x * m10 + v.y * m11 + v.z * m12 + m13,
+				   v.x * m20 + v.y * m21 + v.z * m22 + m23);
 }
 
 void Matrix4x4::operator*=(Vector3 v)

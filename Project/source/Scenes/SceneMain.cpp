@@ -43,7 +43,7 @@ void SceneMain::Init()
 	m_pPlayer->Init();
 
 	// カメラの生成と初期化
-	m_pCamera = std::make_shared<Camera>(*m_pPlayer);
+	m_pCamera = std::make_shared<Camera>(m_input);
 	m_pCamera->Init();
 }
 
@@ -60,8 +60,10 @@ void SceneMain::Update()
 {
 	m_frameCount++;
 
-	m_pCamera->Update();
+	m_pCamera->SetPlayerPos(m_pPlayer->GetPos());
+	m_pPlayer->SetCameraAngleY(m_pCamera->GetAngleY());
 
+	m_pCamera->Update();
 	m_pPlayer->Update();
 }
 

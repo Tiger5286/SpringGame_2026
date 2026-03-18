@@ -1,24 +1,29 @@
 #pragma once
 #include "../Utility/Vector3.h"
 
+class Input;
 class Player;
 
 class Camera
 {
 public:
-	Camera(Player& player);
+	Camera(Input& input);
 	virtual ~Camera();
 
 	void Init();
-	void End();
 	void Update();
+
+	float GetAngleY() const { return m_angleY; }
+
+	void SetPlayerPos(const Vector3& playerPos) { m_playerPos = playerPos; }
 
 private:
 
-	Player& m_player;
+	Input& m_input;
+	Vector3 m_playerPos;
 
 	Vector3 m_pos;
 	Vector3 m_target;
-	float angle = 0.0f;
+	float m_angleY = 0.0f;
 };
 
