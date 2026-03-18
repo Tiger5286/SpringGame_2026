@@ -30,17 +30,15 @@ void Quaternion::DrawAxis()
 	DrawSphere3D(vec.ToDxLib(), 2, 8, 0xff0000, 0xff0000, true);
 }
 
-Quaternion Quaternion::CreateQuaternion(Vector3 axis, float eulerAngle)
+Quaternion Quaternion::CreateQuaternion(Vector3 axis, float radian)
 {
 	// 軸ベクトルを正規化
 	axis.Normalize();
-	// オイラー角をラジアンに変換
-	float rad = eulerAngle * (DX_PI_F / 180.0f);
 	// クォータニオンを計算
-	return Quaternion(axis.x * sinf(rad / 2.0f),
-		axis.y * sinf(rad / 2.0f),
-		axis.z * sinf(rad / 2.0f),
-		cosf(rad / 2.0f));
+	return Quaternion(axis.x * sinf(radian / 2.0f),
+		axis.y * sinf(radian / 2.0f),
+		axis.z * sinf(radian / 2.0f),
+		cosf(radian / 2.0f));
 }
 
 Quaternion Quaternion::operator*(const Quaternion& other) const

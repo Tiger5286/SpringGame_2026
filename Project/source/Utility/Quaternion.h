@@ -16,8 +16,8 @@ public:
 	float x, y, z, w;
 
 	// 軸と角度からクォータニオンを作成する関数
-	// 角度は度数法(オイラー角)で指定する
-	static Quaternion CreateQuaternion(Vector3 axis, float eulerAngle);
+	// 角度は弧度法(ラジアン角)で指定する
+	static Quaternion CreateQuaternion(Vector3 axis, float radian);
 
 	// クォータニオン同士の乗算
 	Quaternion operator*(const Quaternion& other) const;
