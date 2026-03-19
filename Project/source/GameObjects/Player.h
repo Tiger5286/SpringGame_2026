@@ -5,7 +5,8 @@
 enum class PlayerState
 {
     Idle,
-    Move,
+    Walk,
+    Run,
 };
 
 class Player :
