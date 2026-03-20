@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="source\System\Animation.cpp" />
     <ClCompile Include="source\GameObjects\Enemy.cpp" />
     <ClCompile Include="source\System\Camera.cpp" />
@@ -34,6 +35,7 @@
     <ClCompile Include="source\Utility\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="source\System\Animation.h" />
     <ClInclude Include="source\GameObjects\Enemy.h" />
     <ClInclude Include="source\System\Camera.h" />
