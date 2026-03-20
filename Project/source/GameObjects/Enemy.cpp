@@ -9,6 +9,8 @@ namespace
 {
 	// 移動速度
 	constexpr float kMoveSpeed = 4.0f;
+	// プレイヤーとの最短距離
+	constexpr float kMinDistanceToPlayer = 50.0f;
 
 	// アニメーション名
 	const std::wstring kAnimName = L"MonsterArmature|Flying";
@@ -61,12 +63,17 @@ void Enemy::Move()
 	// プレイヤーの方向に移動する
 	// プレイヤーの位置を取得
 	const auto playerPos = m_player.GetPos();
-	// 敵からプレイヤーまでのベクトルを生成し加工
+	// 敵からプレイヤーまでのベクトルを生成
 	auto enemyToPlayer = playerPos - m_pos;
-	enemyToPlayer.Normalize();
-	enemyToPlayer *= kMoveSpeed;
-	// 位置に足す
-	m_pos += enemyToPlayer;
+	// プレイヤーとの距離が遠いときだけ移動する
+	if (enemyToPlayer.SquaredLength() > kMinDistanceToPlayer * kMinDistanceToPlayer)
+	{
+		// ベクトルを移動用に加工
+		enemyToPlayer.Normalize();
+		enemyToPlayer *= kMoveSpeed;
+		// 位置に足す
+		m_pos += enemyToPlayer;
+	}
 	// 平行移動行列を生成
 	auto transMtx = Matrix4x4::GetTranslateMatrix(m_pos);
 
