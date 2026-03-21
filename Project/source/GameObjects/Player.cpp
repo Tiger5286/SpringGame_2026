@@ -143,10 +143,13 @@ void Player::Punch()
 			m_pPunchCollider->SetPos(punchPos);
 		}
 	}
-	// パンチ中はカウントを減らす
+	// パンチ中はカウントを減らし、位置をプレイヤーの前方に設定し続ける
 	if (m_punchFrame > 0)
 	{
 		m_punchFrame--;
+		float punchRadius = m_pPunchCollider->GetSphere().GetRadius();
+		Vector3 punchPos = Vector3(sinf(-m_angle + DX_PI_F) * kPunchDistance, punchRadius, cosf(-m_angle + DX_PI_F) * kPunchDistance) + m_pos;
+		m_pPunchCollider->SetPos(punchPos);
 	}
 	// パンチ中でないときはパンチコライダーを消す
 	if (m_punchFrame == 0)
