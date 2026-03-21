@@ -3,6 +3,7 @@
 #include "../Game.h"
 #include <cmath>
 #include <string>
+#include "PunchCollider.h"
 
 namespace
 {
@@ -20,6 +21,8 @@ namespace
 	constexpr int kPunchFrame = 20;
 	// パンチアニメーションの再生速度
 	constexpr float kPunchAnimSpeed = 1.0f;
+	// プレイヤーからパンチコライダーまでの距離
+	constexpr float kPunchDistance = 100.0f;
 }
 
 Player::Player(Input& input) :
@@ -60,6 +63,10 @@ void Player::Update()
 void Player::Draw()
 {
 	MV1DrawModel(m_modelHandle);
+	if (m_pPunchCollider != nullptr)
+	{
+		m_pPunchCollider->Draw();
+	}
 #ifdef _DEBUG
 	m_sphere.Draw();
 #endif
@@ -116,13 +123,25 @@ void Player::Punch()
 	{
 		if (m_punchFrame == 0)
 		{
+			// パンチフレームをリセット
 			m_punchFrame = kPunchFrame;
+			// パンチコライダーを生成
+			m_pPunchCollider = std::make_shared<PunchCollider>();
+			// パンチコライダーの位置をプレイヤーの前方に設定
+			float punchRadius = m_pPunchCollider->GetSphere().GetRadius();
+			Vector3 punchPos = Vector3(sinf(-m_angle + DX_PI_F) * kPunchDistance, punchRadius, cosf(-m_angle + DX_PI_F) * kPunchDistance) + m_pos;
+			m_pPunchCollider->SetPos(punchPos);
 		}
 	}
 	// パンチ中はカウントを減らす
 	if (m_punchFrame > 0)
 	{
 		m_punchFrame--;
+	}
+	// パンチ中でないときはパンチコライダーを消す
+	if (m_punchFrame == 0)
+	{
+		m_pPunchCollider = nullptr;
 	}
 }
 

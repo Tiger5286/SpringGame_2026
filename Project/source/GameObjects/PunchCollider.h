@@ -14,6 +14,12 @@ public:
 	
 	void OnCollision(const GameObject& other) override;
 
+	void SetPos(const Vector3& pos)
+	{
+		m_pos = pos;
+		m_sphere.SetPos(pos);
+	}
+
 private:
 
 };

@@ -2,7 +2,7 @@
 
 namespace
 {
-	constexpr float kSphereRadius = 100.0f;
+	constexpr float kSphereRadius = 150.0f;
 }
 
 PunchCollider::PunchCollider():
@@ -29,7 +29,7 @@ void PunchCollider::Update()
 void PunchCollider::Draw()
 {
 #ifdef _DEBUG
-	m_sphere.Draw();
+	m_sphere.Draw(0xff0000);
 #endif
 }
 

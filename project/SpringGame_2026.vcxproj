@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\GameObjects\PunchCollider.cpp" />
     <ClCompile Include="source\Managers\CollisionManager.cpp" />
     <ClCompile Include="source\System\Animation.cpp" />
     <ClCompile Include="source\GameObjects\Enemy.cpp" />
@@ -35,6 +36,7 @@
     <ClCompile Include="source\Utility\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\GameObjects\PunchCollider.h" />
     <ClInclude Include="source\Managers\CollisionManager.h" />
     <ClInclude Include="source\System\Animation.h" />
     <ClInclude Include="source\GameObjects\Enemy.h" />

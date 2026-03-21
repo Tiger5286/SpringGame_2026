@@ -1,6 +1,9 @@
 ﻿#pragma once
 #include "GameObject.h"
 #include "../System/Input.h"
+#include <memory>
+
+class PunchCollider;
 
 enum class PlayerState
 {
@@ -43,6 +46,8 @@ private:
     Animation m_animation;
 
     Vector3 m_prevPos;
+
+	std::shared_ptr<PunchCollider> m_pPunchCollider = nullptr;
 
     float m_cameraAngleY = 0.0f;
 
