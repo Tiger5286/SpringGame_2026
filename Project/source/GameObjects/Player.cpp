@@ -4,6 +4,7 @@
 #include <cmath>
 #include <string>
 #include "PunchCollider.h"
+#include "../Managers/CollisionManager.h"
 
 namespace
 {
@@ -25,9 +26,10 @@ namespace
 	constexpr float kPunchDistance = 100.0f;
 }
 
-Player::Player(Input& input) :
+Player::Player(Input& input, CollisionManager& collisionManager) :
 	GameObject(kSphereRadius),
-	m_input(input)
+	m_input(input),
+	m_collisionManager(collisionManager)
 {
 }
 
@@ -38,6 +40,7 @@ Player::~Player()
 void Player::Init()
 {
 	m_animation.Init(m_modelHandle, kIdleAnimName);
+	m_tag = ObjectTag::Player;
 }
 
 void Player::End()
@@ -75,7 +78,10 @@ void Player::Draw()
 void Player::OnCollision(const GameObject& other)
 {
 	// TODO: 当たったときの処理
-	DrawCircle(100, 100, 50, 0xff0000, true);
+	if (other.GetTag() == ObjectTag::Enemy)
+	{
+		DrawCircle(100, 100, 50, 0xff0000, true);
+	}
 }
 
 void Player::Move()
@@ -127,6 +133,8 @@ void Player::Punch()
 			m_punchFrame = kPunchFrame;
 			// パンチコライダーを生成
 			m_pPunchCollider = std::make_shared<PunchCollider>();
+			m_pPunchCollider->Init();
+			m_collisionManager.Register(m_pPunchCollider);
 			// パンチコライダーの位置をプレイヤーの前方に設定
 			float punchRadius = m_pPunchCollider->GetSphere().GetRadius();
 			Vector3 punchPos = Vector3(sinf(-m_angle + DX_PI_F) * kPunchDistance, punchRadius, cosf(-m_angle + DX_PI_F) * kPunchDistance) + m_pos;
@@ -141,6 +149,7 @@ void Player::Punch()
 	// パンチ中でないときはパンチコライダーを消す
 	if (m_punchFrame == 0)
 	{
+		m_collisionManager.Unregister(m_pPunchCollider);
 		m_pPunchCollider = nullptr;
 	}
 }

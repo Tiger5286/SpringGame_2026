@@ -4,6 +4,7 @@
 #include <memory>
 
 class PunchCollider;
+class CollisionManager;
 
 enum class PlayerState
 {
@@ -16,7 +17,7 @@ class Player :
     public GameObject
 {
 public:
-    Player(Input& input);
+    Player(Input& input,CollisionManager& collisionManager);
     virtual ~Player() override;
 
     void Init() override;
@@ -39,6 +40,7 @@ private:
 
 private:
     Input& m_input;
+	CollisionManager& m_collisionManager;
 
 	PlayerState m_state = PlayerState::Idle;
 	PlayerState m_prevState = PlayerState::Idle;

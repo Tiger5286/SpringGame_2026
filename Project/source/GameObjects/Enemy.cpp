@@ -35,6 +35,7 @@ void Enemy::Init()
 {
 	// アニメーションをアタッチ
 	m_animHandle = MV1AttachAnim(m_modelHandle, MV1GetAnimIndex(m_modelHandle, kAnimName.c_str()));
+	m_tag = ObjectTag::Enemy;
 }
 
 void Enemy::End()
@@ -68,6 +69,10 @@ void Enemy::Draw()
 void Enemy::OnCollision(const GameObject& other)
 {
 	// TODO: 当たったときの処理
+	if (other.GetTag() == ObjectTag::PunchCollider)
+	{
+		DrawCircle(100, 200, 50, 0x0000ff, true);
+	}
 }
 
 void Enemy::Move()

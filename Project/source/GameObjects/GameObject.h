@@ -3,6 +3,16 @@
 #include "../System/Animation.h"
 #include "../Utility/Sphere.h"
 
+enum class ObjectTag
+{
+	None,
+	Player,
+	Enemy,
+	Chest,
+	Coin,
+	PunchCollider,
+};
+
 class GameObject
 {
 public:
@@ -24,9 +34,13 @@ public:
 
 	const Sphere& GetSphere() const { return m_sphere; }
 
+	ObjectTag GetTag() const { return m_tag; }
+
 protected:
 	Vector3 m_pos;
 	int m_modelHandle = -1;
 
 	Sphere m_sphere;
+
+	ObjectTag m_tag = ObjectTag::None;
 };

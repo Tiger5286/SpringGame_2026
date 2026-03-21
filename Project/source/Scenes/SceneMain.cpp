@@ -51,7 +51,7 @@ void SceneMain::Init()
 	m_pCamera->Init();
 
 	// プレイヤーの生成と初期化
-	m_pPlayer = std::make_shared<Player>(m_input);
+	m_pPlayer = std::make_shared<Player>(m_input,*m_pCollisionManager);
 	m_pPlayer->SetHandle(m_pModelManager->DuplicateModel(L"Player"));
 	m_pPlayer->Init();
 	m_pCollisionManager->Register(m_pPlayer);

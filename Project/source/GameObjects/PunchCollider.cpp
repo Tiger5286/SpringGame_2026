@@ -16,6 +16,7 @@ PunchCollider::~PunchCollider()
 
 void PunchCollider::Init()
 {
+	m_tag = ObjectTag::PunchCollider;
 }
 
 void PunchCollider::End()
