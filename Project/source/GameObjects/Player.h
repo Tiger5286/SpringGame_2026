@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "GameObject.h"
 #include "../System/Input.h"
+#include "../System/Animation.h"
 #include <memory>
 
 class PunchCollider;

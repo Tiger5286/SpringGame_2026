@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include "../Geometry.h"
-#include "../System/Animation.h"
 #include "../Utility/Sphere.h"
 
 enum class ObjectTag
@@ -31,6 +30,8 @@ public:
 	void SetHandle(int handle);
 
 	void Gravity();
+
+	void LimitPos();
 
 	Vector3 GetPos() const;
 

@@ -107,11 +107,7 @@ void Player::Move()
 	moveVec = Matrix4x4::GetRotYMatrix(-m_cameraAngleY) * moveVec;
 	m_pos += moveVec;
 
-	// 移動範囲の制限
-	if (m_pos.x > Game::kFieldSize) m_pos.x = Game::kFieldSize;
-	if (m_pos.x < -Game::kFieldSize) m_pos.x = -Game::kFieldSize;
-	if (m_pos.z > Game::kFieldSize) m_pos.z = Game::kFieldSize;
-	if (m_pos.z < -Game::kFieldSize) m_pos.z = -Game::kFieldSize;
+	LimitPos();
 
 	m_sphere.SetPos({ m_pos.x,m_pos.y + kSphereRadius,m_pos.z });
 

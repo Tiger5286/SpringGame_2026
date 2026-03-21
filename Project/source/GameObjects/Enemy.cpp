@@ -126,6 +126,7 @@ void Enemy::Move()
 		// 位置に足す
 		m_pos += enemyToPlayer;
 	}
+	LimitPos();
 	// 当たり判定の位置を設定
 	m_sphere.SetPos({ m_pos.x,m_pos.y + kSphereRadius,m_pos.z });
 	// 平行移動行列を生成

@@ -1,4 +1,5 @@
 ﻿#include "GameObject.h"
+#include "../Game.h"
 
 namespace
 {
@@ -35,6 +36,15 @@ void GameObject::Gravity()
 		m_pos.y = 0.0f;
 		m_vel.y = 0.0f;
 	}
+}
+
+void GameObject::LimitPos()
+{
+	// 移動範囲の制限
+	if (m_pos.x > Game::kFieldSize) m_pos.x = Game::kFieldSize;
+	if (m_pos.x < -Game::kFieldSize) m_pos.x = -Game::kFieldSize;
+	if (m_pos.z > Game::kFieldSize) m_pos.z = Game::kFieldSize;
+	if (m_pos.z < -Game::kFieldSize) m_pos.z = -Game::kFieldSize;
 }
 
 Vector3 GameObject::GetPos() const
