@@ -1,6 +1,7 @@
 ﻿#include "GameObject.h"
 
-GameObject::GameObject()
+GameObject::GameObject(float sphereRadius):
+	m_sphere(sphereRadius)
 {
 }
 

@@ -20,6 +20,8 @@ public:
     void Update() override;
     void Draw() override;
 
+	void OnCollision(const GameObject& other) override;
+
     void SetCameraAngleY(float angle) { m_cameraAngleY = angle; }
 
 private:

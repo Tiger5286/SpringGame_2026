@@ -18,15 +18,3 @@ void Sphere::Draw()
 {
 	DrawSphere3D(m_pos.ToDxLib(), m_radius, kDivNum, 0xffff00, 0xffff00, false);
 }
-
-bool Sphere::CheckCollision(const Sphere& other) const
-{
-	// 球体同士の距離を算出
-	float dist = (m_pos - other.m_pos).Length();
-	// 当たる距離を算出
-	float hitDist = m_radius + other.m_radius;
-	// 球体同士の距離が当たる距離を下回っていたら当たっている
-	if (dist < hitDist) return true;
-	// そうでない場合は当たっていない
-	return false;
-}

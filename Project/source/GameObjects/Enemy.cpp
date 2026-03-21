@@ -16,9 +16,13 @@ namespace
 	const std::wstring kAnimName = L"MonsterArmature|Flying";
 	// アニメーションの再生速度
 	constexpr float kAnimSpeed = 0.5f;
+
+	// 当たり判定の半径
+	constexpr float kSphereRadius = 80.0f;
 }
 
 Enemy::Enemy(Player& player):
+	GameObject(kSphereRadius),
 	m_player(player)
 {
 }
@@ -56,6 +60,14 @@ void Enemy::Update()
 void Enemy::Draw()
 {
 	MV1DrawModel(m_modelHandle);
+#ifdef _DEBUG
+	m_sphere.Draw();
+#endif
+}
+
+void Enemy::OnCollision(const GameObject& other)
+{
+	// TODO: 当たったときの処理
 }
 
 void Enemy::Move()
@@ -73,6 +85,7 @@ void Enemy::Move()
 		enemyToPlayer *= kMoveSpeed;
 		// 位置に足す
 		m_pos += enemyToPlayer;
+		m_sphere.SetPos({ m_pos.x,m_pos.y + kSphereRadius,m_pos.z });
 	}
 	// 平行移動行列を生成
 	auto transMtx = Matrix4x4::GetTranslateMatrix(m_pos);

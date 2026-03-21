@@ -11,9 +11,13 @@ namespace
 	// アニメーション名
 	const std::wstring kIdleAnimName = L"CharacterArmature|Idle";
 	const std::wstring kMoveAnimName = L"CharacterArmature|Run";
+
+	// 当たり判定の半径
+	constexpr float kSphereRadius = 80.0f;
 }
 
 Player::Player(Input& input) :
+	GameObject(kSphereRadius),
 	m_input(input)
 {
 }
@@ -55,6 +59,15 @@ void Player::Update()
 void Player::Draw()
 {
 	MV1DrawModel(m_modelHandle);
+#ifdef _DEBUG
+	m_sphere.Draw();
+#endif
+}
+
+void Player::OnCollision(const GameObject& other)
+{
+	// TODO: 当たったときの処理
+	DrawCircle(100, 100, 50, 0xff0000, true);
 }
 
 void Player::Move()
@@ -85,6 +98,14 @@ void Player::Move()
 	moveVec = Matrix4x4::GetRotYMatrix(-m_cameraAngleY) * moveVec;
 	m_pos += moveVec;
 
+	// 移動範囲の制限
+	if (m_pos.x > Game::kFieldSize) m_pos.x = Game::kFieldSize;
+	if (m_pos.x < -Game::kFieldSize) m_pos.x = -Game::kFieldSize;
+	if (m_pos.z > Game::kFieldSize) m_pos.z = Game::kFieldSize;
+	if (m_pos.z < -Game::kFieldSize) m_pos.z = -Game::kFieldSize;
+
+	m_sphere.SetPos({ m_pos.x,m_pos.y + kSphereRadius,m_pos.z });
+
 	// プレイヤーの位置に応じた行列を生成
 	Matrix4x4 transMtx = Matrix4x4::GetTranslateMatrix(m_pos);
 
@@ -92,10 +113,4 @@ void Player::Move()
 	auto mtx = transMtx * rotYMtx;
 	// プレイヤーのモデルに行列を適用
 	MV1SetMatrix(m_modelHandle, mtx.ToDxLib());
-
-	// 移動範囲の制限
-	if (m_pos.x > Game::kFieldSize) m_pos.x = Game::kFieldSize;
-	if (m_pos.x < -Game::kFieldSize) m_pos.x = -Game::kFieldSize;
-	if (m_pos.z > Game::kFieldSize) m_pos.z = Game::kFieldSize;
-	if (m_pos.z < -Game::kFieldSize) m_pos.z = -Game::kFieldSize;
 }

@@ -7,6 +7,7 @@
 #include "../System/Camera.h"
 
 #include "../Managers/ModelManager.h"
+#include "../Managers/CollisionManager.h"
 
 #include "../GameObjects/Player.h"
 #include "../GameObjects/Enemy.h"
@@ -42,6 +43,8 @@ void SceneMain::Init()
 	{
 		m_pModelManager->LoadModel(names.first, names.second);
 	}
+	// コリジョンマネージャーの生成
+	m_pCollisionManager = std::make_shared<CollisionManager>();
 
 	// カメラの生成と初期化
 	m_pCamera = std::make_shared<Camera>(m_input);
@@ -51,11 +54,13 @@ void SceneMain::Init()
 	m_pPlayer = std::make_shared<Player>(m_input);
 	m_pPlayer->SetHandle(m_pModelManager->DuplicateModel(L"Player"));
 	m_pPlayer->Init();
+	m_pCollisionManager->Register(m_pPlayer);
 
 	// 敵の生成と初期化
 	m_pEnemy = std::make_shared<Enemy>(*m_pPlayer);
 	m_pEnemy->SetHandle(m_pModelManager->DuplicateModel(L"Enemy"));
 	m_pEnemy->Init();
+	m_pCollisionManager->Register(m_pEnemy);
 }
 
 void SceneMain::End()
@@ -74,12 +79,17 @@ void SceneMain::Update()
 {
 	m_frameCount++;
 
+	// カメラの更新
 	m_pCamera->SetPlayerPos(m_pPlayer->GetPos());
-	m_pPlayer->SetCameraAngleY(m_pCamera->GetAngleY());
+	m_pPlayer->SetCameraAngleY(m_pCamera->GetAngleY());	// プレイヤーにカメラの角度を渡す
 
+	// 各オブジェクトの更新
 	m_pCamera->Update();
 	m_pPlayer->Update();
 	m_pEnemy->Update();
+
+	// 当たり判定の更新
+	m_pCollisionManager->Update();
 }
 
 void SceneMain::Draw()

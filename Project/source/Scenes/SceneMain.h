@@ -5,6 +5,7 @@
 class Camera;
 
 class ModelManager;
+class CollisionManager;
 
 class Player;
 class Enemy;
@@ -29,6 +30,7 @@ private:
 	std::shared_ptr<Camera> m_pCamera = nullptr;
 
 	std::shared_ptr<ModelManager> m_pModelManager = nullptr;
+	std::shared_ptr<CollisionManager> m_pCollisionManager = nullptr;
 
 	std::shared_ptr<Player> m_pPlayer = nullptr;
 	std::shared_ptr<Enemy> m_pEnemy = nullptr;

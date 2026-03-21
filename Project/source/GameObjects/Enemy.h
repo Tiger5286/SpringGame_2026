@@ -15,6 +15,8 @@ public:
     void Update() override;
     void Draw() override;
 
+	void OnCollision(const GameObject& other) override;
+
 private:
     void Move();
 
