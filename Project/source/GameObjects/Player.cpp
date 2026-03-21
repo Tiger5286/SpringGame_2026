@@ -18,6 +18,8 @@ namespace
 
 	// パンチする時間
 	constexpr int kPunchFrame = 20;
+	// パンチアニメーションの再生速度
+	constexpr float kPunchAnimSpeed = 1.0f;
 }
 
 Player::Player(Input& input) :
@@ -109,8 +111,8 @@ void Player::Move()
 
 void Player::Punch()
 {
-	// Aボタンが押されたとき、パンチが終わっていたらパンチする
-	if (m_input.IsTriggerd(XINPUT_BUTTON_A))
+	// Bボタンが押されたとき、パンチが終わっていたらパンチする
+	if (m_input.IsTriggerd(XINPUT_BUTTON_B))
 	{
 		if (m_punchFrame == 0)
 		{
@@ -146,7 +148,7 @@ void Player::UpdateAnimation()
 	// ステートが変わった瞬間を取得
 	if (TriggeredChangeState(PlayerState::Punch))
 	{
-		m_animation.ChangeAnim(kPunchAnimName);
+		m_animation.ChangeAnim(kPunchAnimName, kPunchAnimSpeed);
 	}
 	if (TriggeredChangeState(PlayerState::Move))
 	{
