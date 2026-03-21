@@ -26,6 +26,11 @@ public:
 
 private:
     void Move();
+    void UpdateState();
+    void UpdateAnimation();
+
+    // ステートが変わった瞬間を取得する関数
+    bool TriggeredChangeState(PlayerState state) const;
 
 private:
     Input& m_input;
@@ -34,6 +39,8 @@ private:
 	PlayerState m_prevState = PlayerState::Idle;
 
     Animation m_animation;
+
+    Vector3 m_prevPos;
 
     float m_cameraAngleY = 0.0f;
 

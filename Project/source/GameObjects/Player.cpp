@@ -11,6 +11,7 @@ namespace
 	// アニメーション名
 	const std::wstring kIdleAnimName = L"CharacterArmature|Idle";
 	const std::wstring kMoveAnimName = L"CharacterArmature|Run";
+	const std::wstring kPunchAnimName = L"CharacterArmature|Punch";
 
 	// 当たり判定の半径
 	constexpr float kSphereRadius = 80.0f;
@@ -39,21 +40,14 @@ void Player::Update()
 {
 	// 前のフレームの状態を保存
 	m_prevState = m_state;
+	m_prevPos = m_pos;
 
 	// 移動
 	Move();
-
-	// ステートが変わった瞬間を取得
-	if (m_state == PlayerState::Idle && m_prevState != PlayerState::Idle)
-	{
-		m_animation.ChangeAnim(kIdleAnimName);
-	}
-	else if (m_state == PlayerState::Move && m_prevState != PlayerState::Move)
-	{
-		m_animation.ChangeAnim(kMoveAnimName);
-	}
+	// ステートの更新
+	UpdateState();
 	// アニメーションの更新
-	m_animation.Update();
+	UpdateAnimation();
 }
 
 void Player::Draw()
@@ -82,13 +76,6 @@ void Player::Move()
 		m_angle = atan2(leftStick.y, leftStick.x);
 		m_angle += DX_PI_F / 2;
 		m_angle += m_cameraAngleY;
-		// ステートを移動にする
-		m_state = PlayerState::Move;
-	}
-	else
-	{
-		// ステートを待機にする
-		m_state = PlayerState::Idle;
 	}
 	// 取得した角度でY軸回転行列を取得
 	auto rotYMtx = Matrix4x4::GetRotYMatrix(-m_angle);
@@ -113,4 +100,38 @@ void Player::Move()
 	auto mtx = transMtx * rotYMtx;
 	// プレイヤーのモデルに行列を適用
 	MV1SetMatrix(m_modelHandle, mtx.ToDxLib());
+}
+
+void Player::UpdateState()
+{
+	if (m_prevPos != m_pos)
+	{
+		m_state = PlayerState::Move;
+
+	}
+	else
+	{
+		m_state = PlayerState::Idle;
+	}
+}
+
+void Player::UpdateAnimation()
+{
+	// ステートが変わった瞬間を取得
+	if (TriggeredChangeState(PlayerState::Idle))
+	{
+		m_animation.ChangeAnim(kIdleAnimName);
+	}
+	else if (TriggeredChangeState(PlayerState::Move))
+	{
+		m_animation.ChangeAnim(kMoveAnimName);
+	}
+	// アニメーションの更新
+	m_animation.Update();
+}
+
+bool Player::TriggeredChangeState(PlayerState state) const
+{
+	if (m_state == state && m_prevState != state) return true;
+	return false;
 }
