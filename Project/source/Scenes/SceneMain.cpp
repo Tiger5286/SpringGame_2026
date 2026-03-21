@@ -11,16 +11,16 @@
 #include "../Managers/EnemyManager.h"
 
 #include "../GameObjects/Player.h"
-#include "../GameObjects/Enemy.h"
+#include "../GameObjects/Coin.h"
 
 namespace
 {
 	// 使用するモデルのファイル名と登録名
 	const std::pair<std::wstring, std::wstring> kModelNames[4] = {
-		{L"data/Player.MV1",L"Player"},
-		{L"data/Enemy.MV1",L"Enemy"},
-		{L"data/Chest.MV1",L"Chest"},
-		{L"data/Coin.MV1",L"Coin"},
+		{ L"data/Player.MV1", L"Player" },
+		{ L"data/Enemy.MV1",  L"Enemy"  },
+		{ L"data/Chest.MV1",  L"Chest"  },
+		{ L"data/Coin.MV1",   L"Coin"   },
 	};
 
 	// 地面の色
@@ -64,6 +64,12 @@ void SceneMain::Init()
 	m_pEnemyManager = std::make_shared<EnemyManager>(*m_pModelManager, *m_pCollisionManager, *m_pPlayer);
 	m_pEnemyManager->Init();
 	m_pEnemyManager->SpawnEnemy();
+
+	// コインの生成と初期化
+	m_pCoin = std::make_shared<Coin>();
+	m_pCoin->SetHandle(m_pModelManager->DuplicateModel(L"Coin"));
+	m_pCoin->Init();
+	m_pCollisionManager->Register(m_pCoin);
 }
 
 void SceneMain::End()
@@ -76,6 +82,8 @@ void SceneMain::End()
 
 	// 敵マネージャーの終了処理
 	m_pEnemyManager->End();
+	
+	m_pCoin->End();
 }
 
 void SceneMain::Update()
@@ -98,6 +106,8 @@ void SceneMain::Update()
 	m_pPlayer->Update();
 	m_pEnemyManager->Update();
 
+	m_pCoin->Update();
+
 	// 当たり判定の更新
 	m_pCollisionManager->Update();
 }
@@ -107,6 +117,7 @@ void SceneMain::Draw()
 	// 各オブジェクトの描画
 	m_pPlayer->Draw();
 	m_pEnemyManager->Draw();
+	m_pCoin->Draw();
 
 	// 床の描画
 	DrawTriangle3D({ -Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,-Game::kFieldSize }, kGroundColor, true);
