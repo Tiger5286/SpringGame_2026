@@ -6,6 +6,7 @@ enum class PlayerState
 {
     Idle,
     Move,
+    Punch,
 };
 
 class Player :
@@ -26,6 +27,7 @@ public:
 
 private:
     void Move();
+    void Punch();
     void UpdateState();
     void UpdateAnimation();
 
@@ -45,4 +47,6 @@ private:
     float m_cameraAngleY = 0.0f;
 
     float m_angle = 0.0f;
+
+    int m_punchFrame = 0;
 };

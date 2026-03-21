@@ -15,6 +15,9 @@ namespace
 
 	// 当たり判定の半径
 	constexpr float kSphereRadius = 80.0f;
+
+	// パンチする時間
+	constexpr int kPunchFrame = 20;
 }
 
 Player::Player(Input& input) :
@@ -44,6 +47,8 @@ void Player::Update()
 
 	// 移動
 	Move();
+	// パンチ
+	Punch();
 	// ステートの更新
 	UpdateState();
 	// アニメーションの更新
@@ -102,9 +107,30 @@ void Player::Move()
 	MV1SetMatrix(m_modelHandle, mtx.ToDxLib());
 }
 
+void Player::Punch()
+{
+	// Aボタンが押されたとき、パンチが終わっていたらパンチする
+	if (m_input.IsTriggerd(XINPUT_BUTTON_A))
+	{
+		if (m_punchFrame == 0)
+		{
+			m_punchFrame = kPunchFrame;
+		}
+	}
+	// パンチ中はカウントを減らす
+	if (m_punchFrame > 0)
+	{
+		m_punchFrame--;
+	}
+}
+
 void Player::UpdateState()
 {
-	if (m_prevPos != m_pos)
+	if (m_punchFrame > 0) // パンチ中
+	{
+		m_state = PlayerState::Punch;
+	}
+	else if (m_prevPos != m_pos) // 前の位置と現在の位置が違っている=移動している
 	{
 		m_state = PlayerState::Move;
 
@@ -118,13 +144,17 @@ void Player::UpdateState()
 void Player::UpdateAnimation()
 {
 	// ステートが変わった瞬間を取得
+	if (TriggeredChangeState(PlayerState::Punch))
+	{
+		m_animation.ChangeAnim(kPunchAnimName);
+	}
+	if (TriggeredChangeState(PlayerState::Move))
+	{
+		m_animation.ChangeAnim(kMoveAnimName);
+	}
 	if (TriggeredChangeState(PlayerState::Idle))
 	{
 		m_animation.ChangeAnim(kIdleAnimName);
-	}
-	else if (TriggeredChangeState(PlayerState::Move))
-	{
-		m_animation.ChangeAnim(kMoveAnimName);
 	}
 	// アニメーションの更新
 	m_animation.Update();
