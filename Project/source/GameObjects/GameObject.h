@@ -30,6 +30,8 @@ public:
 	// Init()より前に実行する
 	void SetHandle(int handle);
 
+	void Gravity();
+
 	Vector3 GetPos() const;
 
 	const Sphere& GetSphere() const { return m_sphere; }
@@ -38,6 +40,7 @@ public:
 
 protected:
 	Vector3 m_pos;
+	Vector3 m_vel;
 	int m_modelHandle = -1;
 
 	Sphere m_sphere;

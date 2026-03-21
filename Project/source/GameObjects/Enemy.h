@@ -17,6 +17,12 @@ public:
 
 	void OnCollision(const GameObject& other) override;
 
+    void Spawn(const Vector3& spawnPos);
+
+	void OnHitPunch();
+
+	bool IsDead() const { return m_isDead; }
+
 private:
     void Move();
 
@@ -25,5 +31,9 @@ private:
 
     int m_animHandle = -1;
     float m_animTime = 0.0f;
+
+    bool m_isHitPunch = false;
+	int m_hitPunchFrame = 0;
+	bool m_isDead = false;
 };
 

@@ -66,12 +66,14 @@ void Player::Update()
 void Player::Draw()
 {
 	MV1DrawModel(m_modelHandle);
+#ifdef _DEBUG
+	// 当たり判定の描画
+	m_sphere.Draw();
+	// パンチの当たり判定の描画
 	if (m_pPunchCollider != nullptr)
 	{
 		m_pPunchCollider->Draw();
 	}
-#ifdef _DEBUG
-	m_sphere.Draw();
 #endif
 }
 

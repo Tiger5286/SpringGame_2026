@@ -8,6 +8,7 @@
 
 #include "../Managers/ModelManager.h"
 #include "../Managers/CollisionManager.h"
+#include "../Managers/EnemyManager.h"
 
 #include "../GameObjects/Player.h"
 #include "../GameObjects/Enemy.h"
@@ -24,6 +25,9 @@ namespace
 
 	// 地面の色
 	constexpr unsigned int kGroundColor = 0x44cc44;
+
+	// 敵がスポーンする間隔(フレーム)
+	constexpr int kEnemySpawnInterval = 120;
 }
 
 SceneMain::SceneMain(Input& input) :
@@ -56,11 +60,10 @@ void SceneMain::Init()
 	m_pPlayer->Init();
 	m_pCollisionManager->Register(m_pPlayer);
 
-	// 敵の生成と初期化
-	m_pEnemy = std::make_shared<Enemy>(*m_pPlayer);
-	m_pEnemy->SetHandle(m_pModelManager->DuplicateModel(L"Enemy"));
-	m_pEnemy->Init();
-	m_pCollisionManager->Register(m_pEnemy);
+	// 敵マネージャーの生成と初期化
+	m_pEnemyManager = std::make_shared<EnemyManager>(*m_pModelManager, *m_pCollisionManager, *m_pPlayer);
+	m_pEnemyManager->Init();
+	m_pEnemyManager->SpawnEnemy();
 }
 
 void SceneMain::End()
@@ -71,13 +74,20 @@ void SceneMain::End()
 	// プレイヤーの終了処理
 	m_pPlayer->End();
 
-	// 敵の終了処理
-	m_pEnemy->End();
+	// 敵マネージャーの終了処理
+	m_pEnemyManager->End();
 }
 
 void SceneMain::Update()
 {
 	m_frameCount++;
+
+	m_enemySpawnFrame++;
+	if (m_enemySpawnFrame >= kEnemySpawnInterval)
+	{
+		m_enemySpawnFrame = 0;
+		m_pEnemyManager->SpawnEnemy();
+	}
 
 	// カメラの更新
 	m_pCamera->SetPlayerPos(m_pPlayer->GetPos());
@@ -86,7 +96,7 @@ void SceneMain::Update()
 	// 各オブジェクトの更新
 	m_pCamera->Update();
 	m_pPlayer->Update();
-	m_pEnemy->Update();
+	m_pEnemyManager->Update();
 
 	// 当たり判定の更新
 	m_pCollisionManager->Update();
@@ -94,8 +104,9 @@ void SceneMain::Update()
 
 void SceneMain::Draw()
 {
+	// 各オブジェクトの描画
 	m_pPlayer->Draw();
-	m_pEnemy->Draw();
+	m_pEnemyManager->Draw();
 
 	// 床の描画
 	DrawTriangle3D({ -Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,-Game::kFieldSize }, kGroundColor, true);
