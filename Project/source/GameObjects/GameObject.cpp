@@ -5,6 +5,8 @@ namespace
 {
 	constexpr float kGravity = 1.0f;
 	constexpr float kMaxFallSpeed = 10.0f;
+
+	constexpr float kResistance = 0.5f;
 }
 
 GameObject::GameObject(float sphereRadius):
@@ -35,6 +37,36 @@ void GameObject::Gravity()
 	{
 		m_pos.y = 0.0f;
 		m_vel.y = 0.0f;
+	}
+}
+
+void GameObject::Resistance()
+{
+	// x方向の抵抗
+	if (m_vel.x > kResistance)
+	{
+		m_vel.x -= kResistance;
+	}
+	else if (m_vel.x < -kResistance)
+	{
+		m_vel.x += kResistance;
+	}
+	else
+	{
+		m_vel.x = 0.0f;
+	}
+	// z方向の抵抗
+	if (m_vel.z > kResistance)
+	{
+		m_vel.z -= kResistance;
+	}
+	else if (m_vel.z < -kResistance)
+	{
+		m_vel.z += kResistance;
+	}
+	else
+	{
+		m_vel.z = 0.0f;
 	}
 }
 

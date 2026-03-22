@@ -29,15 +29,17 @@ public:
 	// Init()より前に実行する
 	void SetHandle(int handle);
 
-	void Gravity();
-
-	void LimitPos();
-
 	Vector3 GetPos() const;
 
 	const Sphere& GetSphere() const { return m_sphere; }
 
 	ObjectTag GetTag() const { return m_tag; }
+
+protected:
+	void LimitPos();
+
+	void Gravity();
+	void Resistance();
 
 protected:
 	Vector3 m_pos;
