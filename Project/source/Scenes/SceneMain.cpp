@@ -57,8 +57,6 @@ void SceneMain::Init()
 	// コインマネージャーの生成と初期化
 	m_pCoinManager = std::make_shared<CoinManager>(*m_pModelManager, *m_pCollisionManager);
 	m_pCoinManager->Init();
-	// コインを生成
-	m_pCoinManager->Spawn({ 0,0,0 });
 
 	// プレイヤーの生成と初期化
 	m_pPlayer = std::make_shared<Player>(m_input,*m_pCollisionManager);

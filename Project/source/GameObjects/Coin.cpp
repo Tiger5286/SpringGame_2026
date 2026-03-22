@@ -7,9 +7,12 @@ namespace
 	constexpr float kRadius = 100.0f;
 
 	constexpr float kRotationSpeed = 0.05f;
+	constexpr float kHitPlayerRotationSpeed = 0.5f;
 
 	constexpr float kSpawnVelocity = 10.0f;
 	constexpr float kSpawnVelocityY = 20.0f;
+
+	const Vector3 kHitPlayerVec = { 0.0f,30.0f,0.0f };
 }
 
 Coin::Coin():
@@ -32,16 +35,37 @@ void Coin::End()
 void Coin::Update()
 {
 	// コインを回転させる
-	m_angle += kRotationSpeed;
+	if (!m_isHitPlayer)
+	{	// 通常の回転
+		m_angle += kRotationSpeed;
+	}
+	else
+	{	// プレイヤーと当たった後は速く回転する
+		m_angle += kHitPlayerRotationSpeed;
+	}
 	auto rotMtx = Matrix4x4::GetRotYMatrix(m_angle);
 
-	// 位置に速度を加算して移動
-	m_pos += m_vel;
-	// 抵抗をかける
-	Resistance();
-	Gravity();
-	// 画面外に出ないようにする
-	LimitPos();
+	if (!m_isHitPlayer)
+	{	// 通常の移動
+		// 位置に速度を加算して移動
+		m_pos += m_vel;
+		// 抵抗をかける
+		Resistance();
+		Gravity();
+		// 画面外に出ないようにする
+		LimitPos();
+	}
+	else
+	{
+		m_pos += m_vel;
+		m_vel.y -= 2.0f;
+		if (m_vel.y < 0.0f)
+		{
+			m_isDead = true;
+		}
+	}
+
+
 	// y0の位置に置くと半分埋まるため、y座標を半径分上げる
 	auto pos = m_pos;
 	pos.y += kRadius;
@@ -64,7 +88,11 @@ void Coin::Draw()
 
 void Coin::OnCollision(const GameObject& other)
 {
-	// TODO: プレイヤーと当たったときの処理
+	if (other.GetTag() == ObjectTag::Player)
+	{
+		m_isHitPlayer = true;
+		m_vel = kHitPlayerVec;
+	}
 }
 
 void Coin::Spawn(const Vector3& pos)
