@@ -70,6 +70,7 @@ void SceneMain::Init()
 	m_pCoin->SetHandle(m_pModelManager->DuplicateModel(L"Coin"));
 	m_pCoin->Init();
 	m_pCollisionManager->Register(m_pCoin);
+	m_pCoin->Spawn({ 0,0,0 });
 }
 
 void SceneMain::End()

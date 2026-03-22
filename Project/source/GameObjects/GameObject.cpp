@@ -6,7 +6,7 @@ namespace
 	constexpr float kGravity = 1.0f;
 	constexpr float kMaxFallSpeed = 10.0f;
 
-	constexpr float kResistance = 0.5f;
+	constexpr float kResistance = 0.15f;
 }
 
 GameObject::GameObject(float sphereRadius):

@@ -14,6 +14,8 @@ public:
 
 	void OnCollision(const GameObject& other) override;
 
+	void Spawn(const Vector3& pos);
+
 private:
     float m_angle = 0.0f;
 };
