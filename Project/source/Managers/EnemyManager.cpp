@@ -5,9 +5,10 @@
 #include "CollisionManager.h"
 #include "../Game.h"
 
-EnemyManager::EnemyManager(ModelManager& modelManager, CollisionManager& collisionManager, Player& player):
+EnemyManager::EnemyManager(ModelManager& modelManager, CollisionManager& collisionManager, CoinManager& coinManager, Player& player):
 	m_modelManager(modelManager),
 	m_collisionManager(collisionManager),
+	m_coinManager(coinManager),
 	m_player(player)
 {
 }

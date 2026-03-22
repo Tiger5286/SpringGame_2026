@@ -9,9 +9,9 @@
 #include "../Managers/ModelManager.h"
 #include "../Managers/CollisionManager.h"
 #include "../Managers/EnemyManager.h"
+#include "../Managers/CoinManager.h"
 
 #include "../GameObjects/Player.h"
-#include "../GameObjects/Coin.h"
 
 namespace
 {
@@ -54,6 +54,12 @@ void SceneMain::Init()
 	m_pCamera = std::make_shared<Camera>(m_input);
 	m_pCamera->Init();
 
+	// コインマネージャーの生成と初期化
+	m_pCoinManager = std::make_shared<CoinManager>(*m_pModelManager, *m_pCollisionManager);
+	m_pCoinManager->Init();
+	// コインを生成
+	m_pCoinManager->Spawn({ 0,0,0 });
+
 	// プレイヤーの生成と初期化
 	m_pPlayer = std::make_shared<Player>(m_input,*m_pCollisionManager);
 	m_pPlayer->SetHandle(m_pModelManager->DuplicateModel(L"Player"));
@@ -61,16 +67,10 @@ void SceneMain::Init()
 	m_pCollisionManager->Register(m_pPlayer);
 
 	// 敵マネージャーの生成と初期化
-	m_pEnemyManager = std::make_shared<EnemyManager>(*m_pModelManager, *m_pCollisionManager, *m_pPlayer);
+	m_pEnemyManager = std::make_shared<EnemyManager>(*m_pModelManager, *m_pCollisionManager,*m_pCoinManager, *m_pPlayer);
 	m_pEnemyManager->Init();
+	// 敵を生成
 	m_pEnemyManager->SpawnEnemy();
-
-	// コインの生成と初期化
-	m_pCoin = std::make_shared<Coin>();
-	m_pCoin->SetHandle(m_pModelManager->DuplicateModel(L"Coin"));
-	m_pCoin->Init();
-	m_pCollisionManager->Register(m_pCoin);
-	m_pCoin->Spawn({ 0,0,0 });
 }
 
 void SceneMain::End()
@@ -84,13 +84,14 @@ void SceneMain::End()
 	// 敵マネージャーの終了処理
 	m_pEnemyManager->End();
 	
-	m_pCoin->End();
+	m_pCoinManager->End();
 }
 
 void SceneMain::Update()
 {
 	m_frameCount++;
 
+	// 定期的に敵を召還する
 	m_enemySpawnFrame++;
 	if (m_enemySpawnFrame >= kEnemySpawnInterval)
 	{
@@ -106,8 +107,7 @@ void SceneMain::Update()
 	m_pCamera->Update();
 	m_pPlayer->Update();
 	m_pEnemyManager->Update();
-
-	m_pCoin->Update();
+	m_pCoinManager->Update();
 
 	// 当たり判定の更新
 	m_pCollisionManager->Update();
@@ -118,7 +118,7 @@ void SceneMain::Draw()
 	// 各オブジェクトの描画
 	m_pPlayer->Draw();
 	m_pEnemyManager->Draw();
-	m_pCoin->Draw();
+	m_pCoinManager->Draw();
 
 	// 床の描画
 	DrawTriangle3D({ -Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,-Game::kFieldSize }, kGroundColor, true);

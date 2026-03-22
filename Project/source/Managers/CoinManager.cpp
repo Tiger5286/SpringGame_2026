@@ -48,4 +48,5 @@ void CoinManager::Spawn(const Vector3& pos)
 	newCoin->Init();
 	m_collisionManager.Register(newCoin);
 	newCoin->Spawn(pos);
+	m_coins.push_back(newCoin);
 }

@@ -5,6 +5,7 @@
 
 class ModelManager;
 class CollisionManager;
+class CoinManager;
 
 class Enemy;
 class Player;
@@ -12,7 +13,10 @@ class Player;
 class EnemyManager
 {
 public:
-	EnemyManager(ModelManager& modelManager, CollisionManager& collisionManager, Player& player);
+	EnemyManager(ModelManager& modelManager,
+		CollisionManager& collisionManager,
+		CoinManager& coinManager,
+		Player& player);
 	virtual ~EnemyManager();
 
 	void Init();
@@ -28,6 +32,7 @@ private:
 private:
 	ModelManager& m_modelManager;
 	CollisionManager& m_collisionManager;
+	CoinManager& m_coinManager;
 	Player& m_player;
 
 	std::list<std::shared_ptr<Enemy>> m_pEnemies;
