@@ -3,7 +3,13 @@
 #include "../GameObjects/Enemy.h"
 #include "ModelManager.h"
 #include "CollisionManager.h"
+#include "CoinManager.h"
 #include "../Game.h"
+
+namespace
+{
+	constexpr int kSpawnCoinNum = 5;
+}
 
 EnemyManager::EnemyManager(ModelManager& modelManager, CollisionManager& collisionManager, CoinManager& coinManager, Player& player):
 	m_modelManager(modelManager),
@@ -40,6 +46,10 @@ void EnemyManager::Update()
 		if (pEnemy->IsDead())
 		{
 			deadEnemies.push_back(pEnemy);
+			for (int i = 0; i < kSpawnCoinNum; i++)
+			{
+				m_coinManager.Spawn(pEnemy->GetPos());
+			}
 		}
 	}
 	// 死んでいる敵をリストから削除
