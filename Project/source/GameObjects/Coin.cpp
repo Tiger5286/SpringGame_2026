@@ -64,6 +64,7 @@ void Coin::Draw()
 
 void Coin::OnCollision(const GameObject& other)
 {
+	// TODO: プレイヤーと当たったときの処理
 }
 
 void Coin::Spawn(const Vector3& pos)

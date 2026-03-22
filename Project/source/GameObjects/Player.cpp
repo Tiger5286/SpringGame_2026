@@ -79,7 +79,6 @@ void Player::Draw()
 
 void Player::OnCollision(const GameObject& other)
 {
-	// TODO: 当たったときの処理
 	if (other.GetTag() == ObjectTag::Enemy)
 	{
 		DrawCircle(100, 100, 50, 0xff0000, true);
