@@ -5,12 +5,14 @@
 
 class ModelManager;
 class CoinManager;
+class CollisionManager;
+
 class Chest;
 
 class ChestManager
 {
 public:
-	ChestManager(ModelManager& modelManager, CoinManager& coinManager);
+	ChestManager(ModelManager& modelManager,CollisionManager& collisionManager, CoinManager& coinManager);
 	virtual ~ChestManager();
 
 	void Init();
@@ -22,6 +24,7 @@ public:
 
 private:
 	ModelManager& m_modelManager;
+	CollisionManager& m_collisionManager;
 	CoinManager& m_coinManager;
 
 	std::list<std::shared_ptr<Chest>> m_chests;

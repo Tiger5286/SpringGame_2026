@@ -10,9 +10,9 @@
 #include "../Managers/CollisionManager.h"
 #include "../Managers/EnemyManager.h"
 #include "../Managers/CoinManager.h"
+#include "../Managers/ChestManager.h"
 
 #include "../GameObjects/Player.h"
-#include "../GameObjects/Chest.h"
 
 namespace
 {
@@ -71,11 +71,11 @@ void SceneMain::Init()
 	// 敵を生成
 	m_pEnemyManager->SpawnEnemy();
 
-	// 宝箱
-	m_pChest = std::make_shared<Chest>(*m_pCoinManager);
-	m_pChest->SetHandle(m_pModelManager->DuplicateModel(L"Chest"));
-	m_pChest->Init();
-	m_pCollisionManager->Register(m_pChest);
+	// 宝箱マネージャーの生成と初期化
+	m_pChestManager = std::make_shared<ChestManager>(*m_pModelManager,*m_pCollisionManager, *m_pCoinManager);
+	m_pChestManager->Init();
+	// 宝箱を生成
+	m_pChestManager->Spawn(m_pPlayer->GetPos());
 }
 
 void SceneMain::End()
@@ -89,7 +89,7 @@ void SceneMain::End()
 	// 敵マネージャーの終了処理
 	m_pEnemyManager->End();
 	m_pCoinManager->End();
-	m_pChest->End();
+	m_pChestManager->End();
 }
 
 void SceneMain::Update()
@@ -113,7 +113,7 @@ void SceneMain::Update()
 	m_pPlayer->Update();
 	m_pEnemyManager->Update();
 	m_pCoinManager->Update();
-	m_pChest->Update();
+	m_pChestManager->Update();
 
 	// 当たり判定の更新
 	m_pCollisionManager->Update();
@@ -125,7 +125,7 @@ void SceneMain::Draw()
 	m_pPlayer->Draw();
 	m_pEnemyManager->Draw();
 	m_pCoinManager->Draw();
-	m_pChest->Draw();
+	m_pChestManager->Draw();
 
 	// 床の描画
 	DrawTriangle3D({ -Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,-Game::kFieldSize }, kGroundColor, true);

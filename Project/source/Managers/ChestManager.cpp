@@ -1,11 +1,13 @@
 ﻿#include "ChestManager.h"
 #include "../GameObjects/Chest.h"
 #include "../Managers/ModelManager.h"
+#include "../Managers/CollisionManager.h"
 #include "../Game.h"
 
 
-ChestManager::ChestManager(ModelManager& modelManager, CoinManager& coinManager):
+ChestManager::ChestManager(ModelManager& modelManager, CollisionManager& collisionManager, CoinManager& coinManager):
 	m_modelManager(modelManager),
+	m_collisionManager(collisionManager),
 	m_coinManager(coinManager)
 {
 }
@@ -28,9 +30,20 @@ void ChestManager::End()
 
 void ChestManager::Update()
 {
+	std::list<std::shared_ptr<Chest>> deadChests;
 	for (auto& chest : m_chests)
 	{
 		chest->Update();
+		if (chest->IsDead())
+		{
+			deadChests.push_back(chest);
+		}
+	}
+	for (auto& chest : deadChests)
+	{
+		m_collisionManager.Unregister(chest);
+		chest->End();
+		m_chests.remove(chest);
 	}
 }
 
@@ -51,4 +64,7 @@ void ChestManager::Spawn(const Vector3& playerPos)
 		0.0f,
 		static_cast<float>(GetRand(Game::kFieldSize * 2) - Game::kFieldSize));
 	newChest->Spawn(spawnPos,playerPos);
+	m_collisionManager.Register(newChest);
+
+	m_chests.push_back(newChest);
 }

@@ -8,9 +8,9 @@ class ModelManager;
 class CollisionManager;
 class EnemyManager;
 class CoinManager;
+class ChestManager;
 
 class Player;
-class Chest;
 
 class SceneMain
 {
@@ -35,9 +35,9 @@ private:
 	std::shared_ptr<CollisionManager> m_pCollisionManager = nullptr;
 	std::shared_ptr<EnemyManager> m_pEnemyManager = nullptr;
 	std::shared_ptr<CoinManager> m_pCoinManager = nullptr;
+	std::shared_ptr<ChestManager> m_pChestManager = nullptr;
 
 	std::shared_ptr<Player> m_pPlayer = nullptr;
-	std::shared_ptr<Chest> m_pChest = nullptr;
 
 	int m_enemySpawnFrame = 0;
 };
