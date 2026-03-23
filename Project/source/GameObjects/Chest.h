@@ -1,5 +1,7 @@
 ﻿#pragma once
 #include "GameObject.h"
+#include "../System/Animation.h"
+
 class Chest :
     public GameObject
 {
@@ -15,6 +17,8 @@ public:
     void OnCollision(const GameObject& other) override;
 
 private:
+    Animation m_anim;
 
+    bool m_isHitPunch = false;
 };
 

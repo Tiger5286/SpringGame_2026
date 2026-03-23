@@ -74,6 +74,7 @@ void SceneMain::Init()
 	m_pChest = std::make_shared<Chest>();
 	m_pChest->SetHandle(m_pModelManager->DuplicateModel(L"Chest"));
 	m_pChest->Init();
+	m_pCollisionManager->Register(m_pChest);
 }
 
 void SceneMain::End()
