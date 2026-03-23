@@ -20,6 +20,8 @@ public:
 
     void Spawn(const Vector3& spawnPos, const Vector3& targetPos);
 
+    bool IsDead() const { return m_isDead; }
+
 private:
     CoinManager& m_coinManager;
 

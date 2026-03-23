@@ -60,7 +60,8 @@ void Chest::Update()
 	// 平行移動行列を生成
 	auto transMtx = Matrix4x4::GetTranslateMatrix(m_pos);
 	// 回転行列を生成
-	auto rotMtx = Matrix4x4::GetRotYMatrix(m_angle);
+	auto angle = m_angle + DX_PI_F / 2;
+	auto rotMtx = Matrix4x4::GetRotYMatrix(-angle);
 	// 行列を合成して適用
 	auto mtx = transMtx * rotMtx;
 	MV1SetMatrix(m_modelHandle, mtx.ToDxLib());
