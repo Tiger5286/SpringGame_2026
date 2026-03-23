@@ -1,14 +1,18 @@
 ﻿#include "Chest.h"
+#include "../Managers/CoinManager.h"
 
 namespace
 {
 	constexpr float kRadius = 120.0f;
 
 	constexpr int kAnimFrame = 18 * 2;
+
+	constexpr int kSpawnCoinInterval = 6;
 }
 
-Chest::Chest() :
-	GameObject(kRadius)
+Chest::Chest(CoinManager& coinManager) :
+	GameObject(kRadius),
+	m_coinManager(coinManager)
 {
 }
 
@@ -29,9 +33,28 @@ void Chest::Update()
 {
 	m_sphere.SetPos(Vector3(m_pos.x, m_pos.y + kRadius, m_pos.z));
 
+	// 開くアニメーションをする
 	if (m_isHitPunch)
 	{
-		m_anim.Update();
+		m_hitPunchFrame++;
+		if (m_hitPunchFrame < kAnimFrame)
+		{
+			m_anim.Update();
+		}
+	}
+	// 開いた後コインが出てくる
+	if (m_hitPunchFrame > kAnimFrame)
+	{
+		if (m_hitPunchFrame % kSpawnCoinInterval)
+		{
+			m_coinManager.Spawn(m_pos);
+			m_spawnCoinCount++;
+		}
+	}
+	// 10回出現させたら消える
+	if (m_spawnCoinCount >= 10)
+	{
+		m_isDead = true;
 	}
 }
 

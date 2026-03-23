@@ -71,7 +71,8 @@ void SceneMain::Init()
 	// 敵を生成
 	m_pEnemyManager->SpawnEnemy();
 
-	m_pChest = std::make_shared<Chest>();
+	// 宝箱
+	m_pChest = std::make_shared<Chest>(*m_pCoinManager);
 	m_pChest->SetHandle(m_pModelManager->DuplicateModel(L"Chest"));
 	m_pChest->Init();
 	m_pCollisionManager->Register(m_pChest);
