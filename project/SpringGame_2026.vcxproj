@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\GameObjects\Chest.cpp" />
     <ClCompile Include="source\Managers\CoinManager.cpp" />
     <ClCompile Include="source\GameObjects\Coin.cpp" />
     <ClCompile Include="source\Managers\EnemyManager.cpp" />
@@ -39,6 +40,7 @@
     <ClCompile Include="source\Utility\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\GameObjects\Chest.h" />
     <ClInclude Include="source\Managers\CoinManager.h" />
     <ClInclude Include="source\GameObjects\Coin.h" />
     <ClInclude Include="source\Managers\EnemyManager.h" />

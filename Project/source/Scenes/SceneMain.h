@@ -10,8 +10,7 @@ class EnemyManager;
 class CoinManager;
 
 class Player;
-
-class Coin;
+class Chest;
 
 class SceneMain
 {
@@ -38,7 +37,7 @@ private:
 	std::shared_ptr<CoinManager> m_pCoinManager = nullptr;
 
 	std::shared_ptr<Player> m_pPlayer = nullptr;
-	std::shared_ptr<Coin> m_pCoin = nullptr;
+	std::shared_ptr<Chest> m_pChest = nullptr;
 
 	int m_enemySpawnFrame = 0;
 };

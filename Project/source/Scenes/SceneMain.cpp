@@ -12,6 +12,7 @@
 #include "../Managers/CoinManager.h"
 
 #include "../GameObjects/Player.h"
+#include "../GameObjects/Chest.h"
 
 namespace
 {
@@ -69,6 +70,10 @@ void SceneMain::Init()
 	m_pEnemyManager->Init();
 	// 敵を生成
 	m_pEnemyManager->SpawnEnemy();
+
+	m_pChest = std::make_shared<Chest>();
+	m_pChest->SetHandle(m_pModelManager->DuplicateModel(L"Chest"));
+	m_pChest->Init();
 }
 
 void SceneMain::End()
@@ -81,8 +86,8 @@ void SceneMain::End()
 
 	// 敵マネージャーの終了処理
 	m_pEnemyManager->End();
-	
 	m_pCoinManager->End();
+	m_pChest->End();
 }
 
 void SceneMain::Update()
@@ -106,6 +111,7 @@ void SceneMain::Update()
 	m_pPlayer->Update();
 	m_pEnemyManager->Update();
 	m_pCoinManager->Update();
+	m_pChest->Update();
 
 	// 当たり判定の更新
 	m_pCollisionManager->Update();
@@ -117,6 +123,7 @@ void SceneMain::Draw()
 	m_pPlayer->Draw();
 	m_pEnemyManager->Draw();
 	m_pCoinManager->Draw();
+	m_pChest->Draw();
 
 	// 床の描画
 	DrawTriangle3D({ -Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,-Game::kFieldSize }, kGroundColor, true);
