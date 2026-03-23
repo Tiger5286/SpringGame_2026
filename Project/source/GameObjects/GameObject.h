@@ -9,7 +9,7 @@ enum class ObjectTag
 	Enemy,
 	Chest,
 	Coin,
-	PunchCollider,
+	Punch,
 };
 
 class GameObject

@@ -2,7 +2,7 @@
 
 namespace
 {
-	constexpr float kRadius = 100.0f;
+	constexpr float kRadius = 120.0f;
 }
 
 Chest::Chest() :
@@ -24,6 +24,7 @@ void Chest::End()
 
 void Chest::Update()
 {
+	m_sphere.SetPos(Vector3(m_pos.x, m_pos.y + kRadius, m_pos.z));
 }
 
 void Chest::Draw()
@@ -36,4 +37,8 @@ void Chest::Draw()
 
 void Chest::OnCollision(const GameObject& other)
 {
+	if (other.GetTag() == ObjectTag::Punch)
+	{
+
+	}
 }

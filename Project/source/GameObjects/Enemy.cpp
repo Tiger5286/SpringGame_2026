@@ -87,7 +87,7 @@ void Enemy::Draw()
 void Enemy::OnCollision(const GameObject& other)
 {
 	// TODO: 当たったときの処理
-	if (other.GetTag() == ObjectTag::PunchCollider)
+	if (other.GetTag() == ObjectTag::Punch)
 	{
 		OnHitPunch();
 	}
