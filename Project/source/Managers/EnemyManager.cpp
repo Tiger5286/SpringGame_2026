@@ -12,7 +12,7 @@ namespace
 	constexpr int kSpawnCoinNum = 5;
 
 	// 敵が地面から浮いている距離
-	constexpr float kFloatDist = 150.0f;
+	constexpr float kFloatDist = 100.0f;
 }
 
 EnemyManager::EnemyManager(ModelManager& modelManager, CollisionManager& collisionManager, CoinManager& coinManager, Player& player):

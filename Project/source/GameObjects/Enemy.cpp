@@ -11,6 +11,8 @@ namespace
 	constexpr float kMoveSpeed = 4.0f;
 	// プレイヤーとの最短距離
 	constexpr float kMinDistanceToPlayer = 50.0f;
+	// 敵が地面から浮いている距離
+	constexpr float kFloatDist = 100.0f;
 
 	// アニメーション名
 	const std::wstring kAnimName = L"MonsterArmature|Flying";
@@ -26,7 +28,6 @@ namespace
 	constexpr float kHitPunchUpSpeed = 30.0f;
 	// 吹き飛ばされてから死ぬまでの時間(フレーム)
 	constexpr int kHitPunchDuration = 30;
-	
 }
 
 Enemy::Enemy(Player& player):
@@ -125,6 +126,8 @@ void Enemy::Move()
 		enemyToPlayer *= kMoveSpeed;
 		// 位置に足す
 		m_pos += enemyToPlayer;
+		// 高さを固定
+		m_pos.y = kFloatDist;
 	}
 	LimitPos();
 	// 当たり判定の位置を設定
