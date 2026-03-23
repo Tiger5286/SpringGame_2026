@@ -75,7 +75,10 @@ void SceneMain::Init()
 	m_pChestManager = std::make_shared<ChestManager>(*m_pModelManager,*m_pCollisionManager, *m_pCoinManager);
 	m_pChestManager->Init();
 	// 宝箱を生成
-	m_pChestManager->Spawn(m_pPlayer->GetPos());
+	for (int i = 0; i < 10; i++)
+	{
+		m_pChestManager->Spawn(m_pPlayer->GetPos());
+	}
 }
 
 void SceneMain::End()
@@ -112,8 +115,8 @@ void SceneMain::Update()
 	m_pCamera->Update();
 	m_pPlayer->Update();
 	m_pEnemyManager->Update();
-	m_pCoinManager->Update();
 	m_pChestManager->Update();
+	m_pCoinManager->Update();
 
 	// 当たり判定の更新
 	m_pCollisionManager->Update();
@@ -124,8 +127,8 @@ void SceneMain::Draw()
 	// 各オブジェクトの描画
 	m_pPlayer->Draw();
 	m_pEnemyManager->Draw();
-	m_pCoinManager->Draw();
 	m_pChestManager->Draw();
+	m_pCoinManager->Draw();
 
 	// 床の描画
 	DrawTriangle3D({ -Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,-Game::kFieldSize }, kGroundColor, true);
