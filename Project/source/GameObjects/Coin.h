@@ -28,4 +28,3 @@ private:
     bool m_isHitPlayer = false;
     bool m_isDead = false;
 };
-

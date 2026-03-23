@@ -8,6 +8,8 @@ namespace
 	constexpr int kAnimFrame = 18 * 2;
 
 	constexpr int kSpawnCoinInterval = 6;
+
+	constexpr int kSpawnCoinNum = 15;
 }
 
 Chest::Chest(CoinManager& coinManager) :
@@ -51,8 +53,8 @@ void Chest::Update()
 			m_spawnCoinCount++;
 		}
 	}
-	// 10回出現させたら消える
-	if (m_spawnCoinCount >= 10)
+	// kSpawnCoinNum回出現させたら消える
+	if (m_spawnCoinCount >= kSpawnCoinNum)
 	{
 		m_isDead = true;
 	}
