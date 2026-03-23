@@ -3,6 +3,12 @@
 #include "ModelManager.h"
 #include "CollisionManager.h"
 
+namespace
+{
+	// このフレーム数経過するまでコインには当たり判定をつけない
+	constexpr int kCollidableFrame = 30;
+}
+
 CoinManager::CoinManager(ModelManager& modelManager, CollisionManager& collisionManager):
 	m_modelManager(modelManager),
 	m_collisionManager(collisionManager)
@@ -50,6 +56,14 @@ void CoinManager::Update()
 		coin->End();
 		m_coins.remove(coin);
 	}
+	// 一定時間経過したコインに当たり判定をつける
+	for (auto& coin : m_coins)
+	{
+		if (coin->GetAliveFrame() == kCollidableFrame)
+		{
+			m_collisionManager.Register(coin);
+		}
+	}
 }
 
 void CoinManager::Draw()
@@ -65,7 +79,6 @@ void CoinManager::Spawn(const Vector3& pos)
 	auto newCoin = std::make_shared<Coin>();
 	newCoin->SetHandle(m_modelManager.DuplicateModel(L"Coin"));
 	newCoin->Init();
-	m_collisionManager.Register(newCoin);
 	newCoin->Spawn(pos);
 	m_coins.push_back(newCoin);
 }

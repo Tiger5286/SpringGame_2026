@@ -18,6 +18,7 @@ public:
 
     bool IsHit() const { return m_isHitPlayer; }
     bool IsDead() const { return m_isDead; }
+    int GetAliveFrame() const { return m_aliveFrame; }
 
 private:
     float m_angle = 0.0f;

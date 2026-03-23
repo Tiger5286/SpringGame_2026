@@ -70,7 +70,7 @@ void Coin::Update()
 			m_isDead = true;
 		}
 	}
-
+	// 生存時間が一定時間たつと死ぬ
 	if (m_aliveFrame > kAliveFrame)
 	{
 		m_isDead = true;
