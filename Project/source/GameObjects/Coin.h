@@ -22,6 +22,8 @@ public:
 private:
     float m_angle = 0.0f;
 
+    int m_aliveFrame = 0;
+
     bool m_isHitPlayer = false;
     bool m_isDead = false;
 };

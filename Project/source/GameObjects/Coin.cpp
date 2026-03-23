@@ -13,6 +13,10 @@ namespace
 	constexpr float kSpawnVelocityY = 20.0f;
 
 	const Vector3 kHitPlayerVec = { 0.0f,30.0f,0.0f };
+
+	constexpr int kAliveFrame = 60 * 10;
+	constexpr int kStartFrickerFrame = kAliveFrame - 60 * 3;
+	constexpr int kFrickerFrame = 10;
 }
 
 Coin::Coin():
@@ -54,6 +58,8 @@ void Coin::Update()
 		Gravity();
 		// 画面外に出ないようにする
 		LimitPos();
+		// 生存時間をカウント
+		m_aliveFrame++;
 	}
 	else
 	{
@@ -63,6 +69,11 @@ void Coin::Update()
 		{
 			m_isDead = true;
 		}
+	}
+
+	if (m_aliveFrame > kAliveFrame)
+	{
+		m_isDead = true;
 	}
 
 
@@ -80,7 +91,22 @@ void Coin::Update()
 
 void Coin::Draw()
 {
-	MV1DrawModel(m_modelHandle);
+	// 取得されたなら普通に描画
+	if (m_isHitPlayer)
+	{
+		MV1DrawModel(m_modelHandle);
+	}
+	else if (m_aliveFrame > kStartFrickerFrame)		// 生存時間がギリギリなら点滅
+	{
+		if (m_aliveFrame % kFrickerFrame * 2 < kFrickerFrame)	// 点滅
+		{
+			MV1DrawModel(m_modelHandle);
+		}
+	}
+	else	// 普通に描画
+	{
+		MV1DrawModel(m_modelHandle);
+	}
 #ifdef _DEBUG
 	m_sphere.Draw();
 #endif
