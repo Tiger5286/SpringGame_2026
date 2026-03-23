@@ -56,6 +56,14 @@ void Chest::Update()
 	{
 		m_isDead = true;
 	}
+
+	// 平行移動行列を生成
+	auto transMtx = Matrix4x4::GetTranslateMatrix(m_pos);
+	// 回転行列を生成
+	auto rotMtx = Matrix4x4::GetRotYMatrix(m_angle);
+	// 行列を合成して適用
+	auto mtx = transMtx * rotMtx;
+	MV1SetMatrix(m_modelHandle, mtx.ToDxLib());
 }
 
 void Chest::Draw()
@@ -72,4 +80,13 @@ void Chest::OnCollision(const GameObject& other)
 	{
 		m_isHitPunch = true;
 	}
+}
+
+void Chest::Spawn(const Vector3& spawnPos, const Vector3& targetPos)
+{
+	// 位置を設定
+	m_pos = spawnPos;
+	// ターゲットの方向を向くように設定
+	auto vec = targetPos - spawnPos;
+	m_angle = atan2(vec.z, vec.x);
 }

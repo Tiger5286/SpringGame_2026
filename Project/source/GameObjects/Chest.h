@@ -18,10 +18,14 @@ public:
 
     void OnCollision(const GameObject& other) override;
 
+    void Spawn(const Vector3& spawnPos, const Vector3& targetPos);
+
 private:
     CoinManager& m_coinManager;
 
     Animation m_anim;
+
+    float m_angle = 0.0f;
 
     bool m_isHitPunch = false;
     int m_hitPunchFrame = 0;
