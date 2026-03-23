@@ -9,5 +9,5 @@ namespace Game
 	constexpr int kColorBitNum = 32;
 
 	// フィールドの大きさ(中心からの距離)(半分の長さ)
-	constexpr int kFieldSize = 1000;
+	constexpr int kFieldSize = 1500;
 }
