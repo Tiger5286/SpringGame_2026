@@ -10,8 +10,7 @@ namespace
 	constexpr float kMoveSpeed = 8.0f;
 	// アニメーション名
 	const std::wstring kIdleAnimName = L"CharacterArmature|Idle";
-	const std::wstring kWalkAnimName = L"CharacterArmature|Walk";
-	const std::wstring kRunAnimName = L"CharacterArmature|Run";
+	const std::wstring kMoveAnimName = L"CharacterArmature|Run";
 }
 
 Player::Player(Input& input) :
@@ -45,13 +44,9 @@ void Player::Update()
 	{
 		m_animation.ChangeAnim(kIdleAnimName);
 	}
-	else if (m_state == PlayerState::Walk && m_prevState != PlayerState::Walk)
+	else if (m_state == PlayerState::Move && m_prevState != PlayerState::Move)
 	{
-		m_animation.ChangeAnim(kWalkAnimName);
-	}
-	else if (m_state == PlayerState::Run && m_prevState != PlayerState::Run)
-	{
-		m_animation.ChangeAnim(kRunAnimName);
+		m_animation.ChangeAnim(kMoveAnimName);
 	}
 	// アニメーションの更新
 	m_animation.Update();
@@ -67,32 +62,20 @@ void Player::Move()
 	// 左スティックの入力を取得
 	const auto leftStick = m_input.GetStickInput(LR::Left);
 
-	const auto stickSqLen = leftStick.SquaredLength();
-
-	// 移動ステートの切り替え
-	if (stickSqLen >= 0.5f)
-	{
-		// ステートを走りにする
-		m_state = PlayerState::Run;
-	}
-	else if (stickSqLen > 0.0f)
-	{
-		// ステートをある気にする
-		m_state = PlayerState::Walk;
-	}
-	else
-	{
-		// ステートを待機にする
-		m_state = PlayerState::Idle;
-	}
-
 	// スティックを倒していないときは角度を反映しない
-	if (stickSqLen > 0.0f)
+	if (leftStick.SquaredLength() > 0.0f)
 	{
 		// スティックの入力方向の角度を取得
 		m_angle = atan2(leftStick.y, leftStick.x);
 		m_angle += DX_PI_F / 2;
 		m_angle += m_cameraAngleY;
+		// ステートを移動にする
+		m_state = PlayerState::Move;
+	}
+	else
+	{
+		// ステートを待機にする
+		m_state = PlayerState::Idle;
 	}
 	// 取得した角度でY軸回転行列を取得
 	auto rotYMtx = Matrix4x4::GetRotYMatrix(-m_angle);
