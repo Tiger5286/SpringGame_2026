@@ -26,7 +26,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetWriteZBuffer3D(true);	// 描画する物体はZバッファにも距離を書き込む
 
 	// ライティングの設定
-	//SetUseLighting(false);
+	SetUseLighting(true);
+	//SetLightDifColor(GetColorF(1.0f, 1.0f, 1.0f, 0.0f));
+	//SetLightAmbColor(GetColorF(0.6f, 0.6f, 0.6f, 0.0f));
+	//SetGlobalAmbientLight(GetColorF(0.4f, 0.4f, 0.4f, 1.0f));
+	//SetLightDirection(VGet(-1.0f, -1.0f, 1.0f));
+	// 背景色の設定
+	SetBackgroundColor(135, 206, 235);
 
 	Input input;
 

@@ -120,6 +120,11 @@ void SceneMain::Update()
 
 	// 当たり判定の更新
 	m_pCollisionManager->Update();
+
+	// カメラからプレイヤーへのベクトルを生成
+	auto cameraToPlayer = m_pPlayer->GetPos() - m_pCamera->GetPos();
+	// 生成したベクトルの方向のライトを設定
+	SetLightDirection(cameraToPlayer.ToDxLib());
 }
 
 void SceneMain::Draw()
