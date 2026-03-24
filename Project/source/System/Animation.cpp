@@ -4,9 +4,6 @@
 
 namespace
 {
-	// アニメーションの進行速度
-	constexpr float kAnimSpeed = 0.5f;
-
 	// アニメーションの切り替えフレーム数
 	constexpr int kAnimChangeFrame = 8;
 }
@@ -56,7 +53,7 @@ void Animation::Update()
 	}
 
 	// アニメーションの進行
-	m_currentAnimTime += kAnimSpeed;
+	m_currentAnimTime += m_animSpeed;
 	// アニメーションのループ処理
 	float totalCount = MV1GetAttachAnimTotalTime(m_modelHandle, m_currentAnimHandle);
 	while (m_currentAnimTime >= totalCount)
@@ -68,7 +65,7 @@ void Animation::Update()
 	// ひとつ前のアニメーションも進行させる
 	if (m_lastAnimHandle != -1)
 	{
-		m_lastAnimTime += kAnimSpeed;
+		m_lastAnimTime += m_animSpeed;
 		float lastTotalCount = MV1GetAttachAnimTotalTime(m_modelHandle, m_lastAnimHandle);
 		while (m_lastAnimTime >= lastTotalCount)
 		{
@@ -78,7 +75,7 @@ void Animation::Update()
 	}
 }
 
-void Animation::ChangeAnim(std::wstring animName)
+void Animation::ChangeAnim(std::wstring animName, float animSpeed)
 {
 	// 新しくアニメーションを設定しようとしたとき
 	// 古いアニメーションが残っている場合、それをデタッチ
@@ -98,4 +95,6 @@ void Animation::ChangeAnim(std::wstring animName)
 	m_currentAnimTime = 0.0f;
 	// アニメーションの切り替えフレーム数をリセット
 	m_animChangeFrame = 0;
+	// アニメーションの進行速度を設定
+	m_animSpeed = animSpeed;
 }

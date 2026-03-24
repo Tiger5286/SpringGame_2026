@@ -5,9 +5,12 @@
 class Camera;
 
 class ModelManager;
+class CollisionManager;
+class EnemyManager;
+class CoinManager;
+class ChestManager;
 
 class Player;
-class Enemy;
 
 class SceneMain
 {
@@ -29,8 +32,13 @@ private:
 	std::shared_ptr<Camera> m_pCamera = nullptr;
 
 	std::shared_ptr<ModelManager> m_pModelManager = nullptr;
+	std::shared_ptr<CollisionManager> m_pCollisionManager = nullptr;
+	std::shared_ptr<EnemyManager> m_pEnemyManager = nullptr;
+	std::shared_ptr<CoinManager> m_pCoinManager = nullptr;
+	std::shared_ptr<ChestManager> m_pChestManager = nullptr;
 
 	std::shared_ptr<Player> m_pPlayer = nullptr;
-	std::shared_ptr<Enemy> m_pEnemy = nullptr;
+
+	int m_enemySpawnFrame = 0;
 };
 

@@ -25,6 +25,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetUseZBuffer3D(true);	// Zバッファを使います
 	SetWriteZBuffer3D(true);	// 描画する物体はZバッファにも距離を書き込む
 
+	// ライティングの設定
+	//SetUseLighting(false);
+
 	Input input;
 
 	auto pScene = std::make_shared<SceneMain>(input);

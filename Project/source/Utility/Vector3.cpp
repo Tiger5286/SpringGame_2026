@@ -116,3 +116,15 @@ void Vector3::operator*=(float s)
 	y *= s;
 	z *= s;
 }
+
+bool Vector3::operator==(const Vector3& v) const
+{
+	if (x == v.x && y == v.y && z == v.z) return true;
+	return false;
+}
+
+bool Vector3::operator!=(const Vector3& v) const
+{
+	if (x != v.x || y != v.y || z != v.z) return true;
+	return false;
+}

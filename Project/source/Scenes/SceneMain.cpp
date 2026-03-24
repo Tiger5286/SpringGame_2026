@@ -7,22 +7,28 @@
 #include "../System/Camera.h"
 
 #include "../Managers/ModelManager.h"
+#include "../Managers/CollisionManager.h"
+#include "../Managers/EnemyManager.h"
+#include "../Managers/CoinManager.h"
+#include "../Managers/ChestManager.h"
 
 #include "../GameObjects/Player.h"
-#include "../GameObjects/Enemy.h"
 
 namespace
 {
 	// 使用するモデルのファイル名と登録名
 	const std::pair<std::wstring, std::wstring> kModelNames[4] = {
-		{L"data/Player.MV1",L"Player"},
-		{L"data/Enemy.MV1",L"Enemy"},
-		{L"data/Chest.MV1",L"Chest"},
-		{L"data/Coin.MV1",L"Coin"},
+		{ L"data/Player.MV1", L"Player" },
+		{ L"data/Enemy.MV1",  L"Enemy"  },
+		{ L"data/Chest.MV1",  L"Chest"  },
+		{ L"data/Coin.MV1",   L"Coin"   },
 	};
 
 	// 地面の色
 	constexpr unsigned int kGroundColor = 0x44cc44;
+
+	// 敵がスポーンする間隔(フレーム)
+	constexpr int kEnemySpawnInterval = 120;
 }
 
 SceneMain::SceneMain(Input& input) :
@@ -42,20 +48,37 @@ void SceneMain::Init()
 	{
 		m_pModelManager->LoadModel(names.first, names.second);
 	}
+	// コリジョンマネージャーの生成
+	m_pCollisionManager = std::make_shared<CollisionManager>();
 
 	// カメラの生成と初期化
 	m_pCamera = std::make_shared<Camera>(m_input);
 	m_pCamera->Init();
 
+	// コインマネージャーの生成と初期化
+	m_pCoinManager = std::make_shared<CoinManager>(*m_pModelManager, *m_pCollisionManager);
+	m_pCoinManager->Init();
+
 	// プレイヤーの生成と初期化
-	m_pPlayer = std::make_shared<Player>(m_input);
+	m_pPlayer = std::make_shared<Player>(m_input,*m_pCollisionManager);
 	m_pPlayer->SetHandle(m_pModelManager->DuplicateModel(L"Player"));
 	m_pPlayer->Init();
+	m_pCollisionManager->Register(m_pPlayer);
 
-	// 敵の生成と初期化
-	m_pEnemy = std::make_shared<Enemy>(*m_pPlayer);
-	m_pEnemy->SetHandle(m_pModelManager->DuplicateModel(L"Enemy"));
-	m_pEnemy->Init();
+	// 敵マネージャーの生成と初期化
+	m_pEnemyManager = std::make_shared<EnemyManager>(*m_pModelManager, *m_pCollisionManager,*m_pCoinManager, *m_pPlayer);
+	m_pEnemyManager->Init();
+	// 敵を生成
+	m_pEnemyManager->SpawnEnemy();
+
+	// 宝箱マネージャーの生成と初期化
+	m_pChestManager = std::make_shared<ChestManager>(*m_pModelManager,*m_pCollisionManager, *m_pCoinManager);
+	m_pChestManager->Init();
+	// 宝箱を生成
+	for (int i = 0; i < 10; i++)
+	{
+		m_pChestManager->Spawn(m_pPlayer->GetPos());
+	}
 }
 
 void SceneMain::End()
@@ -66,26 +89,46 @@ void SceneMain::End()
 	// プレイヤーの終了処理
 	m_pPlayer->End();
 
-	// 敵の終了処理
-	m_pEnemy->End();
+	// 敵マネージャーの終了処理
+	m_pEnemyManager->End();
+	m_pCoinManager->End();
+	m_pChestManager->End();
 }
 
 void SceneMain::Update()
 {
 	m_frameCount++;
 
-	m_pCamera->SetPlayerPos(m_pPlayer->GetPos());
-	m_pPlayer->SetCameraAngleY(m_pCamera->GetAngleY());
+	// 定期的に敵を召還する
+	m_enemySpawnFrame++;
+	if (m_enemySpawnFrame >= kEnemySpawnInterval)
+	{
+		m_enemySpawnFrame = 0;
+		m_pEnemyManager->SpawnEnemy();
+	}
 
+	// カメラの更新
+	m_pCamera->SetPlayerPos(m_pPlayer->GetPos());
+	m_pPlayer->SetCameraAngleY(m_pCamera->GetAngleY());	// プレイヤーにカメラの角度を渡す
+
+	// 各オブジェクトの更新
 	m_pCamera->Update();
 	m_pPlayer->Update();
-	m_pEnemy->Update();
+	m_pEnemyManager->Update();
+	m_pChestManager->Update();
+	m_pCoinManager->Update();
+
+	// 当たり判定の更新
+	m_pCollisionManager->Update();
 }
 
 void SceneMain::Draw()
 {
+	// 各オブジェクトの描画
 	m_pPlayer->Draw();
-	m_pEnemy->Draw();
+	m_pEnemyManager->Draw();
+	m_pChestManager->Draw();
+	m_pCoinManager->Draw();
 
 	// 床の描画
 	DrawTriangle3D({ -Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,-Game::kFieldSize }, kGroundColor, true);

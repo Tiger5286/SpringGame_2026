@@ -43,5 +43,8 @@ public:
 	// ベクトルの掛け算
 	Vector3 operator*(float s) const;
 	void operator*=(float s);
+
+	bool operator==(const Vector3& v) const;
+	bool operator!=(const Vector3& v) const;
 };
 

@@ -1,0 +1,138 @@
+﻿#include "Coin.h"
+#include "../Geometry.h"
+#include <cmath>
+
+namespace
+{
+	constexpr float kRadius = 100.0f;
+
+	constexpr float kRotationSpeed = 0.05f;
+	constexpr float kHitPlayerRotationSpeed = 0.5f;
+
+	constexpr float kSpawnVelocity = 10.0f;
+	constexpr float kSpawnVelocityY = 20.0f;
+
+	const Vector3 kHitPlayerVec = { 0.0f,30.0f,0.0f };
+
+	constexpr int kAliveFrame = 60 * 10;
+	constexpr int kStartFrickerFrame = kAliveFrame - 60 * 3;
+	constexpr int kFrickerFrame = 10;
+}
+
+Coin::Coin():
+	GameObject(kRadius)
+{
+}
+
+Coin::~Coin()
+{
+}
+
+void Coin::Init()
+{
+}
+
+void Coin::End()
+{
+}
+
+void Coin::Update()
+{
+	// コインを回転させる
+	if (!m_isHitPlayer)
+	{	// 通常の回転
+		m_angle += kRotationSpeed;
+	}
+	else
+	{	// プレイヤーと当たった後は速く回転する
+		m_angle += kHitPlayerRotationSpeed;
+	}
+	auto rotMtx = Matrix4x4::GetRotYMatrix(m_angle);
+
+	if (!m_isHitPlayer)
+	{	// 通常の移動
+		// 位置に速度を加算して移動
+		m_pos += m_vel;
+		// 抵抗をかける
+		Resistance();
+		Gravity();
+		// 画面外に出ないようにする
+		LimitPos();
+		// 生存時間をカウント
+		m_aliveFrame++;
+	}
+	else
+	{
+		m_pos += m_vel;
+		m_vel.y -= 2.0f;
+		if (m_vel.y < 0.0f)
+		{
+			m_isDead = true;
+		}
+	}
+	// 生存時間が一定時間たつと死ぬ
+	if (m_aliveFrame > kAliveFrame)
+	{
+		m_isDead = true;
+	}
+
+
+	// y0の位置に置くと半分埋まるため、y座標を半径分上げる
+	auto pos = m_pos;
+	pos.y += kRadius;
+	auto transMtx = Matrix4x4::GetTranslateMatrix(pos);
+	// コインの当たり判定の位置も更新
+	m_sphere.SetPos(pos);
+
+	// 行列を合成してモデルに適用
+	auto mtx = transMtx * rotMtx;
+	MV1SetMatrix(m_modelHandle, mtx.ToDxLib());
+}
+
+void Coin::Draw()
+{
+	// 取得されたなら普通に描画
+	if (m_isHitPlayer)
+	{
+		MV1DrawModel(m_modelHandle);
+	}
+	else if (m_aliveFrame > kStartFrickerFrame)		// 生存時間がギリギリなら点滅
+	{
+		if (m_aliveFrame % kFrickerFrame * 2 < kFrickerFrame)	// 点滅
+		{
+			MV1DrawModel(m_modelHandle);
+		}
+	}
+	else	// 普通に描画
+	{
+		MV1DrawModel(m_modelHandle);
+	}
+#ifdef _DEBUG
+	m_sphere.Draw();
+#endif
+}
+
+void Coin::OnCollision(const GameObject& other)
+{
+	if (other.GetTag() == ObjectTag::Player)
+	{
+		m_isHitPlayer = true;
+		m_vel = kHitPlayerVec;
+	}
+}
+
+void Coin::Spawn(const Vector3& pos)
+{
+	// コインの位置を設定
+	m_pos = pos;
+	m_sphere.SetPos(pos);
+	// ランダムな方向に飛ばす
+	// ランダムな方向を生成
+	float randRad = GetRand(359) * DX_PI_F / 180.0f;
+	// 生成した方向に速度を設定
+	m_vel.x = sinf(randRad);
+	m_vel.z = cosf(randRad);
+	m_vel.Normalize();
+	m_vel *= kSpawnVelocity;
+	m_vel.y = kSpawnVelocityY;
+}
