@@ -12,6 +12,7 @@ enum class PlayerState
     Idle,
     Move,
     Punch,
+    Hit,
 };
 
 class Player :
@@ -33,6 +34,7 @@ public:
 private:
     void Move();
     void Punch();
+    void Hit();
     void UpdateState();
     void UpdateAnimation();
 
@@ -52,9 +54,17 @@ private:
 
 	std::shared_ptr<PunchCollider> m_pPunchCollider = nullptr;
 
+    bool m_isCanControll = true;
+
     float m_cameraAngleY = 0.0f;
 
     float m_angle = 0.0f;
 
     int m_punchFrame = 0;
+
+    bool m_isHitEnemy = false;
+    int m_hitFrame = 0;
+
+    bool m_isInvincible = false;
+    int m_invincibleFrame = 0;
 };

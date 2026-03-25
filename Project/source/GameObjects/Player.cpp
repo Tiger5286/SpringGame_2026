@@ -1,6 +1,5 @@
 ﻿#include "Player.h"
 #include "../Geometry.h"
-#include "../Game.h"
 #include <cmath>
 #include <string>
 #include "PunchCollider.h"
@@ -14,9 +13,10 @@ namespace
 	const std::wstring kIdleAnimName = L"CharacterArmature|Idle";
 	const std::wstring kMoveAnimName = L"CharacterArmature|Run";
 	const std::wstring kPunchAnimName = L"CharacterArmature|Punch";
+	const std::wstring kHitAnimName = L"CharacterArmature|HitReact";
 
 	// 当たり判定の半径
-	constexpr float kSphereRadius = 80.0f;
+	constexpr float kSphereRadius = 100.0f;
 
 	// パンチする時間
 	constexpr int kPunchFrame = 20;
@@ -24,6 +24,13 @@ namespace
 	constexpr float kPunchAnimSpeed = 1.0f;
 	// プレイヤーからパンチコライダーまでの距離
 	constexpr float kPunchDistance = 100.0f;
+
+	// 被弾アニメーションの長さ(フレーム)
+	constexpr int kHitAnimFrame = 18 * 2;
+	// 無敵時間の長さ(フレーム)
+	constexpr int kInvincibleFrame = 120;
+	// 無敵時間の点滅の間隔(フレーム)
+	constexpr int kInvincibleFrickerInterval = 12;
 }
 
 Player::Player(Input& input, CollisionManager& collisionManager) :
@@ -55,8 +62,25 @@ void Player::Update()
 
 	// 移動
 	Move();
-	// パンチ
-	Punch();
+	// 被弾中でなければパンチ
+	if (!m_isHitEnemy)
+	{
+		Punch();
+	}
+	// 被弾
+	Hit();
+
+	// 無敵時間の更新
+	if (m_isInvincible)
+	{
+		m_invincibleFrame++;
+		if (m_invincibleFrame >= kInvincibleFrame)
+		{
+			m_invincibleFrame = 0;
+			m_isInvincible = false;
+		}
+	}
+
 	// ステートの更新
 	UpdateState();
 	// アニメーションの更新
@@ -65,7 +89,18 @@ void Player::Update()
 
 void Player::Draw()
 {
-	MV1DrawModel(m_modelHandle);
+	if (m_isInvincible)
+	{
+		if (m_invincibleFrame % kInvincibleFrickerInterval * 2 < kInvincibleFrickerInterval)
+		{
+			MV1DrawModel(m_modelHandle);
+		}
+	}
+	else
+	{
+		MV1DrawModel(m_modelHandle);
+	}
+	
 #ifdef _DEBUG
 	// 当たり判定の描画
 	m_sphere.Draw();
@@ -79,16 +114,28 @@ void Player::Draw()
 
 void Player::OnCollision(const GameObject& other)
 {
+	// 敵に当たった
 	if (other.GetTag() == ObjectTag::Enemy)
 	{
-		DrawCircle(100, 100, 50, 0xff0000, true);
+		// パンチ中でなければ、かつ無敵でなければ
+		if (m_punchFrame == 0 && !m_isInvincible)
+		{
+			// 当たった処理をする
+			m_isHitEnemy = true;
+			m_isCanControll = false;
+		}
 	}
 }
 
 void Player::Move()
 {
 	// 左スティックの入力を取得
-	const auto leftStick = m_input.GetStickInput(LR::Left);
+	auto leftStick = m_input.GetStickInput(LR::Left);
+	// 入力できない状態なら入力を無効にする
+	if (!m_isCanControll)
+	{
+		leftStick = Vector3(0.0f, 0.0f, 0.0f);
+	}
 
 	// スティックを倒していないときは角度を反映しない
 	if (leftStick.SquaredLength() > 0.0f)
@@ -121,9 +168,10 @@ void Player::Move()
 
 void Player::Punch()
 {
-	// Bボタンが押されたとき、パンチが終わっていたらパンチする
-	if (m_input.IsTriggerd(XINPUT_BUTTON_B))
+	// Bボタンが押されたとき、入力が有効なら
+	if (m_input.IsTriggerd(XINPUT_BUTTON_B) && m_isCanControll)
 	{
+		// パンチ中でなければパンチする
 		if (m_punchFrame == 0)
 		{
 			// パンチフレームをリセット
@@ -154,11 +202,30 @@ void Player::Punch()
 	}
 }
 
+void Player::Hit()
+{
+	if (m_isHitEnemy)
+	{
+		m_hitFrame++;
+		if (m_hitFrame >= kHitAnimFrame)
+		{
+			m_isHitEnemy = false;
+			m_isCanControll = true;
+			m_isInvincible = true;
+			m_hitFrame = 0;
+		}
+	}
+}
+
 void Player::UpdateState()
 {
 	if (m_punchFrame > 0) // パンチ中
 	{
 		m_state = PlayerState::Punch;
+	}
+	else if (m_isHitEnemy)
+	{
+		m_state = PlayerState::Hit;
 	}
 	else if (m_prevPos != m_pos) // 前の位置と現在の位置が違っている=移動している
 	{
@@ -177,6 +244,10 @@ void Player::UpdateAnimation()
 	if (TriggeredChangeState(PlayerState::Punch))
 	{
 		m_animation.ChangeAnim(kPunchAnimName, kPunchAnimSpeed);
+	}
+	if (TriggeredChangeState(PlayerState::Hit))
+	{
+		m_animation.ChangeAnim(kHitAnimName);
 	}
 	if (TriggeredChangeState(PlayerState::Move))
 	{
