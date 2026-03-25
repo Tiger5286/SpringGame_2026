@@ -22,7 +22,7 @@ public:
 
 	void Spawn(const Vector3& playerPos);
 
-	int GetChestNum() { return m_chests.size(); }
+	int GetChestNum() { return static_cast<int>(m_chests.size()); }
 
 private:
 	ModelManager& m_modelManager;

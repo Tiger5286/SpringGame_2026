@@ -96,5 +96,5 @@ void Chest::Spawn(const Vector3& spawnPos, const Vector3& targetPos)
 	m_pos = spawnPos;
 	// ターゲットの方向を向くように設定
 	auto vec = targetPos - spawnPos;
-	m_angle = atan2(vec.z, vec.x);
+	m_angle = static_cast<float>(atan2(vec.z, vec.x));
 }
