@@ -31,6 +31,11 @@ namespace
 	constexpr int kEnemySpawnInterval = 120;
 	// 宝箱がスポーンする間隔(フレーム)
 	constexpr int kChestSpawnInterval = 300;
+
+	// 敵の存在上限数
+	constexpr int kEnemyMaxNum = 10;
+	// 宝箱の存在上限数
+	constexpr int kChestMaxNum = 3;
 }
 
 SceneMain::SceneMain(Input& input) :
@@ -101,12 +106,20 @@ void SceneMain::Update()
 	// 定期的に敵を召還する
 	if (m_frameCount % kEnemySpawnInterval == 0)
 	{
-		m_pEnemyManager->Spawn();
+		// 今存在している敵の数が上限を超えていなければ召還
+		if (m_pEnemyManager->GetEnemyNum() < kEnemyMaxNum)
+		{
+			m_pEnemyManager->Spawn();
+		}
 	}
 	// 定期的に宝箱を召還する
 	if (m_frameCount % kChestSpawnInterval == 0)
 	{
-		m_pChestManager->Spawn(m_pPlayer->GetPos());
+		// 今存在している宝箱の数が上限を超えていなければ召還
+		if (m_pChestManager->GetChestNum() < kChestMaxNum)
+		{
+			m_pChestManager->Spawn(m_pPlayer->GetPos());
+		}
 	}
 
 	// カメラの更新

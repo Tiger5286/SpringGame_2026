@@ -26,6 +26,8 @@ public:
 
 	void Spawn();
 
+	int GetEnemyNum() { return m_pEnemies.size(); }
+
 private:
 	Vector3 GetSpawnPos();
 

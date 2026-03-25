@@ -22,6 +22,8 @@ public:
 
 	void Spawn(const Vector3& playerPos);
 
+	int GetChestNum() { return m_chests.size(); }
+
 private:
 	ModelManager& m_modelManager;
 	CollisionManager& m_collisionManager;
