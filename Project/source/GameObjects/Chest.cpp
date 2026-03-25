@@ -3,13 +3,16 @@
 
 namespace
 {
+	// 当たり判定の半径
 	constexpr float kRadius = 120.0f;
-
+	// アニメーションにかかるフレーム数
 	constexpr int kAnimFrame = 18 * 2;
-
-	constexpr int kSpawnCoinInterval = 6;
-
+	// コインが出てくる間隔
+	constexpr int kSpawnCoinInterval = 4;
+	// コインが出てくる枚数
 	constexpr int kSpawnCoinNum = 15;
+	// パンチされてから死ぬまでの時間
+	constexpr int kDeathFrame = kSpawnCoinInterval * kSpawnCoinNum + kAnimFrame + 30;
 }
 
 Chest::Chest(CoinManager& coinManager) :
@@ -47,14 +50,16 @@ void Chest::Update()
 	// 開いた後コインが出てくる
 	if (m_hitPunchFrame > kAnimFrame)
 	{
-		if (m_hitPunchFrame % kSpawnCoinInterval)
+		if (!(m_hitPunchFrame % kSpawnCoinInterval))
 		{
+			// kSpawnCoinNum回出現させていたらコインを出現させない
+			if (m_spawnCoinCount >= kSpawnCoinNum) return;
 			m_coinManager.Spawn(m_pos);
 			m_spawnCoinCount++;
 		}
 	}
-	// kSpawnCoinNum回出現させたら消える
-	if (m_spawnCoinCount >= kSpawnCoinNum)
+	// 死ぬ
+	if (m_hitPunchFrame > kDeathFrame)
 	{
 		m_isDead = true;
 	}
