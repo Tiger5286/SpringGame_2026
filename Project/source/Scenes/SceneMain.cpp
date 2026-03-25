@@ -29,6 +29,8 @@ namespace
 
 	// 敵がスポーンする間隔(フレーム)
 	constexpr int kEnemySpawnInterval = 120;
+	// 宝箱がスポーンする間隔(フレーム)
+	constexpr int kChestSpawnInterval = 300;
 }
 
 SceneMain::SceneMain(Input& input) :
@@ -69,16 +71,13 @@ void SceneMain::Init()
 	m_pEnemyManager = std::make_shared<EnemyManager>(*m_pModelManager, *m_pCollisionManager,*m_pCoinManager, *m_pPlayer);
 	m_pEnemyManager->Init();
 	// 敵を生成
-	m_pEnemyManager->SpawnEnemy();
+	m_pEnemyManager->Spawn();
 
 	// 宝箱マネージャーの生成と初期化
 	m_pChestManager = std::make_shared<ChestManager>(*m_pModelManager,*m_pCollisionManager, *m_pCoinManager);
 	m_pChestManager->Init();
 	// 宝箱を生成
-	for (int i = 0; i < 10; i++)
-	{
-		m_pChestManager->Spawn(m_pPlayer->GetPos());
-	}
+	m_pChestManager->Spawn(m_pPlayer->GetPos());
 }
 
 void SceneMain::End()
@@ -100,11 +99,14 @@ void SceneMain::Update()
 	m_frameCount++;
 
 	// 定期的に敵を召還する
-	m_enemySpawnFrame++;
-	if (m_enemySpawnFrame >= kEnemySpawnInterval)
+	if (m_frameCount % kEnemySpawnInterval == 0)
 	{
-		m_enemySpawnFrame = 0;
-		m_pEnemyManager->SpawnEnemy();
+		m_pEnemyManager->Spawn();
+	}
+	// 定期的に宝箱を召還する
+	if (m_frameCount % kChestSpawnInterval == 0)
+	{
+		m_pChestManager->Spawn(m_pPlayer->GetPos());
 	}
 
 	// カメラの更新

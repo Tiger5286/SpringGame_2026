@@ -38,7 +38,5 @@ private:
 	std::shared_ptr<ChestManager> m_pChestManager = nullptr;
 
 	std::shared_ptr<Player> m_pPlayer = nullptr;
-
-	int m_enemySpawnFrame = 0;
 };
 
