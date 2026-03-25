@@ -24,7 +24,7 @@ public:
 	void Update();
 	void Draw();
 
-	void SpawnEnemy();
+	void Spawn();
 
 private:
 	Vector3 GetSpawnPos();

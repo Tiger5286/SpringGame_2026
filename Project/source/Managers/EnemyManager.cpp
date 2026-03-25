@@ -73,7 +73,7 @@ void EnemyManager::Draw()
 	}
 }
 
-void EnemyManager::SpawnEnemy()
+void EnemyManager::Spawn()
 {
 	auto newEnemy = std::make_shared<Enemy>(m_player);
 	newEnemy->SetHandle(m_modelManager.DuplicateModel(L"Enemy"));
