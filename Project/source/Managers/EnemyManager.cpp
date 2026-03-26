@@ -4,6 +4,7 @@
 #include "ModelManager.h"
 #include "CollisionManager.h"
 #include "CoinManager.h"
+#include "EffectManager.h"
 #include "../Game.h"
 
 namespace
@@ -15,10 +16,11 @@ namespace
 	constexpr float kFloatDist = 100.0f;
 }
 
-EnemyManager::EnemyManager(ModelManager& modelManager, CollisionManager& collisionManager, CoinManager& coinManager, Player& player):
+EnemyManager::EnemyManager(ModelManager& modelManager, CollisionManager& collisionManager, CoinManager& coinManager, EffectManager& effectManager, Player& player):
 	m_modelManager(modelManager),
 	m_collisionManager(collisionManager),
 	m_coinManager(coinManager),
+	m_effectManager(effectManager),
 	m_player(player)
 {
 }
@@ -50,6 +52,7 @@ void EnemyManager::Update()
 		if (pEnemy->IsDead())
 		{
 			deadEnemies.push_back(pEnemy);
+			m_effectManager.PlayEffect(L"Benediction", pEnemy->GetPos() + Vector3(0.0f,200.0f,0.0f));
 			for (int i = 0; i < kSpawnCoinNum; i++)
 			{
 				m_coinManager.Spawn(pEnemy->GetPos());

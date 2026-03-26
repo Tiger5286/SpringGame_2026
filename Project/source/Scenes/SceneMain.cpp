@@ -59,6 +59,11 @@ void SceneMain::Init()
 	// コリジョンマネージャーの生成
 	m_pCollisionManager = std::make_shared<CollisionManager>();
 
+	// エフェクトマネージャーの生成と初期化
+	m_pEffectManager = std::make_shared<EffectManager>();
+	m_pEffectManager->Init();
+	m_pEffectManager->LoadEffect(L"data/Effects/Benediction.efk", L"Benediction", 20.0f);
+
 	// カメラの生成と初期化
 	m_pCamera = std::make_shared<Camera>(m_input);
 	m_pCamera->Init();
@@ -74,20 +79,12 @@ void SceneMain::Init()
 	m_pCollisionManager->Register(m_pPlayer);
 
 	// 敵マネージャーの生成と初期化
-	m_pEnemyManager = std::make_shared<EnemyManager>(*m_pModelManager, *m_pCollisionManager,*m_pCoinManager, *m_pPlayer);
+	m_pEnemyManager = std::make_shared<EnemyManager>(*m_pModelManager, *m_pCollisionManager,*m_pCoinManager,*m_pEffectManager, *m_pPlayer);
 	m_pEnemyManager->Init();
-	// 敵を生成
-	m_pEnemyManager->Spawn();
 
 	// 宝箱マネージャーの生成と初期化
-	m_pChestManager = std::make_shared<ChestManager>(*m_pModelManager,*m_pCollisionManager, *m_pCoinManager);
+	m_pChestManager = std::make_shared<ChestManager>(*m_pModelManager,*m_pCollisionManager, *m_pCoinManager,*m_pEffectManager);
 	m_pChestManager->Init();
-
-	// エフェクトマネージャーの生成と初期化
-	m_pEffectManager = std::make_shared<EffectManager>();
-	m_pEffectManager->Init();
-	m_pEffectManager->LoadEffect(L"data/Effects/Benediction.efk", L"Benediction",20.0f);
-	m_pEffectManager->PlayEffect(L"Benediction", Vector3(0.0f, 100.0f, 0.0f));
 }
 
 void SceneMain::End()
@@ -158,12 +155,13 @@ void SceneMain::Draw()
 	m_pChestManager->Draw();
 	m_pCoinManager->Draw();
 
-	// エフェクトの描画
-	m_pEffectManager->Draw();
-
 	// 床の描画
 	DrawTriangle3D({ -Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,-Game::kFieldSize }, kGroundColor, true);
 	DrawTriangle3D({ -Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,-Game::kFieldSize }, { -Game::kFieldSize,0,-Game::kFieldSize }, kGroundColor, true);
+
+	// エフェクトの描画
+	m_pEffectManager->Draw();
+
 #ifdef _DEBUG
 	DrawGrid();
 	DrawString(0,0,L"SceneMain",0xffffff);

@@ -6,13 +6,17 @@
 class ModelManager;
 class CoinManager;
 class CollisionManager;
+class EffectManager;
 
 class Chest;
 
 class ChestManager
 {
 public:
-	ChestManager(ModelManager& modelManager,CollisionManager& collisionManager, CoinManager& coinManager);
+	ChestManager(ModelManager& modelManager,
+		CollisionManager& collisionManager,
+		CoinManager& coinManager,
+		EffectManager& effectManager);
 	virtual ~ChestManager();
 
 	void Init();
@@ -28,6 +32,7 @@ private:
 	ModelManager& m_modelManager;
 	CollisionManager& m_collisionManager;
 	CoinManager& m_coinManager;
+	EffectManager& m_effectManager;
 
 	std::list<std::shared_ptr<Chest>> m_chests;
 };

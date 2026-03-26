@@ -1,5 +1,6 @@
 ﻿#include "Chest.h"
 #include "../Managers/CoinManager.h"
+#include "../Managers/EffectManager.h"
 
 namespace
 {
@@ -15,9 +16,10 @@ namespace
 	constexpr int kDeathFrame = kSpawnCoinInterval * kSpawnCoinNum + kAnimFrame + 30;
 }
 
-Chest::Chest(CoinManager& coinManager) :
+Chest::Chest(CoinManager& coinManager, EffectManager& effectManager) :
 	GameObject(kRadius),
-	m_coinManager(coinManager)
+	m_coinManager(coinManager),
+	m_effectManager(effectManager)
 {
 }
 
@@ -47,6 +49,12 @@ void Chest::Update()
 			m_anim.Update();
 		}
 	}
+	// 開いた瞬間のみエフェクトを出す
+	if (m_hitPunchFrame == 10)
+	{
+		m_effectManager.PlayEffect(L"Benediction", m_pos + Vector3(0.0f, 100.0f, 0.0f));
+	}
+
 	// 開いた後コインが出てくる
 	if (m_hitPunchFrame > kAnimFrame)
 	{

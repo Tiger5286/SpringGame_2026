@@ -3,12 +3,13 @@
 #include "../System/Animation.h"
 
 class CoinManager;
+class EffectManager;
 
 class Chest :
     public GameObject
 {
 public:
-    Chest(CoinManager& coinManager);
+    Chest(CoinManager& coinManager,EffectManager& effectManager);
     virtual ~Chest() override;
 
     void Init() override;
@@ -24,6 +25,7 @@ public:
 
 private:
     CoinManager& m_coinManager;
+    EffectManager& m_effectManager;
 
     Animation m_anim;
 
