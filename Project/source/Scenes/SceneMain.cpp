@@ -18,10 +18,10 @@ namespace
 {
 	// 使用するモデルのファイル名と登録名
 	const std::pair<std::wstring, std::wstring> kModelNames[4] = {
-		{ L"data/Player.MV1", L"Player" },
-		{ L"data/Enemy.MV1",  L"Enemy"  },
-		{ L"data/Chest.MV1",  L"Chest"  },
-		{ L"data/Coin.MV1",   L"Coin"   },
+		{ L"data/Models/Player.MV1", L"Player" },
+		{ L"data/Models/Enemy.MV1",  L"Enemy"  },
+		{ L"data/Models/Chest.MV1",  L"Chest"  },
+		{ L"data/Models/Coin.MV1",   L"Coin"   },
 	};
 
 	// 地面の色
@@ -153,7 +153,6 @@ void SceneMain::Draw()
 	// 床の描画
 	DrawTriangle3D({ -Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,-Game::kFieldSize }, kGroundColor, true);
 	DrawTriangle3D({ -Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,-Game::kFieldSize }, { -Game::kFieldSize,0,-Game::kFieldSize }, kGroundColor, true);
-
 #ifdef _DEBUG
 	DrawGrid();
 	DrawString(0,0,L"SceneMain",0xffffff);
