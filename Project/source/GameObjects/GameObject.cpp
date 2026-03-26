@@ -6,7 +6,7 @@ namespace
 	constexpr float kGravity = 1.0f;
 	constexpr float kMaxFallSpeed = 10.0f;
 
-	constexpr float kResistance = 0.15f;
+	constexpr float kResistance = 0.3f;
 }
 
 GameObject::GameObject(float sphereRadius):
@@ -42,32 +42,15 @@ void GameObject::Gravity()
 
 void GameObject::Resistance()
 {
-	// x方向の抵抗
-	if (m_vel.x > kResistance)
-	{
-		m_vel.x -= kResistance;
-	}
-	else if (m_vel.x < -kResistance)
-	{
-		m_vel.x += kResistance;
-	}
-	else
-	{
-		m_vel.x = 0.0f;
-	}
-	// z方向の抵抗
-	if (m_vel.z > kResistance)
-	{
-		m_vel.z -= kResistance;
-	}
-	else if (m_vel.z < -kResistance)
-	{
-		m_vel.z += kResistance;
-	}
-	else
-	{
-		m_vel.z = 0.0f;
-	}
+	// 速度と逆向きのベクトルを生成
+	Vector3 resist = -m_vel;
+	// Y方向には抵抗を適用しない
+	resist.y = 0.0f;
+	// 長さをkResistanceに補正
+	resist.Normalize();
+	resist *= kResistance;
+	// 速度に抵抗を加算し減速
+	m_vel += resist;
 }
 
 void GameObject::LimitPos()
