@@ -9,6 +9,7 @@ class CollisionManager;
 class EnemyManager;
 class CoinManager;
 class ChestManager;
+class EffectManager;
 
 class Player;
 
@@ -36,6 +37,7 @@ private:
 	std::shared_ptr<EnemyManager> m_pEnemyManager = nullptr;
 	std::shared_ptr<CoinManager> m_pCoinManager = nullptr;
 	std::shared_ptr<ChestManager> m_pChestManager = nullptr;
+	std::shared_ptr<EffectManager> m_pEffectManager = nullptr;
 
 	std::shared_ptr<Player> m_pPlayer = nullptr;
 };

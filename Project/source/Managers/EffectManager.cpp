@@ -21,12 +21,17 @@ void EffectManager::Update()
 {
 	UpdateEffekseer3D();
 	// 再生されていないエフェクトハンドルを除外する
+	std::list<int> deleteHandles;
 	for (auto& handle : m_effectPlayingHandles)
 	{
 		if (IsEffekseer3DEffectPlaying(handle) == -1)
 		{
-			m_effectPlayingHandles.remove(handle);
+			deleteHandles.push_back(handle);
 		}
+	}
+	for (auto& handle : deleteHandles)
+	{
+		m_effectPlayingHandles.remove(handle);
 	}
 }
 

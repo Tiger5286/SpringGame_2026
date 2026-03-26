@@ -11,6 +11,7 @@
 #include "../Managers/EnemyManager.h"
 #include "../Managers/CoinManager.h"
 #include "../Managers/ChestManager.h"
+#include "../Managers/EffectManager.h"
 
 #include "../GameObjects/Player.h"
 
@@ -81,8 +82,12 @@ void SceneMain::Init()
 	// 宝箱マネージャーの生成と初期化
 	m_pChestManager = std::make_shared<ChestManager>(*m_pModelManager,*m_pCollisionManager, *m_pCoinManager);
 	m_pChestManager->Init();
-	// 宝箱を生成
-	m_pChestManager->Spawn(m_pPlayer->GetPos());
+
+	// エフェクトマネージャーの生成と初期化
+	m_pEffectManager = std::make_shared<EffectManager>();
+	m_pEffectManager->Init();
+	m_pEffectManager->LoadEffect(L"data/Effects/Benediction.efk", L"Benediction",20.0f);
+	m_pEffectManager->PlayEffect(L"Benediction", Vector3(0.0f, 100.0f, 0.0f));
 }
 
 void SceneMain::End()
@@ -140,6 +145,9 @@ void SceneMain::Update()
 	auto cameraToPlayer = m_pPlayer->GetPos() - m_pCamera->GetPos();
 	// 生成したベクトルの方向のライトを設定
 	SetLightDirection(cameraToPlayer.ToDxLib());
+
+	// エフェクトマネージャーの更新
+	m_pEffectManager->Update();
 }
 
 void SceneMain::Draw()
@@ -149,6 +157,9 @@ void SceneMain::Draw()
 	m_pEnemyManager->Draw();
 	m_pChestManager->Draw();
 	m_pCoinManager->Draw();
+
+	// エフェクトの描画
+	m_pEffectManager->Draw();
 
 	// 床の描画
 	DrawTriangle3D({ -Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,-Game::kFieldSize }, kGroundColor, true);
