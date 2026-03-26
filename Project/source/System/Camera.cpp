@@ -1,5 +1,6 @@
 ﻿#include "Camera.h"
 #include <cmath>
+#include "EffekseerForDXLib.h"
 
 #include "../GameObjects/Player.h"
 
@@ -39,6 +40,8 @@ void Camera::Init()
 	SetCameraPositionAndTarget_UpVecY(m_pos.ToDxLib(), m_target.ToDxLib());
 	SetupCamera_Perspective(kFov);
 	SetCameraNearFar(kNear, kFar);
+	// DXライブラリのカメラとEffekseerのカメラを同期する。
+	Effekseer_Sync3DSetting();
 
 	// 角度を補正
 	if (m_angleY < 0.0f) m_angleY += DX_TWO_PI_F;
@@ -66,4 +69,6 @@ void Camera::Update()
 
 	// 位置と注視点を反映
 	SetCameraPositionAndTarget_UpVecY(m_pos.ToDxLib(), m_target.ToDxLib());
+	// DXライブラリのカメラとEffekseerのカメラを同期する。
+	Effekseer_Sync3DSetting();
 }
