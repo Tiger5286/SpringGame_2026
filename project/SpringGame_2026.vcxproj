@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\Managers\EffectManager.cpp" />
     <ClCompile Include="source\Managers\ChestManager.cpp" />
     <ClCompile Include="source\GameObjects\Chest.cpp" />
     <ClCompile Include="source\Managers\CoinManager.cpp" />
@@ -41,6 +42,7 @@
     <ClCompile Include="source\Utility\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\Managers\EffectManager.h" />
     <ClInclude Include="source\Managers\ChestManager.h" />
     <ClInclude Include="source\GameObjects\Chest.h" />
     <ClInclude Include="source\Managers\CoinManager.h" />
