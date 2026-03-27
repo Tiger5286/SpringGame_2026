@@ -26,6 +26,13 @@ public:
 private:
     void Move();
 
+    /// <summary>
+    /// 他のオブジェクトとぶつかったときの押し戻し処理
+    /// </summary>
+    /// <param name="center">ぶつかったオブジェクトの球の中心</param>
+    /// <param name="radius">ぶつかったオブジェクトの球の半径</param>
+    void PushBack(const Vector3& center, float radius);
+
 private:
     Player& m_player;
 

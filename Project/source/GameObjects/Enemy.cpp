@@ -87,10 +87,15 @@ void Enemy::Draw()
 
 void Enemy::OnCollision(const GameObject& other)
 {
-	// TODO: 当たったときの処理
+	// パンチと当たったとき
 	if (other.GetTag() == ObjectTag::Punch)
 	{
 		OnHitPunch();
+	}
+	// 敵と当たったとき
+	if (other.GetTag() == ObjectTag::Enemy)
+	{
+		PushBack(other.GetSphere().GetPos(), other.GetSphere().GetRadius());
 	}
 }
 
@@ -146,4 +151,20 @@ void Enemy::Move()
 	auto mtx = transMtx * rotMtx;
 	// 行列をモデルに適用
 	MV1SetMatrix(m_modelHandle, mtx.ToDxLib());
+}
+
+void Enemy::PushBack(const Vector3& center, float radius)
+{
+	auto otherToThis = m_sphere.GetPos() - center;
+
+	float targetLength = m_sphere.GetRadius() + radius;
+
+	otherToThis.Normalize();
+	otherToThis *= targetLength;
+
+	// 当たり判定の中心を押し戻す
+	auto pushBackColCenter = center + otherToThis;
+	// 当たり判定の座標から実際に自身を置く座標を計算する
+	auto pos = pushBackColCenter - Vector3(0.0f, kSphereRadius, 0.0f);
+	m_pos = pos;
 }
