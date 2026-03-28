@@ -47,6 +47,11 @@ void CoinManager::Update()
 		if (coin->IsDead())
 		{
 			deadCoins.push_back(coin);
+			// 死ぬコインがプレイヤーに触れていたら獲得判定
+			if (coin->IsHit())
+			{
+				m_getCoinNum++;
+			}
 		}
 	}
 	// 死んでいるコインをリストから削除
@@ -72,6 +77,9 @@ void CoinManager::Draw()
 	{
 		coin->Draw();
 	}
+#ifdef _DEBUG
+	DrawFormatString(100, 100, 0xffffff, L"getCoin:%d", m_getCoinNum);
+#endif
 }
 
 void CoinManager::Spawn(const Vector3& pos)

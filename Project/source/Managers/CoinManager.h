@@ -26,4 +26,6 @@ private:
 	CollisionManager& m_collisionManager;
 
 	std::list<std::shared_ptr<Coin>> m_coins;
+
+	int m_getCoinNum = 0;
 };
