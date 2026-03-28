@@ -134,6 +134,7 @@ void SceneMain::Update()
 	m_pEnemyManager->Update();
 	m_pChestManager->Update();
 	m_pCoinManager->Update();
+	m_score = m_pCoinManager->GetCoinNum() * 100;
 
 	// 当たり判定の更新
 	m_pCollisionManager->Update();
@@ -163,6 +164,8 @@ void SceneMain::Draw()
 	m_pEffectManager->Draw();
 
 #ifdef _DEBUG
+	DrawFormatString(0, 32, 0x000000, L"SCORE:%d", m_score);
+
 	DrawGrid();
 	DrawString(0,0,L"SceneMain",0xffffff);
 	DrawFormatString(0, 16, 0xffffff, L"FRAME:%d", m_frameCount);

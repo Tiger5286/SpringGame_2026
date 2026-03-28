@@ -40,5 +40,7 @@ private:
 	std::shared_ptr<EffectManager> m_pEffectManager = nullptr;
 
 	std::shared_ptr<Player> m_pPlayer = nullptr;
+
+	int m_score = 0;
 };
 

@@ -79,6 +79,7 @@ void CoinManager::Draw()
 	}
 #ifdef _DEBUG
 	DrawFormatString(100, 100, 0xffffff, L"getCoin:%d", m_getCoinNum);
+	DrawFormatString(100, 116, 0xffffff, L"m_coins:%d", m_coins.size());
 #endif
 }
 

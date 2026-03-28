@@ -21,6 +21,8 @@ public:
 
 	void Spawn(const Vector3& pos);
 
+	int GetCoinNum() const { return m_getCoinNum; }
+
 private:
 	ModelManager& m_modelManager;
 	CollisionManager& m_collisionManager;
