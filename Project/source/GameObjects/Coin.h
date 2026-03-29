@@ -18,12 +18,17 @@ public:
 
     bool IsHit() const { return m_isHitPlayer; }
     bool IsDead() const { return m_isDead; }
+    /// <summary>
+    /// 取得された瞬間だけtrueを返す
+    /// </summary>
+    bool IsGetted() const { return m_hitFrame == 1; }
     int GetAliveFrame() const { return m_aliveFrame; }
 
 private:
     float m_angle = 0.0f;
 
     int m_aliveFrame = 0;
+    int m_hitFrame = 0;
 
     bool m_isHitPlayer = false;
     bool m_isDead = true;

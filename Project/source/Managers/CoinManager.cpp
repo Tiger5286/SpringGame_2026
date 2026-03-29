@@ -60,6 +60,12 @@ void CoinManager::Update()
 		{
 			m_collisionManager.Unregister(coin);
 		}
+
+		// 取得されたコインはカウントする
+		if (coin->IsGetted())
+		{
+			m_getCoinNum++;
+		}
 	}
 }
 

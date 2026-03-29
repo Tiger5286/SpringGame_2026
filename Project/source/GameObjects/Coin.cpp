@@ -46,6 +46,7 @@ void Coin::Update()
 	else
 	{	// プレイヤーと当たった後は速く回転する
 		m_angle += kHitPlayerRotationSpeed;
+		m_hitFrame++;
 	}
 	auto rotMtx = Matrix4x4::GetRotYMatrix(m_angle);
 
@@ -127,6 +128,7 @@ void Coin::Spawn(const Vector3& pos)
 	m_isDead = false;
 	m_isHitPlayer = false;
 	m_aliveFrame = 0;
+	m_hitFrame = 0;
 	// コインの位置を設定
 	m_pos = pos;
 	m_sphere.SetPos(pos);
