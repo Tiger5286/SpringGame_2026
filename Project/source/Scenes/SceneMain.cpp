@@ -2,6 +2,7 @@
 #include "DxLib.h"
 #include "../Game.h"
 #include <cassert>
+#include <format>
 
 #include "../System/Input.h"
 
@@ -27,7 +28,8 @@ namespace
 	};
 
 	// フォントのサイズ
-	constexpr int kFontSize = 100;
+	constexpr int kStartFontSize = 100;
+	constexpr int kUIFontSize = 50;
 
 	// 地面の色
 	constexpr unsigned int kGroundColor = 0x44cc44;
@@ -54,8 +56,10 @@ SceneMain::~SceneMain()
 
 void SceneMain::Init()
 {
-	m_fontHandle = CreateFontToHandle(nullptr, kFontSize, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
-	assert(m_fontHandle != -1 && "フォントが正しく生成されませんでした");
+	m_startFontHandle = CreateFontToHandle(nullptr, kStartFontSize, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
+	assert(m_startFontHandle != -1 && "フォントが正しく生成されませんでした");
+	m_uiFontHandle = CreateFontToHandle(nullptr, kUIFontSize, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
+	assert(m_uiFontHandle != -1 && "フォントが正しく生成されませんでした");
 
 	// モデルマネージャーを生成しモデルのロードを依頼
 	m_pModelManager = std::make_shared<ModelManager>();
@@ -98,6 +102,9 @@ void SceneMain::Init()
 
 void SceneMain::End()
 {
+	DeleteFontToHandle(m_startFontHandle);
+	DeleteFontToHandle(m_uiFontHandle);
+
 	// モデルマネージャーの終了処理(ロードしたモデルの削除)
 	m_pModelManager->End();
 
@@ -116,8 +123,10 @@ void SceneMain::Update()
 
 	if (m_isStarted)
 	{
+		m_gameCount++;
+
 		// 定期的に敵を召還する
-		if ((m_frameCount - 240) % kEnemySpawnInterval == 0)
+		if (m_gameCount % kEnemySpawnInterval == 0)
 		{
 			// 今存在している敵の数が上限を超えていなければ召還
 			if (m_pEnemyManager->GetEnemyNum() < kEnemyMaxNum)
@@ -126,7 +135,7 @@ void SceneMain::Update()
 			}
 		}
 		// 定期的に宝箱を召還する
-		if ((m_frameCount - 240) % kChestSpawnInterval == 0)
+		if (m_gameCount % kChestSpawnInterval == 0)
 		{
 			// 今存在している宝箱の数が上限を超えていなければ召還
 			if (m_pChestManager->GetChestNum() < kChestMaxNum)
@@ -176,7 +185,14 @@ void SceneMain::Draw()
 	// エフェクトの描画
 	m_pEffectManager->Draw();
 
+	// ゲーム開始前のカウントダウンの描画
 	DrawStart();
+
+	float sec = 60.0f - static_cast<float>(m_gameCount) / 60.0f;
+	std::wstring text = std::format(L"残り時間:{:.1f}", sec);
+	auto strWidth = GetDrawFormatStringWidthToHandle(m_uiFontHandle, text.c_str());
+	int x = Game::kScreenWidth / 2 - strWidth / 2;
+	DrawFormatStringToHandle(x, 0, 0xffffff, m_uiFontHandle, text.c_str());
 
 #ifdef _DEBUG
 	DrawFormatString(0, 32, 0x000000, L"SCORE:%d", m_score);
@@ -212,10 +228,10 @@ void SceneMain::DrawStart()
 		m_pPlayer->SetCanControll(true);
 	}
 
-	auto stringWidth = GetDrawFormatStringWidthToHandle(m_fontHandle, text.c_str());
+	auto stringWidth = GetDrawFormatStringWidthToHandle(m_startFontHandle, text.c_str());
 	int x = Game::kScreenWidth / 2 - stringWidth / 2;
-	int y = Game::kScreenHeight / 2 - kFontSize / 2;
-	DrawFormatStringToHandle(x, y, 0xffffff, m_fontHandle, text.c_str());
+	int y = Game::kScreenHeight / 2 - kStartFontSize / 2;
+	DrawFormatStringToHandle(x, y, 0xffffff, m_startFontHandle, text.c_str());
 }
 
 void SceneMain::DrawGrid()

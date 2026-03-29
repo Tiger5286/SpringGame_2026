@@ -43,11 +43,14 @@ private:
 
 	std::shared_ptr<Player> m_pPlayer = nullptr;
 
-	int m_fontHandle = -1;
+	int m_startFontHandle = -1;
+	int m_uiFontHandle = -1;
 
 	int m_score = 0;
 
 	bool m_isStarted = false;
 	int m_startCount = 0;
+
+	int m_gameCount = 0;
 };
 
