@@ -3,8 +3,7 @@
 #include "Game.h"
 #include <memory>
 
-#include "Scenes/SceneMain.h"
-#include "System/Input.h"
+#include "Scenes/SceneManager.h"
 
 // プログラムは WinMain から始まる
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -52,19 +51,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// 背景色の設定
 	SetBackgroundColor(135, 206, 235);
 
-	Input input;
-
-	auto pScene = std::make_shared<SceneMain>(input);
-	pScene->Init();
+	auto pSceneManager = std::make_shared<SceneManager>();
+	pSceneManager->Init();
 
 	while (ProcessMessage() != -1)
 	{
 		LONGLONG start = GetNowHiPerformanceCount(); // フレーム開始時間を取得
 		ClearDrawScreen(); // 画面をクリア
 
-		input.Update();
-		pScene->Update();
-		pScene->Draw();
+		pSceneManager->Update();
+		pSceneManager->Draw();
 
 		// escキーで終了
 		if (CheckHitKey(KEY_INPUT_ESCAPE))
@@ -74,7 +70,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		ScreenFlip(); // 描画した内容を画面に反映する
 		while (GetNowHiPerformanceCount() - start < 16667) {} // 約16.667ミリ秒(1/60秒)待つことで60FPSに固定
 	}
-	pScene->End();
+	
+	pSceneManager->End();
+
 	// Effekseerを終了する。
 	Effkseer_End();
 	DxLib_End();				// ＤＸライブラリ使用の終了処理

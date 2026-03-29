@@ -2,6 +2,14 @@
 
 class Input;
 
+enum class SceneType
+{
+	None,
+	Title,
+	Main,
+	Result,
+};
+
 class SceneBase
 {
 public:
@@ -14,9 +22,10 @@ public:
 	virtual void Draw() abstract;
 
 	bool IsEnd() const { return m_isEnd; }
+	SceneType GetSceneType() const { return m_sceneType; }
 
 protected:
 	Input& m_input;
-
+	SceneType m_sceneType = SceneType::None;
 	bool m_isEnd = false;
 };

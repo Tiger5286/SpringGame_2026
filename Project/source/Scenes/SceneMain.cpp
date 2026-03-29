@@ -48,6 +48,7 @@ namespace
 SceneMain::SceneMain(Input& input) :
 	SceneBase(input)
 {
+	m_sceneType = SceneType::Main;
 }
 
 SceneMain::~SceneMain()
@@ -90,6 +91,10 @@ void SceneMain::Init()
 	m_pCollisionManager->Register(m_pPlayer);
 	// 最初は操作不能にする
 	m_pPlayer->SetCanControll(false);
+
+	// カメラの更新
+	m_pCamera->SetPlayerPos(m_pPlayer->GetPos());
+	m_pPlayer->SetCameraAngleY(m_pCamera->GetAngleY());	// プレイヤーにカメラの角度を渡す
 
 	// 敵マネージャーの生成と初期化
 	m_pEnemyManager = std::make_shared<EnemyManager>(*m_pModelManager, *m_pCollisionManager,*m_pCoinManager,*m_pEffectManager, *m_pPlayer);

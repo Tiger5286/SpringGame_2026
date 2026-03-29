@@ -3,10 +3,12 @@
 #include "../System/Input.h"
 #include <string>
 #include "../Game.h"
+#include <cassert>
 
 SceneTitle::SceneTitle(Input& input):
 	SceneBase(input)
 {
+	m_sceneType = SceneType::Title;
 }
 
 SceneTitle::~SceneTitle()
@@ -16,7 +18,9 @@ SceneTitle::~SceneTitle()
 void SceneTitle::Init()
 {
 	m_titleFontHandle = CreateFontToHandle(nullptr, 100, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
+	assert(m_titleFontHandle != -1 && "フォントが正しく生成されませんでした");
 	m_fontHandle = CreateFontToHandle(nullptr, 50, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
+	assert(m_fontHandle != -1 && "フォントが正しく生成されませんでした");
 }
 
 void SceneTitle::End()
