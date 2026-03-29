@@ -1,6 +1,7 @@
 ﻿#include "SceneBase.h"
 
-SceneBase::SceneBase()
+SceneBase::SceneBase(Input& input):
+	m_input(input)
 {
 }
 

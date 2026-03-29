@@ -46,7 +46,7 @@ namespace
 }
 
 SceneMain::SceneMain(Input& input) :
-	m_input(input)
+	SceneBase(input)
 {
 }
 
@@ -167,6 +167,13 @@ void SceneMain::Update()
 
 	// エフェクトマネージャーの更新
 	m_pEffectManager->Update();
+
+#ifdef _DEBUG
+	if (CheckHitKey(KEY_INPUT_1))
+	{
+		m_isEnd = true;
+	}
+#endif
 }
 
 void SceneMain::Draw()
@@ -194,6 +201,7 @@ void SceneMain::Draw()
 	auto strWidth = GetDrawFormatStringWidthToHandle(m_uiFontHandle, text.c_str());
 	int x = Game::kScreenWidth / 2 - strWidth / 2;
 	DrawFormatStringToHandle(x, 0, 0xffffff, m_uiFontHandle, text.c_str());
+
 	// スコアの描画
 	text = std::format(L"スコア:{:d}", m_score);
 	strWidth = GetDrawFormatStringWidthToHandle(m_uiFontHandle, text.c_str());
@@ -201,11 +209,10 @@ void SceneMain::Draw()
 	DrawFormatStringToHandle(x, kUIFontSize, 0xffffff, m_uiFontHandle, text.c_str());
 
 #ifdef _DEBUG
-	DrawFormatString(0, 32, 0x000000, L"SCORE:%d", m_score);
-
 	DrawGrid();
 	DrawString(0,0,L"SceneMain",0xffffff);
 	DrawFormatString(0, 16, 0xffffff, L"FRAME:%d", m_frameCount);
+	DrawString(0, 32, L"1キーでシーンを終わる", 0xffffff);
 #endif
 }
 

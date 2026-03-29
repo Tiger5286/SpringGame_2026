@@ -1,6 +1,6 @@
 ﻿#pragma once
+#include "SceneBase.h"
 #include <memory>
-#include "../System/Input.h"
 
 class Camera;
 
@@ -13,16 +13,16 @@ class EffectManager;
 
 class Player;
 
-class SceneMain
+class SceneMain : public SceneBase
 {
 public:
 	SceneMain(Input& input);
-	~SceneMain();
+	~SceneMain() override;
 
-	void Init();
-	void End();
-	void Update();
-	void Draw();
+	void Init() override;
+	void End() override;
+	void Update() override;
+	void Draw() override;
 private:
 	void DrawStart();
 
@@ -30,7 +30,6 @@ private:
 
 private:
 	int m_frameCount = 0;
-	Input& m_input;
 
 	std::shared_ptr<Camera> m_pCamera = nullptr;
 
