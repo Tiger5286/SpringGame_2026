@@ -52,7 +52,7 @@ void EnemyManager::Update()
 		if (pEnemy->IsDead())
 		{
 			deadEnemies.push_back(pEnemy);
-			m_effectManager.PlayEffect(L"Benediction", pEnemy->GetPos() + Vector3(0.0f,200.0f,0.0f));
+			//m_effectManager.PlayEffect(L"Benediction", pEnemy->GetPos() + Vector3(0.0f,200.0f,0.0f));
 			for (int i = 0; i < kSpawnCoinNum; i++)
 			{
 				m_coinManager.Spawn(pEnemy->GetPos());
