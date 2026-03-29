@@ -13,6 +13,6 @@ public:
 	virtual void Draw() override;
 
 private:
-
+	int m_fontHandle = -1;
 };
 

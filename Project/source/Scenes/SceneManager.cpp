@@ -3,6 +3,7 @@
 #include <cassert>
 #include "SceneTitle.h"
 #include "SceneMain.h"
+#include "SceneResult.h"
 
 SceneManager::SceneManager()
 {
@@ -36,10 +37,10 @@ void SceneManager::Update()
 				ChangeScene(std::make_shared<SceneMain>(*m_pInput));
 				break;
 			case SceneType::Main:
-
+				ChangeScene(std::make_shared<SceneResult>(*m_pInput));
 				break;
 			case SceneType::Result:
-
+				ChangeScene(std::make_shared<SceneTitle>(*m_pInput));
 				break;
 			default:
 				assert(false && "存在しないシーンタイプです");
