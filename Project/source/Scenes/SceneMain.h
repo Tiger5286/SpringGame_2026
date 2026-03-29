@@ -49,6 +49,5 @@ private:
 
 	bool m_isStarted = false;
 	int m_startCount = 0;
-	int m_gameCount = 0;
 };
 
