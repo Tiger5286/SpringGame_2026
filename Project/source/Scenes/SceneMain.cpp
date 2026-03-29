@@ -205,13 +205,13 @@ void SceneMain::Draw()
 
 void SceneMain::DrawStart()
 {
+	m_startCount++;
+
 	int second = m_startCount / 60;
 	if (second > 4)
 	{
 		return;
 	}
-
-	m_startCount++;
 
 	if (m_startCount < 60)
 	{
