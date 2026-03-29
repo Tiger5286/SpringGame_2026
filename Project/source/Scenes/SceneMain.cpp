@@ -188,11 +188,17 @@ void SceneMain::Draw()
 	// ゲーム開始前のカウントダウンの描画
 	DrawStart();
 
+	// 残り時間の描画
 	float sec = 60.0f - static_cast<float>(m_gameCount) / 60.0f;
 	std::wstring text = std::format(L"残り時間:{:.1f}", sec);
 	auto strWidth = GetDrawFormatStringWidthToHandle(m_uiFontHandle, text.c_str());
 	int x = Game::kScreenWidth / 2 - strWidth / 2;
 	DrawFormatStringToHandle(x, 0, 0xffffff, m_uiFontHandle, text.c_str());
+	// スコアの描画
+	text = std::format(L"スコア:{:d}", m_score);
+	strWidth = GetDrawFormatStringWidthToHandle(m_uiFontHandle, text.c_str());
+	x = Game::kScreenWidth / 2 - strWidth / 2;
+	DrawFormatStringToHandle(x, kUIFontSize, 0xffffff, m_uiFontHandle, text.c_str());
 
 #ifdef _DEBUG
 	DrawFormatString(0, 32, 0x000000, L"SCORE:%d", m_score);
