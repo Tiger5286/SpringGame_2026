@@ -123,6 +123,10 @@ void Coin::OnCollision(const GameObject& other)
 
 void Coin::Spawn(const Vector3& pos)
 {
+	// コインを生き返らせる
+	m_isDead = false;
+	m_isHitPlayer = false;
+	m_aliveFrame = 0;
 	// コインの位置を設定
 	m_pos = pos;
 	m_sphere.SetPos(pos);

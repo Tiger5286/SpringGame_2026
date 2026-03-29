@@ -21,6 +21,12 @@ CoinManager::~CoinManager()
 
 void CoinManager::Init()
 {
+	for (auto& coin : m_coins)
+	{
+		coin = std::make_shared<Coin>();
+		coin->SetHandle(m_modelManager.DuplicateModel(L"Coin"));
+		coin->Init();
+	}
 }
 
 void CoinManager::End()
@@ -33,40 +39,26 @@ void CoinManager::End()
 
 void CoinManager::Update()
 {
-	// 死んでいるコインリスト
-	std::list<std::shared_ptr<Coin>> deadCoins;
 	for (auto& coin : m_coins)
 	{
+		// 死んでいるコインは更新しない
+		if (coin->IsDead())
+		{
+			continue;
+		}
+
 		coin->Update();
+
+		// 一定時間経過したコインに当たり判定をつける
+		if (coin->GetAliveFrame() == kCollidableFrame)
+		{
+			m_collisionManager.Register(coin);
+		}
+
 		// 当たっていたら当たり判定を登録解除
 		if (coin->IsHit())
 		{
 			m_collisionManager.Unregister(coin);
-		}
-		// 死んでいたら死亡リストに追加
-		if (coin->IsDead())
-		{
-			deadCoins.push_back(coin);
-			// 死ぬコインがプレイヤーに触れていたら獲得判定
-			if (coin->IsHit())
-			{
-				m_getCoinNum++;
-			}
-		}
-	}
-	// 死んでいるコインをリストから削除
-	for (auto& coin : deadCoins)
-	{
-		m_collisionManager.Unregister(coin);
-		coin->End();
-		m_coins.remove(coin);
-	}
-	// 一定時間経過したコインに当たり判定をつける
-	for (auto& coin : m_coins)
-	{
-		if (coin->GetAliveFrame() == kCollidableFrame)
-		{
-			m_collisionManager.Register(coin);
 		}
 	}
 }
@@ -75,19 +67,39 @@ void CoinManager::Draw()
 {
 	for (auto& coin : m_coins)
 	{
+		// 死んでいるコインは描画しない
+		if (coin->IsDead())
+		{
+			continue;
+		}
+
+		// コインを描画
 		coin->Draw();
 	}
 #ifdef _DEBUG
 	DrawFormatString(100, 100, 0xffffff, L"getCoin:%d", m_getCoinNum);
-	DrawFormatString(100, 116, 0xffffff, L"m_coins:%d", m_coins.size());
+
+	int aliveCoinNum = 0;
+	for (auto& coin : m_coins)
+	{
+		if (!coin->IsDead())
+		{
+			aliveCoinNum++;
+		}
+	}
+	DrawFormatString(100, 116, 0xffffff, L"m_coins:%d", aliveCoinNum);
 #endif
 }
 
 void CoinManager::Spawn(const Vector3& pos)
 {
-	auto newCoin = std::make_shared<Coin>();
-	newCoin->SetHandle(m_modelManager.DuplicateModel(L"Coin"));
-	newCoin->Init();
-	newCoin->Spawn(pos);
-	m_coins.push_back(newCoin);
+	for (auto& coin : m_coins)
+	{
+		// 死んでいるコインがあればそれを再利用して召還
+		if (coin->IsDead())
+		{
+			coin->Spawn(pos);
+			return;
+		}
+	}
 }

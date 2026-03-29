@@ -26,5 +26,5 @@ private:
     int m_aliveFrame = 0;
 
     bool m_isHitPlayer = false;
-    bool m_isDead = false;
+    bool m_isDead = true;
 };
