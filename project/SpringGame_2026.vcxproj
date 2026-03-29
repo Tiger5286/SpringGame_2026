@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\Scenes\SceneBase.cpp" />
     <ClCompile Include="source\Managers\EffectManager.cpp" />
     <ClCompile Include="source\Managers\ChestManager.cpp" />
     <ClCompile Include="source\GameObjects\Chest.cpp" />
@@ -42,6 +43,7 @@
     <ClCompile Include="source\Utility\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\Scenes\SceneBase.h" />
     <ClInclude Include="source\Managers\EffectManager.h" />
     <ClInclude Include="source\Managers\ChestManager.h" />
     <ClInclude Include="source\GameObjects\Chest.h" />
