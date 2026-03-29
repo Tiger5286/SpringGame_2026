@@ -31,6 +31,8 @@ public:
 
     void SetCameraAngleY(float angle) { m_cameraAngleY = angle; }
 
+	void SetCanControll(bool isCanControll) { m_isCanControll = isCanControll; }
+
 private:
     void Move();
     void Punch();
