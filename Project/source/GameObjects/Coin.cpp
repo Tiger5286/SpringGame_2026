@@ -131,6 +131,7 @@ void Coin::Spawn(const Vector3& pos)
 	m_hitFrame = 0;
 	// コインの位置を設定
 	m_pos = pos;
+	m_vel = { 0.0f,0.0f,0.0f };
 	m_sphere.SetPos(pos);
 	// ランダムな方向に飛ばす
 	// ランダムな方向を生成
