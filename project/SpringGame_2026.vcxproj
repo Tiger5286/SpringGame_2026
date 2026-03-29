@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\Scenes\SceneResult.cpp" />
     <ClCompile Include="source\Scenes\SceneTitle.cpp" />
     <ClCompile Include="source\Scenes\SceneManager.cpp" />
     <ClCompile Include="source\Scenes\SceneBase.cpp" />
@@ -45,6 +46,7 @@
     <ClCompile Include="source\Utility\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\Scenes\SceneResult.h" />
     <ClInclude Include="source\Scenes\SceneTitle.h" />
     <ClInclude Include="source\Scenes\SceneManager.h" />
     <ClInclude Include="source\Scenes\SceneBase.h" />
