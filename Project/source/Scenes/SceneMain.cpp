@@ -1,6 +1,7 @@
 ﻿#include "SceneMain.h"
 #include "DxLib.h"
 #include "../Game.h"
+#include <cassert>
 
 #include "../System/Input.h"
 
@@ -24,6 +25,9 @@ namespace
 		{ L"data/Models/Chest.MV1",  L"Chest"  },
 		{ L"data/Models/Coin.MV1",   L"Coin"   },
 	};
+
+	// フォントのサイズ
+	constexpr int kFontSize = 64;
 
 	// 地面の色
 	constexpr unsigned int kGroundColor = 0x44cc44;
@@ -50,6 +54,9 @@ SceneMain::~SceneMain()
 
 void SceneMain::Init()
 {
+	m_fontHandle = CreateFontToHandle(nullptr, kFontSize, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
+	assert(m_fontHandle != -1 && "フォントが正しく生成されませんでした");
+
 	// モデルマネージャーを生成しモデルのロードを依頼
 	m_pModelManager = std::make_shared<ModelManager>();
 	for (auto& names : kModelNames)
@@ -77,6 +84,8 @@ void SceneMain::Init()
 	m_pPlayer->SetHandle(m_pModelManager->DuplicateModel(L"Player"));
 	m_pPlayer->Init();
 	m_pCollisionManager->Register(m_pPlayer);
+	// 最初は操作不能にする
+	m_pPlayer->SetCanControll(false);
 
 	// 敵マネージャーの生成と初期化
 	m_pEnemyManager = std::make_shared<EnemyManager>(*m_pModelManager, *m_pCollisionManager,*m_pCoinManager,*m_pEffectManager, *m_pPlayer);
@@ -150,6 +159,7 @@ void SceneMain::Update()
 
 void SceneMain::Draw()
 {
+
 	// 各オブジェクトの描画
 	m_pPlayer->Draw();
 	m_pEnemyManager->Draw();
@@ -163,6 +173,8 @@ void SceneMain::Draw()
 	// エフェクトの描画
 	m_pEffectManager->Draw();
 
+	DrawStart();
+
 #ifdef _DEBUG
 	DrawFormatString(0, 32, 0x000000, L"SCORE:%d", m_score);
 
@@ -170,6 +182,37 @@ void SceneMain::Draw()
 	DrawString(0,0,L"SceneMain",0xffffff);
 	DrawFormatString(0, 16, 0xffffff, L"FRAME:%d", m_frameCount);
 #endif
+}
+
+void SceneMain::DrawStart()
+{
+	int second = m_startCount / 60;
+	if (second > 4)
+	{
+		return;
+	}
+
+	m_startCount++;
+
+	if (m_startCount < 60)
+	{
+		return;
+	}
+
+	std::wstring text = L"temp";
+	text = std::to_wstring(4 - second);
+
+	if (second > 3)
+	{
+		text = L"START!";
+		m_isStarted = true;
+		m_pPlayer->SetCanControll(true);
+	}
+
+	auto stringWidth = GetDrawFormatStringWidthToHandle(m_fontHandle, text.c_str());
+	int x = Game::kScreenWidth / 2 - stringWidth / 2;
+	int y = Game::kScreenHeight / 2 - kFontSize / 2;
+	DrawFormatStringToHandle(x, y, 0xffffff, m_fontHandle, text.c_str());
 }
 
 void SceneMain::DrawGrid()
