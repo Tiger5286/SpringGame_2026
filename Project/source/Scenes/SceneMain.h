@@ -23,8 +23,11 @@ public:
 	void End() override;
 	void Update() override;
 	void Draw() override;
+
+	int GetScore() const { return m_score; }
 private:
 	void DrawStart();
+	void DrawFinish();
 
 	void DrawGrid();
 
@@ -42,7 +45,7 @@ private:
 
 	std::shared_ptr<Player> m_pPlayer = nullptr;
 
-	int m_startFontHandle = -1;
+	int m_titleFontHandle = -1;
 	int m_uiFontHandle = -1;
 
 	int m_score = 0;
@@ -51,5 +54,7 @@ private:
 	int m_startCount = 0;
 
 	int m_gameCount = 0;
+
+	int m_finishCount = 0;
 };
 

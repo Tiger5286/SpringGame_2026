@@ -2,6 +2,7 @@
 #include "Dxlib.h"
 #include <cassert>
 #include <string>
+#include <format>
 #include "../System/Input.h"
 #include "../Game.h"
 
@@ -42,7 +43,7 @@ void SceneResult::Update()
 
 void SceneResult::Draw()
 {
-	std::wstring resultText = L"スコア:ababa";
+	std::wstring resultText = std::format(L"スコア:{:d}", m_score);
 	std::wstring subText = L"Aボタンでタイトルに戻る";
 
 	int resultTextWidth = GetDrawStringWidthToHandle(resultText.c_str(), resultText.size(), m_fontHandle);

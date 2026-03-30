@@ -37,7 +37,11 @@ void SceneManager::Update()
 				ChangeScene(std::make_shared<SceneMain>(*m_pInput));
 				break;
 			case SceneType::Main:
+				// シーン遷移前にスコアを保存
+				m_score = std::dynamic_pointer_cast<SceneMain>(m_pCurrentScene)->GetScore();
 				ChangeScene(std::make_shared<SceneResult>(*m_pInput));
+				// シーン遷移後にスコアを渡す
+				std::dynamic_pointer_cast<SceneResult>(m_pCurrentScene)->SetScore(m_score);
 				break;
 			case SceneType::Result:
 				ChangeScene(std::make_shared<SceneTitle>(*m_pInput));

@@ -28,7 +28,7 @@ namespace
 	};
 
 	// フォントのサイズ
-	constexpr int kStartFontSize = 100;
+	constexpr int kTitleFontSize = 100;
 	constexpr int kUIFontSize = 50;
 
 	// 地面の色
@@ -43,6 +43,9 @@ namespace
 	constexpr int kEnemyMaxNum = 10;
 	// 宝箱の存在上限数
 	constexpr int kChestMaxNum = 3;
+
+	// ゲームの制限時間(秒)
+	constexpr int kGameTimeLimit = 60;
 }
 
 SceneMain::SceneMain(Input& input) :
@@ -57,8 +60,8 @@ SceneMain::~SceneMain()
 
 void SceneMain::Init()
 {
-	m_startFontHandle = CreateFontToHandle(nullptr, kStartFontSize, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
-	assert(m_startFontHandle != -1 && "フォントが正しく生成されませんでした");
+	m_titleFontHandle = CreateFontToHandle(nullptr, kTitleFontSize, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
+	assert(m_titleFontHandle != -1 && "フォントが正しく生成されませんでした");
 	m_uiFontHandle = CreateFontToHandle(nullptr, kUIFontSize, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
 	assert(m_uiFontHandle != -1 && "フォントが正しく生成されませんでした");
 
@@ -107,7 +110,7 @@ void SceneMain::Init()
 
 void SceneMain::End()
 {
-	DeleteFontToHandle(m_startFontHandle);
+	DeleteFontToHandle(m_titleFontHandle);
 	DeleteFontToHandle(m_uiFontHandle);
 
 	// モデルマネージャーの終了処理(ロードしたモデルの削除)
@@ -173,10 +176,24 @@ void SceneMain::Update()
 	// エフェクトマネージャーの更新
 	m_pEffectManager->Update();
 
+	if (m_gameCount > kGameTimeLimit * 60)
+	{
+		m_finishCount++;
+		m_pPlayer->SetCanControll(false);
+	}
+	if (m_finishCount > 120)
+	{
+		m_isEnd = true;
+	}
+
 #ifdef _DEBUG
 	if (CheckHitKey(KEY_INPUT_1))
 	{
 		m_isEnd = true;
+	}
+	if (CheckHitKey(KEY_INPUT_2))
+	{
+		m_gameCount = kGameTimeLimit * (60 - 2);
 	}
 #endif
 }
@@ -200,8 +217,15 @@ void SceneMain::Draw()
 	// ゲーム開始前のカウントダウンの描画
 	DrawStart();
 
+	// ゲーム終了後のテキストの描画
+	if (m_finishCount > 0)
+	{
+		DrawFinish();
+	}
+
 	// 残り時間の描画
-	float sec = 60.0f - static_cast<float>(m_gameCount) / 60.0f;
+	float sec = kGameTimeLimit - static_cast<float>(m_gameCount) / 60.0f;
+	if (sec < 0) sec = 0.0f;
 	std::wstring text = std::format(L"残り時間:{:.1f}", sec);
 	auto strWidth = GetDrawFormatStringWidthToHandle(m_uiFontHandle, text.c_str());
 	int x = Game::kScreenWidth / 2 - strWidth / 2;
@@ -246,10 +270,19 @@ void SceneMain::DrawStart()
 		m_pPlayer->SetCanControll(true);
 	}
 
-	auto stringWidth = GetDrawFormatStringWidthToHandle(m_startFontHandle, text.c_str());
+	auto stringWidth = GetDrawFormatStringWidthToHandle(m_titleFontHandle, text.c_str());
 	int x = Game::kScreenWidth / 2 - stringWidth / 2;
-	int y = Game::kScreenHeight / 2 - kStartFontSize / 2;
-	DrawFormatStringToHandle(x, y, 0xffffff, m_startFontHandle, text.c_str());
+	int y = Game::kScreenHeight / 2 - kTitleFontSize / 2;
+	DrawFormatStringToHandle(x, y, 0xffffff, m_titleFontHandle, text.c_str());
+}
+
+void SceneMain::DrawFinish()
+{
+	std::wstring text = L"Finish!";
+	auto stringWidth = GetDrawFormatStringWidthToHandle(m_titleFontHandle, text.c_str());
+	int x = Game::kScreenWidth / 2 - stringWidth / 2;
+	int y = Game::kScreenHeight / 2 - kTitleFontSize / 2;
+	DrawFormatStringToHandle(x, y, 0xffffff, m_titleFontHandle, text.c_str());
 }
 
 void SceneMain::DrawGrid()

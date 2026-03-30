@@ -12,7 +12,11 @@ public:
 	virtual void Update() override;
 	virtual void Draw() override;
 
+	void SetScore(int score) { m_score = score; }
+
 private:
 	int m_fontHandle = -1;
+
+	int m_score = 0;
 };
 

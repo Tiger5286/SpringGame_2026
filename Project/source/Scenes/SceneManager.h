@@ -21,4 +21,6 @@ private:
 private:
 	std::shared_ptr<Input> m_pInput = nullptr;
 	std::shared_ptr<SceneBase> m_pCurrentScene = nullptr;
+
+	int m_score = 0;
 };
