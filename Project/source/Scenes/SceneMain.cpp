@@ -107,6 +107,9 @@ void SceneMain::Init()
 	// 宝箱マネージャーの生成と初期化
 	m_pChestManager = std::make_shared<ChestManager>(*m_pModelManager,*m_pCollisionManager, *m_pCoinManager,*m_pEffectManager);
 	m_pChestManager->Init();
+
+	// シャドウマップの生成
+	m_shadowMapHandle = MakeShadowMap(8192, 8192);
 }
 
 void SceneMain::End()
@@ -201,6 +204,17 @@ void SceneMain::Update()
 
 void SceneMain::Draw()
 {
+	// シャドウマップへの描画開始
+	ShadowMap_DrawSetup(m_shadowMapHandle);
+
+	// シャドウマップへ各オブジェクトの描画
+	m_pPlayer->Draw();
+	m_pEnemyManager->Draw();
+	m_pChestManager->Draw();
+	m_pCoinManager->Draw();
+
+	// シャドウマップへの描画終了
+	ShadowMap_DrawEnd();
 
 	// 各オブジェクトの描画
 	m_pPlayer->Draw();
@@ -208,10 +222,16 @@ void SceneMain::Draw()
 	m_pChestManager->Draw();
 	m_pCoinManager->Draw();
 
+	// シャドウマップを使用して描画開始
+	SetUseShadowMap(0, m_shadowMapHandle);
+
 	// 床の描画
 	//DrawTriangle3D({ -Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,-Game::kFieldSize }, kGroundColor, true);
 	//DrawTriangle3D({ -Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,-Game::kFieldSize }, { -Game::kFieldSize,0,-Game::kFieldSize }, kGroundColor, true);
 	MV1DrawModel(m_pModelManager->GetModelHandle(L"Floor"));
+
+	// シャドウマップを使用した描画終了
+	SetUseShadowMap(0, -1);
 
 	// エフェクトの描画
 	m_pEffectManager->Draw();

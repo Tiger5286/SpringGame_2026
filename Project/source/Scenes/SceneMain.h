@@ -45,6 +45,8 @@ private:
 
 	std::shared_ptr<Player> m_pPlayer = nullptr;
 
+	int m_shadowMapHandle = -1;
+
 	int m_titleFontHandle = -1;
 	int m_uiFontHandle = -1;
 
