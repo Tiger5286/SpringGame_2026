@@ -1,6 +1,7 @@
 ﻿#include "Camera.h"
 #include <cmath>
 #include "EffekseerForDXLib.h"
+#include "../Utility/Matrix4x4.h"
 
 #include "../GameObjects/Player.h"
 
@@ -52,7 +53,7 @@ void Camera::Update()
 {
 	// スティック入力に応じて角度を更新
 	auto rightStick = m_input.GetStickInput(LR::Right);
-	m_angleY -= rightStick.x * 0.05f;
+	m_angleY += rightStick.x * 0.05f;
 	if (m_angleY < 0.0f) m_angleY += DX_TWO_PI_F;
 	if (m_angleY > DX_TWO_PI_F) m_angleY -= DX_TWO_PI_F;
 
@@ -61,11 +62,19 @@ void Camera::Update()
 	// 注視点を設定
 	m_target = m_playerPos + kTargetOffset;
 	// 位置を設定
-	Vector3 temp;
-	temp.x = cosf(m_angleY - DX_PI_F / 2);
-	temp.z = sinf(m_angleY - DX_PI_F / 2);
-	temp *= kTargetDis;
-	m_pos = m_playerPos + temp + kPosOffset;
+	// 適当なベクトルを生成
+	Vector3 pos = { 0,0,-1 };
+	pos.Normalize();
+	// ベクトルの長さを注視点との距離にする
+	pos *= kTargetDis;
+	// 変形用の行列を生成
+	auto rotYMtx = Matrix4x4::GetRotYMatrix(m_angleY);
+	auto transMtx = Matrix4x4::GetTranslateMatrix(m_playerPos + kPosOffset);
+	// 行列を合成
+	auto mtx = transMtx * rotYMtx;
+	// ベクトルを変形
+	pos = mtx * pos;
+	m_pos = pos;
 
 	// 位置と注視点を反映
 	SetCameraPositionAndTarget_UpVecY(m_pos.ToDxLib(), m_target.ToDxLib());

@@ -141,16 +141,16 @@ void Player::Move()
 	if (leftStick.SquaredLength() > 0.0f)
 	{
 		// スティックの入力方向の角度を取得
-		m_angle = atan2(leftStick.y, leftStick.x);
+		m_angle = atan2(leftStick.y, -leftStick.x);
 		m_angle += DX_PI_F / 2;
 		m_angle += m_cameraAngleY;
 	}
 	// 取得した角度でY軸回転行列を取得
-	auto rotYMtx = Matrix4x4::GetRotYMatrix(-m_angle);
+	auto rotYMtx = Matrix4x4::GetRotYMatrix(m_angle);
 
 	// 移動ベクトルをカメラの角度分回転させる
 	auto moveVec = Vector3(leftStick.x, 0.0f, leftStick.y) * kMoveSpeed;
-	moveVec = Matrix4x4::GetRotYMatrix(-m_cameraAngleY) * moveVec;
+	moveVec = Matrix4x4::GetRotYMatrix(m_cameraAngleY) * moveVec;
 	m_pos += moveVec;
 
 	LimitPos();
@@ -182,7 +182,10 @@ void Player::Punch()
 			m_collisionManager.Register(m_pPunchCollider);
 			// パンチコライダーの位置をプレイヤーの前方に設定
 			float punchRadius = m_pPunchCollider->GetSphere().GetRadius();
-			Vector3 punchPos = Vector3(sinf(-m_angle + DX_PI_F) * kPunchDistance, punchRadius, cosf(-m_angle + DX_PI_F) * kPunchDistance) + m_pos;
+			Vector3 temp = { 0,0,-kPunchDistance };
+			temp = Matrix4x4::GetRotYMatrix(m_angle) * temp;
+			temp.y = punchRadius;
+			Vector3 punchPos = m_pos + temp;
 			m_pPunchCollider->SetPos(punchPos);
 		}
 	}
@@ -191,7 +194,10 @@ void Player::Punch()
 	{
 		m_punchFrame--;
 		float punchRadius = m_pPunchCollider->GetSphere().GetRadius();
-		Vector3 punchPos = Vector3(sinf(-m_angle + DX_PI_F) * kPunchDistance, punchRadius, cosf(-m_angle + DX_PI_F) * kPunchDistance) + m_pos;
+		Vector3 temp = { 0,0,-kPunchDistance };
+		temp = Matrix4x4::GetRotYMatrix(m_angle) * temp;
+		temp.y = punchRadius;
+		Vector3 punchPos = m_pos + temp;
 		m_pPunchCollider->SetPos(punchPos);
 	}
 	// パンチ中でないときはパンチコライダーを消す
