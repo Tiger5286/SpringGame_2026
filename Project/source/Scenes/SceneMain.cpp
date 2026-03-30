@@ -20,11 +20,12 @@
 namespace
 {
 	// 使用するモデルのファイル名と登録名
-	const std::pair<std::wstring, std::wstring> kModelNames[4] = {
+	const std::pair<std::wstring, std::wstring> kModelNames[5] = {
 		{ L"data/Models/Player.MV1", L"Player" },
 		{ L"data/Models/Enemy.MV1",  L"Enemy"  },
 		{ L"data/Models/Chest.MV1",  L"Chest"  },
 		{ L"data/Models/Coin.MV1",   L"Coin"   },
+		{ L"data/Models/Floor.MV1",  L"Floor"  }
 	};
 
 	// フォントのサイズ
@@ -208,8 +209,9 @@ void SceneMain::Draw()
 	m_pCoinManager->Draw();
 
 	// 床の描画
-	DrawTriangle3D({ -Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,-Game::kFieldSize }, kGroundColor, true);
-	DrawTriangle3D({ -Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,-Game::kFieldSize }, { -Game::kFieldSize,0,-Game::kFieldSize }, kGroundColor, true);
+	//DrawTriangle3D({ -Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,-Game::kFieldSize }, kGroundColor, true);
+	//DrawTriangle3D({ -Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,-Game::kFieldSize }, { -Game::kFieldSize,0,-Game::kFieldSize }, kGroundColor, true);
+	MV1DrawModel(m_pModelManager->GetModelHandle(L"Floor"));
 
 	// エフェクトの描画
 	m_pEffectManager->Draw();
