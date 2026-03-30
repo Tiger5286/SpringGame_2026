@@ -8,7 +8,7 @@
 namespace
 {
 	// 移動速度
-	constexpr float kMoveSpeed = 8.0f;
+	constexpr float kMoveSpeed = 10.0f;
 	// アニメーション名
 	const std::wstring kIdleAnimName = L"CharacterArmature|Idle";
 	const std::wstring kMoveAnimName = L"CharacterArmature|Run";
