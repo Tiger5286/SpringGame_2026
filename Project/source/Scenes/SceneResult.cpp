@@ -24,6 +24,7 @@ void SceneResult::Init()
 
 void SceneResult::End()
 {
+	DeleteFontToHandle(m_fontHandle);
 }
 
 void SceneResult::Update()
