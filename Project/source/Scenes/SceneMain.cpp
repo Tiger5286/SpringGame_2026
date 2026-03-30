@@ -39,7 +39,8 @@ namespace
 	const EffectData kEffectData[] =
 	{
 		{L"data/Effects/Benediction.efk", L"Benediction", 20.0f  },
-		{L"data/Effects/Hit.efkefc",L"Hit",100.0f}
+		{L"data/Effects/Hit.efkefc",L"Hit",100.0f},
+		{L"data/Effects/fire.efkefc",L"Explosion",100.0f}
 	};
 
 	// フォントのサイズ
@@ -108,7 +109,7 @@ void SceneMain::Init()
 	m_pCoinManager->Init();
 
 	// プレイヤーの生成と初期化
-	m_pPlayer = std::make_shared<Player>(m_input,*m_pCollisionManager);
+	m_pPlayer = std::make_shared<Player>(m_input,*m_pCollisionManager,*m_pEffectManager);
 	m_pPlayer->SetHandle(m_pModelManager->DuplicateModel(L"Player"));
 	m_pPlayer->Init();
 	m_pCollisionManager->Register(m_pPlayer);

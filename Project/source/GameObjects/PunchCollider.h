@@ -1,10 +1,12 @@
 ﻿#pragma once
 #include "GameObject.h"
 
+class EffectManager;
+
 class PunchCollider : public GameObject
 {
 public:
-	PunchCollider();
+	PunchCollider(EffectManager& effectManager);
 	virtual ~PunchCollider() override;
 
 	void Init() override;
@@ -13,6 +15,7 @@ public:
 	void Draw() override;
 	
 	void OnCollision(const GameObject& other) override;
+	void OnCollision2(GameObject& other) override;
 
 	void SetPos(const Vector3& pos)
 	{
@@ -21,6 +24,6 @@ public:
 	}
 
 private:
-
+	EffectManager& m_effectManager;
 };
 

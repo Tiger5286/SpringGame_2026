@@ -1,12 +1,14 @@
 ﻿#include "PunchCollider.h"
+#include "../Managers/EffectManager.h"
 
 namespace
 {
 	constexpr float kSphereRadius = 150.0f;
 }
 
-PunchCollider::PunchCollider():
-	GameObject(kSphereRadius)
+PunchCollider::PunchCollider(EffectManager& effectManager):
+	GameObject(kSphereRadius),
+	m_effectManager(effectManager)
 {
 }
 
@@ -36,4 +38,17 @@ void PunchCollider::Draw()
 
 void PunchCollider::OnCollision(const GameObject& other)
 {
+}
+
+void PunchCollider::OnCollision2(GameObject& other)
+{
+	if (other.GetTag() == ObjectTag::Enemy)
+	{
+		if (!other.IsHit())
+		{
+			auto effectPos = (other.GetSphere().GetPos() + m_pos) * 0.5f;
+			m_effectManager.PlayEffect(L"Hit", effectPos);
+			other.OnHit();
+		}
+	}
 }

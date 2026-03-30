@@ -33,10 +33,11 @@ namespace
 	constexpr int kInvincibleFrickerInterval = 12;
 }
 
-Player::Player(Input& input, CollisionManager& collisionManager) :
+Player::Player(Input& input, CollisionManager& collisionManager,EffectManager& effectManager) :
 	GameObject(kSphereRadius),
 	m_input(input),
-	m_collisionManager(collisionManager)
+	m_collisionManager(collisionManager),
+	m_effectManager(effectManager)
 {
 }
 
@@ -177,7 +178,7 @@ void Player::Punch()
 			// パンチフレームをリセット
 			m_punchFrame = kPunchFrame;
 			// パンチコライダーを生成
-			m_pPunchCollider = std::make_shared<PunchCollider>();
+			m_pPunchCollider = std::make_shared<PunchCollider>(m_effectManager);
 			m_pPunchCollider->Init();
 			m_collisionManager.Register(m_pPunchCollider);
 			// パンチコライダーの位置をプレイヤーの前方に設定

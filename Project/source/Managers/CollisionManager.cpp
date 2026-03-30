@@ -29,8 +29,12 @@ void CollisionManager::Update()
 			// 当たっているかチェック
 			if (CheckCollision(*objA, *objB))
 			{
+				// 当たった関数を呼び出す
 				objA->OnCollision(*objB);
 				objB->OnCollision(*objA);
+
+				objA->OnCollision2(*objB);
+				objB->OnCollision2(*objA);
 			}
 		}
 	}
