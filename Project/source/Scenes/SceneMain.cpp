@@ -61,6 +61,7 @@ SceneMain::~SceneMain()
 
 void SceneMain::Init()
 {
+	// フォントの生成
 	m_titleFontHandle = CreateFontToHandle(nullptr, kTitleFontSize, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
 	assert(m_titleFontHandle != -1 && "フォントが正しく生成されませんでした");
 	m_uiFontHandle = CreateFontToHandle(nullptr, kUIFontSize, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
@@ -114,6 +115,7 @@ void SceneMain::Init()
 
 void SceneMain::End()
 {
+	// フォントの削除
 	DeleteFontToHandle(m_titleFontHandle);
 	DeleteFontToHandle(m_uiFontHandle);
 
@@ -127,12 +129,16 @@ void SceneMain::End()
 	m_pEnemyManager->End();
 	m_pCoinManager->End();
 	m_pChestManager->End();
+
+	// シャドウマップを削除
+	DeleteShadowMap(m_shadowMapHandle);
 }
 
 void SceneMain::Update()
 {
 	m_frameCount++;
 
+	// ゲーム開始後の処理
 	if (m_isStarted)
 	{
 		m_gameCount++;
@@ -167,6 +173,8 @@ void SceneMain::Update()
 	m_pEnemyManager->Update();
 	m_pChestManager->Update();
 	m_pCoinManager->Update();
+
+	// スコアの更新
 	m_score = m_pCoinManager->GetCoinNum() * 100;
 
 	// 当たり判定の更新
@@ -180,11 +188,13 @@ void SceneMain::Update()
 	// エフェクトマネージャーの更新
 	m_pEffectManager->Update();
 
+	// ゲームの制限時間を超えたらゲーム終了
 	if (m_gameCount > kGameTimeLimit * 60)
 	{
 		m_finishCount++;
 		m_pPlayer->SetCanControll(false);
 	}
+	// ゲーム終了後、一定時間が経ったらシーンを終了
 	if (m_finishCount > 120)
 	{
 		m_isEnd = true;
@@ -197,7 +207,7 @@ void SceneMain::Update()
 	}
 	if (CheckHitKey(KEY_INPUT_2))
 	{
-		m_gameCount = kGameTimeLimit * (60 - 2);
+		m_gameCount = kGameTimeLimit * (60 - 1);
 	}
 #endif
 }
@@ -263,7 +273,7 @@ void SceneMain::Draw()
 	DrawGrid();
 	DrawString(0,0,L"SceneMain",0xffffff);
 	DrawFormatString(0, 16, 0xffffff, L"FRAME:%d", m_frameCount);
-	DrawString(0, 32, L"1キーでシーンを終わる", 0xffffff);
+	DrawString(0, 32, L"1キーでシーンを終わる\n2キーで制限時間を1にする", 0xffffff);
 #endif
 }
 
