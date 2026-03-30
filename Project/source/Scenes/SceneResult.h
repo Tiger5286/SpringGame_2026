@@ -19,4 +19,3 @@ private:
 
 	int m_score = 0;
 };
-

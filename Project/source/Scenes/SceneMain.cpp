@@ -236,8 +236,6 @@ void SceneMain::Draw()
 	SetUseShadowMap(0, m_shadowMapHandle);
 
 	// 床の描画
-	//DrawTriangle3D({ -Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,-Game::kFieldSize }, kGroundColor, true);
-	//DrawTriangle3D({ -Game::kFieldSize,0,Game::kFieldSize }, { Game::kFieldSize,0,-Game::kFieldSize }, { -Game::kFieldSize,0,-Game::kFieldSize }, kGroundColor, true);
 	MV1DrawModel(m_pModelManager->GetModelHandle(L"Floor"));
 
 	// シャドウマップを使用した描画終了
