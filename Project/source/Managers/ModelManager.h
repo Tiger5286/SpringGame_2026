@@ -33,7 +33,14 @@ public:
 	/// </summary>
 	/// <param name="key">複製するモデルの名前</param>
 	/// <returns>複製されたモデルのハンドル</returns>
-	int DuplicateModel(std::wstring key);
+	int DuplicateModel(std::wstring key) const;
+
+	/// <summary>
+	/// 登録されたモデルのハンドルを返す
+	/// </summary>
+	/// <param name="key">モデルの名前</param>
+	/// <returns>モデルのハンドル</returns>
+	int GetModelHandle(std::wstring key) const;
 
 private:
 	bool m_isEnd = false;

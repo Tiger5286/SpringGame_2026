@@ -50,7 +50,7 @@ void ModelManager::DeleteModel(std::wstring key)
 	m_modelHandles.erase(key);
 }
 
-int ModelManager::DuplicateModel(std::wstring key)
+int ModelManager::DuplicateModel(std::wstring key) const
 {
 	// 存在しないキーをチェック
 	if (!m_modelHandles.contains(key))
@@ -59,7 +59,18 @@ int ModelManager::DuplicateModel(std::wstring key)
 		return -1;
 	}
 	// モデルを複製してハンドルを返す
-	auto handle = MV1DuplicateModel(m_modelHandles[key]);
+	auto handle = MV1DuplicateModel(m_modelHandles.at(key));
 	assert(handle != -1 && "モデルが正しく複製されませんでした");
 	return handle;
+}
+
+int ModelManager::GetModelHandle(std::wstring key) const
+{
+	// 存在しないキーをチェック
+	if (!m_modelHandles.contains(key))
+	{
+		assert(false && "存在しないモデルを指定しています");
+		return -1;
+	}
+	return m_modelHandles.at(key);
 }
