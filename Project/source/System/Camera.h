@@ -26,5 +26,6 @@ private:
 	Vector3 m_pos;
 	Vector3 m_target;
 	float m_angleY = 0.0f;
+	float m_angleX = 0.0f;
 };
 
