@@ -235,8 +235,17 @@ void SceneMain::Draw()
 	// シャドウマップを使用して描画開始
 	SetUseShadowMap(0, m_shadowMapHandle);
 
+	// 床用のライトの向きを生成
+	auto temp = Vector3(0.0f, -1.5f, 1.0f);
+	temp = Matrix4x4::GetRotYMatrix(m_pCamera->GetAngleY()) * temp;
+	SetLightDirection(temp.ToDxLib());
+
 	// 床の描画
 	MV1DrawModel(m_pModelManager->GetModelHandle(L"Floor"));
+
+	// 通常のライトの向きを設定
+	auto cameraToPlayer = m_pPlayer->GetPos() - m_pCamera->GetPos();
+	SetLightDirection(cameraToPlayer.ToDxLib());
 
 	// シャドウマップを使用した描画終了
 	SetUseShadowMap(0, -1);
