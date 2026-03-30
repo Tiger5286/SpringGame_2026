@@ -20,12 +20,26 @@
 namespace
 {
 	// 使用するモデルのファイル名と登録名
-	const std::pair<std::wstring, std::wstring> kModelNames[5] = {
+	const std::pair<std::wstring, std::wstring> kModelNames[] = {
 		{ L"data/Models/Player.MV1", L"Player" },
 		{ L"data/Models/Enemy.MV1",  L"Enemy"  },
 		{ L"data/Models/Chest.MV1",  L"Chest"  },
 		{ L"data/Models/Coin.MV1",   L"Coin"   },
 		{ L"data/Models/Floor.MV1",  L"Floor"  }
+	};
+
+	// エフェクトのデータ
+	struct EffectData
+	{
+		const std::wstring filePath;	// エフェクトのファイルパス
+		const std::wstring key;			// エフェクトの登録名
+		const float scale;				// エフェクトの拡大率
+	};
+	// 使用するエフェクトのファイルパスと登録名と拡大率
+	const EffectData kEffectData[] =
+	{
+		{L"data/Effects/Benediction.efk", L"Benediction", 20.0f  },
+		{L"data/Effects/Hit.efkefc",L"Hit",100.0f}
 	};
 
 	// フォントのサイズ
@@ -79,7 +93,11 @@ void SceneMain::Init()
 	// エフェクトマネージャーの生成と初期化
 	m_pEffectManager = std::make_shared<EffectManager>();
 	m_pEffectManager->Init();
-	m_pEffectManager->LoadEffect(L"data/Effects/Benediction.efk", L"Benediction", 20.0f);
+	// エフェクトのロード
+	for (auto& data : kEffectData)
+	{
+		m_pEffectManager->LoadEffect(data.filePath, data.key, data.scale);
+	}
 
 	// カメラの生成と初期化
 	m_pCamera = std::make_shared<Camera>(m_input);
