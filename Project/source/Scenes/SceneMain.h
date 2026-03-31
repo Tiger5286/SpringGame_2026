@@ -13,6 +13,8 @@ class EffectManager;
 
 class Player;
 
+class SkyBox;
+
 class SceneMain : public SceneBase
 {
 public:
@@ -44,6 +46,8 @@ private:
 	std::shared_ptr<EffectManager> m_pEffectManager = nullptr;
 
 	std::shared_ptr<Player> m_pPlayer = nullptr;
+
+	std::shared_ptr<SkyBox> m_pSkyBox = nullptr;
 
 	int m_shadowMapHandle = -1;
 

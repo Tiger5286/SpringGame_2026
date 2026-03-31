@@ -57,7 +57,7 @@ void SkyBox::Update()
 
 void SkyBox::Draw()
 {
-	float size = 800.0f;
+	float size = 1000.0f;
 
 	Vector3 cPos = m_camera.GetPos();
 

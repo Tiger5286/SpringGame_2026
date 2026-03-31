@@ -17,6 +17,8 @@
 
 #include "../GameObjects/Player.h"
 
+#include "../System/SkyBox.h"
+
 namespace
 {
 	// 使用するモデルのファイル名と登録名
@@ -128,6 +130,10 @@ void SceneMain::Init()
 	m_pChestManager = std::make_shared<ChestManager>(*m_pModelManager,*m_pCollisionManager, *m_pCoinManager,*m_pEffectManager);
 	m_pChestManager->Init();
 
+	// スカイボックスの生成
+	m_pSkyBox = std::make_shared<SkyBox>(*m_pCamera);
+	m_pSkyBox->Init();
+
 	// シャドウマップの生成
 	m_shadowMapHandle = MakeShadowMap(8192, 8192);
 }
@@ -148,6 +154,8 @@ void SceneMain::End()
 	m_pEnemyManager->End();
 	m_pCoinManager->End();
 	m_pChestManager->End();
+
+	m_pSkyBox->End();
 
 	// シャドウマップを削除
 	DeleteShadowMap(m_shadowMapHandle);
@@ -206,6 +214,8 @@ void SceneMain::Update()
 
 	// エフェクトマネージャーの更新
 	m_pEffectManager->Update();
+
+	m_pSkyBox->Update();
 
 	// ゲームの制限時間を超えたらゲーム終了
 	if (m_gameCount > kGameTimeLimit * 60)
@@ -268,6 +278,8 @@ void SceneMain::Draw()
 
 	// シャドウマップを使用した描画終了
 	SetUseShadowMap(0, -1);
+
+	m_pSkyBox->Draw();
 
 	// エフェクトの描画
 	m_pEffectManager->Draw();
