@@ -49,7 +49,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// ライティングの設定
 	SetUseLighting(true);
 	// 背景色の設定
-	SetBackgroundColor(135, 206, 235);
+	//SetBackgroundColor(135, 206, 235);
 
 	auto pSceneManager = std::make_shared<SceneManager>();
 	pSceneManager->Init();

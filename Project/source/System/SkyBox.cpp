@@ -1,5 +1,6 @@
-#include "SkyBox.h"
+﻿#include "SkyBox.h"
 #include <string>
+#include <array>
 #include "Dxlib.h"
 #include <cassert>
 
@@ -8,20 +9,13 @@
 
 namespace
 {
-	struct SkyboxData
-	{
-		std::wstring filePath;	// ファイルパス
-		std::wstring key;		// 登録名
-	};
-
-	SkyboxData kSkyboxData[] =
-	{
-		L"data/Graphs/skybox_up.png",    L"SkyboxUp",
-		L"data/Graphs/skybox_down.png",  L"SkyboxDown",
-		L"data/Graphs/skybox_left.png",  L"SkyboxLeft",
-		L"data/Graphs/skybox_right.png", L"SkyboxRight",
-		L"data/Graphs/skybox_front.png", L"SkyboxFront",
-		L"data/Graphs/skybox_back.png",  L"SkyboxBack"
+	const std::array<std::wstring,6> kFileNames = {
+		L"data/Graphs/skybox_front.png",
+		L"data/Graphs/skybox_back.png",
+		L"data/Graphs/skybox_left.png",
+		L"data/Graphs/skybox_right.png",
+		L"data/Graphs/skybox_up.png",
+		L"data/Graphs/skybox_down.png",
 	};
 }
 
@@ -36,9 +30,9 @@ SkyBox::~SkyBox()
 
 void SkyBox::Init()
 {
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < kFileNames.size(); i++)
 	{
-		m_graphHandles[i] = LoadGraph(kSkyboxData[i].filePath.c_str());
+		m_graphHandles[i] = LoadGraph(kFileNames[i].c_str());
 		assert(m_graphHandles[i] != -1 && "スカイボックスの画像が正しく読み込まれませんでした");
 	}
 }
@@ -57,66 +51,68 @@ void SkyBox::Update()
 
 void SkyBox::Draw()
 {
-	float size = 1000.0f;
+	constexpr float size = 200.0f;
+	const auto cameraPos = m_camera.GetPos();
 
-	Vector3 cPos = m_camera.GetPos();
+	SetWriteZBuffer3D(false);
+	SetUseLighting(false);
 
-	Vector3 v[8] =
-	{
-		{ cPos.x - size, cPos.y + size,cPos.z - size},
-		{ cPos.x + size, cPos.y + size,cPos.z - size},
-		{ cPos.x + size, cPos.y - size,cPos.z - size},
-		{ cPos.x - size, cPos.y - size,cPos.z - size},
+	// front
+	DrawSquare(cameraPos + Vector3(-size, size, size),	// lt
+		cameraPos + Vector3(size, size, size),	// rt
+		cameraPos + Vector3(size, -size, size),	// rb
+		cameraPos + Vector3(-size, -size, size),	// lb
+		m_graphHandles[static_cast<int>(SkyBoxFace::Front)]);
+	// back
+	DrawSquare(cameraPos + Vector3(size, size, -size),	// lt
+		cameraPos + Vector3(-size, size, -size),	// rt
+		cameraPos + Vector3(-size, -size, -size),	// rb
+		cameraPos + Vector3(size, -size, -size),	// lb
+		m_graphHandles[static_cast<int>(SkyBoxFace::Back)]);
+	// left
+	DrawSquare(cameraPos + Vector3(-size, size, -size),	// lt
+		cameraPos + Vector3(-size, size, size),	// rt
+		cameraPos + Vector3(-size, -size, size),	// rb
+		cameraPos + Vector3(-size, -size, -size),	// lb
+		m_graphHandles[static_cast<int>(SkyBoxFace::Left)]);
+	// right
+	DrawSquare(cameraPos + Vector3(size, size, size),	// lt
+		cameraPos + Vector3(size, size, -size),	// rt
+		cameraPos + Vector3(size, -size, -size),	// rb
+		cameraPos + Vector3(size, -size, size),	// lb
+		m_graphHandles[static_cast<int>(SkyBoxFace::Right)]);
+	// up
+	DrawSquare(cameraPos + Vector3(-size, size, -size),	// lt
+		cameraPos + Vector3(size, size, -size),	// rt
+		cameraPos + Vector3(size, size, size),	// rb
+		cameraPos + Vector3(-size, size, size),	// lb
+		m_graphHandles[static_cast<int>(SkyBoxFace::Up)]);
+	// down
+	DrawSquare(cameraPos + Vector3(-size, -size, size),	// lt
+		cameraPos + Vector3(size, -size, size),	// rt
+		cameraPos + Vector3(size, -size, -size),	// rb
+		cameraPos + Vector3(-size, -size, -size),	// lb
+		m_graphHandles[static_cast<int>(SkyBoxFace::Down)]);
 
-		{ cPos.x - size, cPos.y + size,cPos.z + size},
-		{ cPos.x + size, cPos.y + size,cPos.z + size},
-		{ cPos.x + size, cPos.y - size,cPos.z + size},
-		{ cPos.x - size, cPos.y - size,cPos.z + size}
-	};
 
-	// 前
-	DrawSkyQuad(v[5], v[4], v[7], v[6], m_graphHandles[4]);
-
-	// 後
-	DrawSkyQuad(v[0], v[1], v[2], v[3], m_graphHandles[5]);
-
-	// 左
-	DrawSkyQuad(v[4], v[0], v[3], v[7], m_graphHandles[2]);
-
-	// 右
-	DrawSkyQuad(v[1], v[5], v[6], v[2], m_graphHandles[3]);
-
-	// 上
-	DrawSkyQuad(v[4], v[5], v[1], v[0], m_graphHandles[0]);
-
-	// 下
-	DrawSkyQuad(v[3], v[2], v[6], v[7], m_graphHandles[1]);
+	SetWriteZBuffer3D(true);
+	SetUseLighting(true);
 }
 
-void SkyBox::DrawSkyQuad(const Vector3& a, const Vector3& b, const Vector3& c, const Vector3& d, int graphHandle)
+void SkyBox::DrawSquare(const Vector3& lt, const Vector3& rt, const Vector3& rb, const Vector3& lb, int graphHandle)
 {
-	VERTEX3D v[4];
+	VERTEX3D v[4] = {};
+	v[0].pos = lt.ToDxLib(); v[0].u = 0.0f; v[0].v = 0.0f;
+	v[1].pos = rt.ToDxLib(); v[1].u = 1.0f; v[1].v = 0.0f;
+	v[2].pos = rb.ToDxLib(); v[2].u = 1.0f; v[2].v = 1.0f;
+	v[3].pos = lb.ToDxLib(); v[3].u = 0.0f; v[3].v = 1.0f;
 
-	v[0].pos = a.ToDxLib(); v[0].u = 0.0f; v[0].v = 0.0f;
-	v[1].pos = b.ToDxLib(); v[1].u = 1.0f; v[1].v = 0.0f;
-	v[2].pos = c.ToDxLib(); v[2].u = 1.0f; v[2].v = 1.0f;
-	v[3].pos = d.ToDxLib(); v[3].u = 0.0f; v[3].v = 1.0f;
-
-	for (int i = 0; i < 4; i++)
+	int size = sizeof(v) / sizeof(VERTEX3D);
+	for (int i = 0; i < size; i++)
 	{
-		v[i].dif.r = 255;
-		v[i].dif.g = 255;
-		v[i].dif.b = 255;
-		v[i].dif.a = 255;
-
-		v[i].spc.r = 0;
-		v[i].spc.g = 0;
-		v[i].spc.b = 0;
-		v[i].spc.a = 0;
+		v[i].dif = GetColorU8(255, 255, 255, 255);
 	}
 
-	DrawPolygon3D(&v[0], 3, graphHandle, false);
-
-	VERTEX3D v2[3] = { v[0], v[2], v[3] };
-	DrawPolygon3D(v2, 3, graphHandle, false);
+	unsigned short index[] = { 0,2,3, 0,1,2 };
+	DrawPolygonIndexed3D(v, size, index, 2, graphHandle, true);
 }

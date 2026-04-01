@@ -243,6 +243,8 @@ void SceneMain::Update()
 
 void SceneMain::Draw()
 {
+	m_pSkyBox->Draw();
+
 	// シャドウマップへの描画開始
 	ShadowMap_DrawSetup(m_shadowMapHandle);
 
@@ -278,8 +280,6 @@ void SceneMain::Draw()
 
 	// シャドウマップを使用した描画終了
 	SetUseShadowMap(0, -1);
-
-	m_pSkyBox->Draw();
 
 	// エフェクトの描画
 	m_pEffectManager->Draw();
