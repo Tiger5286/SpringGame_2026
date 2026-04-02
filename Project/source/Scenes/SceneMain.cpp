@@ -121,6 +121,7 @@ void SceneMain::Init()
 	// カメラの更新
 	m_pCamera->SetPlayerPos(m_pPlayer->GetPos());
 	m_pPlayer->SetCameraAngleY(m_pCamera->GetAngleY());	// プレイヤーにカメラの角度を渡す
+	m_pCamera->Update();
 
 	// 敵マネージャーの生成と初期化
 	m_pEnemyManager = std::make_shared<EnemyManager>(*m_pModelManager, *m_pCollisionManager,*m_pCoinManager,*m_pEffectManager, *m_pPlayer);
