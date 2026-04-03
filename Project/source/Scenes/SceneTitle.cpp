@@ -5,7 +5,13 @@
 #include "../Game.h"
 #include <cassert>
 #include "../System/SkyBox.h"
-#include "../System/Camera.h"
+#include "../Managers/ModelManager.h"
+
+namespace
+{
+	const Vector3 kCameraPos = Vector3(0.0f, 500.0f, -1000.0f);
+	const Vector3 kCameraTarget = Vector3(0.0f, 200.0f, 0.0f);
+}
 
 SceneTitle::SceneTitle(Input& input):
 	SceneBase(input)
@@ -24,8 +30,11 @@ void SceneTitle::Init()
 	m_fontHandle = CreateFontToHandle(nullptr, 50, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
 	assert(m_fontHandle != -1 && "フォントが正しく生成されませんでした");
 
+	SetCameraPositionAndTarget_UpVecY(kCameraPos.ToDxLib(), kCameraTarget.ToDxLib());
+
 	m_pSkyBox = std::make_shared<SkyBox>();
 	m_pSkyBox->Init();
+	m_pSkyBox->SetCameraPos(kCameraPos);
 }
 
 void SceneTitle::End()
@@ -56,6 +65,8 @@ void SceneTitle::Update()
 void SceneTitle::Draw()
 {
 	m_pSkyBox->Draw();
+
+	MV1DrawModel(ModelManager::GetInstance().GetModelHandle(L"Floor"));
 
 	std::wstring titleText = L"コインラッシュ！";
 	std::wstring subText = L"Aボタンでスタート";
