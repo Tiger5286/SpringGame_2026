@@ -4,6 +4,8 @@
 #include <string>
 #include "../Game.h"
 #include <cassert>
+#include "../System/SkyBox.h"
+#include "../System/Camera.h"
 
 SceneTitle::SceneTitle(Input& input):
 	SceneBase(input)
@@ -21,12 +23,20 @@ void SceneTitle::Init()
 	assert(m_titleFontHandle != -1 && "フォントが正しく生成されませんでした");
 	m_fontHandle = CreateFontToHandle(nullptr, 50, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
 	assert(m_fontHandle != -1 && "フォントが正しく生成されませんでした");
+
+	m_pCamera = std::make_shared<Camera>(m_input);
+	m_pCamera->Init();
+
+	m_pSkyBox = std::make_shared<SkyBox>(*m_pCamera);
+	m_pSkyBox->Init();
 }
 
 void SceneTitle::End()
 {
 	DeleteFontToHandle(m_titleFontHandle);
 	DeleteFontToHandle(m_fontHandle);
+
+	m_pSkyBox->End();
 }
 
 void SceneTitle::Update()
@@ -35,6 +45,8 @@ void SceneTitle::Update()
 	{
 		m_isEnd = true;
 	}
+
+	m_pSkyBox->Update();
 
 #ifdef _DEBUG
 	if (CheckHitKey(KEY_INPUT_1))
@@ -46,7 +58,9 @@ void SceneTitle::Update()
 
 void SceneTitle::Draw()
 {
-	std::wstring titleText = L"タイトル";
+	m_pSkyBox->Draw();
+
+	std::wstring titleText = L"コインラッシュ！";
 	std::wstring subText = L"Aボタンでスタート";
 	int titleTextWidth = GetDrawFormatStringWidthToHandle(m_titleFontHandle, titleText.c_str());
 	int subTextWidth = GetDrawFormatStringWidthToHandle(m_fontHandle, subText.c_str());

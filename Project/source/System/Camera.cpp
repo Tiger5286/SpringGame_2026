@@ -8,7 +8,7 @@
 namespace
 {
 	// カメラの初期位置と初期注視点
-	const Vector3 kFirstPos = { 0.0f,300.0f,-700.0f };
+	const Vector3 kFirstPos = { 0.0f,0.0f,-700.0f };
 	const Vector3 kFirstTarget = { 0.0f,0.0f,0.0f };
 	// 視野角
 	constexpr float kFov = DX_PI_F / 3.0f;	// 60度
