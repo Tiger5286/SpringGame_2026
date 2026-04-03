@@ -16,8 +16,7 @@ namespace
 	constexpr float kFloatDist = 100.0f;
 }
 
-EnemyManager::EnemyManager(ModelManager& modelManager, CollisionManager& collisionManager, CoinManager& coinManager, EffectManager& effectManager, Player& player):
-	m_modelManager(modelManager),
+EnemyManager::EnemyManager(CollisionManager& collisionManager, CoinManager& coinManager, EffectManager& effectManager, Player& player):
 	m_collisionManager(collisionManager),
 	m_coinManager(coinManager),
 	m_effectManager(effectManager),
@@ -79,7 +78,7 @@ void EnemyManager::Draw()
 void EnemyManager::Spawn()
 {
 	auto newEnemy = std::make_shared<Enemy>(m_player);
-	newEnemy->SetHandle(m_modelManager.DuplicateModel(L"Enemy"));
+	newEnemy->SetHandle(ModelManager::GetInstance().DuplicateModel(L"Enemy"));
 	newEnemy->Init();
 	newEnemy->Spawn(GetSpawnPos());
 	m_collisionManager.Register(newEnemy);

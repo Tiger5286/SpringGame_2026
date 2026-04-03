@@ -3,7 +3,6 @@
 #include <memory>
 #include "../Utility/Vector3.h"
 
-class ModelManager;
 class CoinManager;
 class CollisionManager;
 class EffectManager;
@@ -13,8 +12,7 @@ class Chest;
 class ChestManager
 {
 public:
-	ChestManager(ModelManager& modelManager,
-		CollisionManager& collisionManager,
+	ChestManager(CollisionManager& collisionManager,
 		CoinManager& coinManager,
 		EffectManager& effectManager);
 	virtual ~ChestManager();
@@ -29,7 +27,6 @@ public:
 	int GetChestNum() { return static_cast<int>(m_chests.size()); }
 
 private:
-	ModelManager& m_modelManager;
 	CollisionManager& m_collisionManager;
 	CoinManager& m_coinManager;
 	EffectManager& m_effectManager;

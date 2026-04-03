@@ -38,7 +38,6 @@ private:
 
 	std::shared_ptr<Camera> m_pCamera = nullptr;
 
-	std::shared_ptr<ModelManager> m_pModelManager = nullptr;
 	std::shared_ptr<CollisionManager> m_pCollisionManager = nullptr;
 	std::shared_ptr<EnemyManager> m_pEnemyManager = nullptr;
 	std::shared_ptr<CoinManager> m_pCoinManager = nullptr;

@@ -9,8 +9,7 @@ namespace
 	constexpr int kCollidableFrame = 30;
 }
 
-CoinManager::CoinManager(ModelManager& modelManager, CollisionManager& collisionManager):
-	m_modelManager(modelManager),
+CoinManager::CoinManager(CollisionManager& collisionManager):
 	m_collisionManager(collisionManager)
 {
 }
@@ -24,7 +23,7 @@ void CoinManager::Init()
 	for (auto& coin : m_coins)
 	{
 		coin = std::make_shared<Coin>();
-		coin->SetHandle(m_modelManager.DuplicateModel(L"Coin"));
+		coin->SetHandle(ModelManager::GetInstance().DuplicateModel(L"Coin"));
 		coin->Init();
 	}
 }

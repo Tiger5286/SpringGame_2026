@@ -21,15 +21,6 @@
 
 namespace
 {
-	// 使用するモデルのファイル名と登録名
-	const std::pair<std::wstring, std::wstring> kModelNames[] = {
-		{ L"data/Models/Player.MV1", L"Player" },
-		{ L"data/Models/Enemy.MV1",  L"Enemy"  },
-		{ L"data/Models/Chest.MV1",  L"Chest"  },
-		{ L"data/Models/Coin.MV1",   L"Coin"   },
-		{ L"data/Models/Floor.MV1",  L"Floor"  }
-	};
-
 	// エフェクトのデータ
 	struct EffectData
 	{
@@ -84,12 +75,6 @@ void SceneMain::Init()
 	m_uiFontHandle = CreateFontToHandle(nullptr, kUIFontSize, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
 	assert(m_uiFontHandle != -1 && "フォントが正しく生成されませんでした");
 
-	// モデルマネージャーを生成しモデルのロードを依頼
-	m_pModelManager = std::make_shared<ModelManager>();
-	for (auto& names : kModelNames)
-	{
-		m_pModelManager->LoadModel(names.first, names.second);
-	}
 	// コリジョンマネージャーの生成
 	m_pCollisionManager = std::make_shared<CollisionManager>();
 
@@ -107,12 +92,12 @@ void SceneMain::Init()
 	m_pCamera->Init();
 
 	// コインマネージャーの生成と初期化
-	m_pCoinManager = std::make_shared<CoinManager>(*m_pModelManager, *m_pCollisionManager);
+	m_pCoinManager = std::make_shared<CoinManager>(*m_pCollisionManager);
 	m_pCoinManager->Init();
 
 	// プレイヤーの生成と初期化
 	m_pPlayer = std::make_shared<Player>(m_input,*m_pCollisionManager,*m_pEffectManager);
-	m_pPlayer->SetHandle(m_pModelManager->DuplicateModel(L"Player"));
+	m_pPlayer->SetHandle(ModelManager::GetInstance().DuplicateModel(L"Player"));
 	m_pPlayer->Init();
 	m_pCollisionManager->Register(m_pPlayer);
 	// 最初は操作不能にする
@@ -124,11 +109,11 @@ void SceneMain::Init()
 	m_pCamera->Update();
 
 	// 敵マネージャーの生成と初期化
-	m_pEnemyManager = std::make_shared<EnemyManager>(*m_pModelManager, *m_pCollisionManager,*m_pCoinManager,*m_pEffectManager, *m_pPlayer);
+	m_pEnemyManager = std::make_shared<EnemyManager>(*m_pCollisionManager,*m_pCoinManager,*m_pEffectManager, *m_pPlayer);
 	m_pEnemyManager->Init();
 
 	// 宝箱マネージャーの生成と初期化
-	m_pChestManager = std::make_shared<ChestManager>(*m_pModelManager,*m_pCollisionManager, *m_pCoinManager,*m_pEffectManager);
+	m_pChestManager = std::make_shared<ChestManager>(*m_pCollisionManager, *m_pCoinManager,*m_pEffectManager);
 	m_pChestManager->Init();
 
 	// スカイボックスの生成
@@ -270,7 +255,7 @@ void SceneMain::Draw()
 	SetLightDirection(temp.ToDxLib());
 
 	// 床の描画
-	MV1DrawModel(m_pModelManager->GetModelHandle(L"Floor"));
+	MV1DrawModel(ModelManager::GetInstance().GetModelHandle(L"Floor"));
 
 	// 通常のライトの向きを設定
 	auto cameraToPlayer = m_pPlayer->GetPos() - m_pCamera->GetPos();

@@ -5,8 +5,7 @@
 #include "../Game.h"
 
 
-ChestManager::ChestManager(ModelManager& modelManager, CollisionManager& collisionManager, CoinManager& coinManager,EffectManager& effectManager):
-	m_modelManager(modelManager),
+ChestManager::ChestManager(CollisionManager& collisionManager, CoinManager& coinManager,EffectManager& effectManager):
 	m_collisionManager(collisionManager),
 	m_coinManager(coinManager),
 	m_effectManager(effectManager)
@@ -59,7 +58,7 @@ void ChestManager::Draw()
 void ChestManager::Spawn(const Vector3& playerPos)
 {
 	auto newChest = std::make_shared<Chest>(m_coinManager,m_effectManager);
-	newChest->SetHandle(m_modelManager.DuplicateModel(L"Chest"));
+	newChest->SetHandle(ModelManager::GetInstance().DuplicateModel(L"Chest"));
 	newChest->Init();
 	Vector3 spawnPos = Vector3(static_cast<float>(GetRand(Game::kFieldSize * 2) - Game::kFieldSize),
 		0.0f,

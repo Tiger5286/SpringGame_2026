@@ -3,7 +3,6 @@
 #include <list>
 #include "../Utility/Vector3.h"
 
-class ModelManager;
 class CollisionManager;
 class CoinManager;
 class EffectManager;
@@ -14,8 +13,7 @@ class Player;
 class EnemyManager
 {
 public:
-	EnemyManager(ModelManager& modelManager,
-		CollisionManager& collisionManager,
+	EnemyManager(CollisionManager& collisionManager,
 		CoinManager& coinManager,
 		EffectManager& effectManager,
 		Player& player);
@@ -34,7 +32,6 @@ private:
 	Vector3 GetSpawnPos();
 
 private:
-	ModelManager& m_modelManager;
 	CollisionManager& m_collisionManager;
 	CoinManager& m_coinManager;
 	EffectManager& m_effectManager;

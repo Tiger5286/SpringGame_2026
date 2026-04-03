@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\Application.cpp" />
     <ClCompile Include="source\System\SkyBox.cpp" />
     <ClCompile Include="source\Scenes\SceneResult.cpp" />
     <ClCompile Include="source\Scenes\SceneTitle.cpp" />
@@ -47,6 +48,7 @@
     <ClCompile Include="source\Utility\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\Application.h" />
     <ClInclude Include="source\System\SkyBox.h" />
     <ClInclude Include="source\Scenes\SceneResult.h" />
     <ClInclude Include="source\Scenes\SceneTitle.h" />
