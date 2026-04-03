@@ -136,11 +136,13 @@ void Coin::Spawn(const Vector3& pos)
 	// ランダムな方向に飛ばす
 	// ランダムな方向を生成
 	float randRad = GetRand(359) * DX_PI_F / 180.0f;
-	m_angle = randRad;
 	// 生成した方向に速度を設定
 	m_vel.x = sinf(randRad);
 	m_vel.z = cosf(randRad);
 	m_vel.Normalize();
 	m_vel *= kSpawnVelocity;
 	m_vel.y = kSpawnVelocityY;
+	// コインの向きをランダムにする
+	randRad = GetRand(359) * DX_PI_F / 180.0f;
+	m_angle = randRad;
 }
