@@ -32,6 +32,9 @@ public:
 	// ベクトルの外積を返す
 	Vector3 Cross(const Vector3& v) const;
 
+	// ベクトルの線形補間をする
+	void Lerp(const Vector3& v, float t);
+
 	// 反転したベクトルを返す
 	Vector3 operator-() const;
 	// ベクトルの足し算

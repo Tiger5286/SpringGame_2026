@@ -70,6 +70,13 @@ Vector3 Vector3::Cross(const Vector3& v) const
 				   x * v.y - y * v.x);
 }
 
+void Vector3::Lerp(const Vector3& v, float t)
+{
+	x = std::lerp(x, v.x, t);
+	y = std::lerp(y, v.y, t);
+	z = std::lerp(z, v.z, t);
+}
+
 Vector3 Vector3::operator-() const
 {
 	return Vector3(-x, -y, -z);
