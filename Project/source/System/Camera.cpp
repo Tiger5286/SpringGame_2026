@@ -85,7 +85,7 @@ void Camera::Update()
 	auto mtx = transMtx * rotYMtx * rotXMtx;
 	// ベクトルを変形
 	pos = mtx * pos;
-	m_pos = pos;
+	m_pos.Lerp(pos, 0.2f);	// カメラの位置を滑らかに移動させる
 
 	// 位置と注視点を反映
 	SetCameraPositionAndTarget_UpVecY(m_pos.ToDxLib(), m_target.ToDxLib());
