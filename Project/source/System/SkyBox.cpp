@@ -19,8 +19,7 @@ namespace
 	};
 }
 
-SkyBox::SkyBox(Camera& camera):
-	m_camera(camera)
+SkyBox::SkyBox()
 {
 }
 
@@ -52,46 +51,45 @@ void SkyBox::Update()
 void SkyBox::Draw()
 {
 	constexpr float size = 200.0f;
-	const auto cameraPos = m_camera.GetPos();
 
 	SetWriteZBuffer3D(false);
 	SetUseLighting(false);
 
 	// front
-	DrawSquare(cameraPos + Vector3(-size, size, size),	// lt
-		cameraPos + Vector3(size, size, size),	// rt
-		cameraPos + Vector3(size, -size, size),	// rb
-		cameraPos + Vector3(-size, -size, size),	// lb
+	DrawSquare(m_pos + Vector3(-size, size, size),	// lt
+		m_pos + Vector3(size, size, size),	// rt
+		m_pos + Vector3(size, -size, size),	// rb
+		m_pos + Vector3(-size, -size, size),	// lb
 		m_graphHandles[static_cast<int>(SkyBoxFace::Front)]);
 	// back
-	DrawSquare(cameraPos + Vector3(size, size, -size),	// lt
-		cameraPos + Vector3(-size, size, -size),	// rt
-		cameraPos + Vector3(-size, -size, -size),	// rb
-		cameraPos + Vector3(size, -size, -size),	// lb
+	DrawSquare(m_pos + Vector3(size, size, -size),	// lt
+		m_pos + Vector3(-size, size, -size),	// rt
+		m_pos + Vector3(-size, -size, -size),	// rb
+		m_pos + Vector3(size, -size, -size),	// lb
 		m_graphHandles[static_cast<int>(SkyBoxFace::Back)]);
 	// left
-	DrawSquare(cameraPos + Vector3(-size, size, -size),	// lt
-		cameraPos + Vector3(-size, size, size),	// rt
-		cameraPos + Vector3(-size, -size, size),	// rb
-		cameraPos + Vector3(-size, -size, -size),	// lb
+	DrawSquare(m_pos + Vector3(-size, size, -size),	// lt
+		m_pos + Vector3(-size, size, size),	// rt
+		m_pos + Vector3(-size, -size, size),	// rb
+		m_pos + Vector3(-size, -size, -size),	// lb
 		m_graphHandles[static_cast<int>(SkyBoxFace::Left)]);
 	// right
-	DrawSquare(cameraPos + Vector3(size, size, size),	// lt
-		cameraPos + Vector3(size, size, -size),	// rt
-		cameraPos + Vector3(size, -size, -size),	// rb
-		cameraPos + Vector3(size, -size, size),	// lb
+	DrawSquare(m_pos + Vector3(size, size, size),	// lt
+		m_pos + Vector3(size, size, -size),	// rt
+		m_pos + Vector3(size, -size, -size),	// rb
+		m_pos + Vector3(size, -size, size),	// lb
 		m_graphHandles[static_cast<int>(SkyBoxFace::Right)]);
 	// up
-	DrawSquare(cameraPos + Vector3(-size, size, -size),	// lt
-		cameraPos + Vector3(size, size, -size),	// rt
-		cameraPos + Vector3(size, size, size),	// rb
-		cameraPos + Vector3(-size, size, size),	// lb
+	DrawSquare(m_pos + Vector3(-size, size, -size),	// lt
+		m_pos + Vector3(size, size, -size),	// rt
+		m_pos + Vector3(size, size, size),	// rb
+		m_pos + Vector3(-size, size, size),	// lb
 		m_graphHandles[static_cast<int>(SkyBoxFace::Up)]);
 	// down
-	DrawSquare(cameraPos + Vector3(-size, -size, size),	// lt
-		cameraPos + Vector3(size, -size, size),	// rt
-		cameraPos + Vector3(size, -size, -size),	// rb
-		cameraPos + Vector3(-size, -size, -size),	// lb
+	DrawSquare(m_pos + Vector3(-size, -size, size),	// lt
+		m_pos + Vector3(size, -size, size),	// rt
+		m_pos + Vector3(size, -size, -size),	// rb
+		m_pos + Vector3(-size, -size, -size),	// lb
 		m_graphHandles[static_cast<int>(SkyBoxFace::Down)]);
 
 

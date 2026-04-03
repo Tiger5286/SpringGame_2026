@@ -117,7 +117,7 @@ void SceneMain::Init()
 	m_pChestManager->Init();
 
 	// スカイボックスの生成
-	m_pSkyBox = std::make_shared<SkyBox>(*m_pCamera);
+	m_pSkyBox = std::make_shared<SkyBox>();
 	m_pSkyBox->Init();
 
 	// シャドウマップの生成
@@ -198,6 +198,8 @@ void SceneMain::Update()
 	// エフェクトマネージャーの更新
 	m_pEffectManager->Update();
 
+	// スカイボックスの更新
+	m_pSkyBox->SetCameraPos(m_pCamera->GetPos());
 	m_pSkyBox->Update();
 
 	// ゲームの制限時間を超えたらゲーム終了
@@ -226,6 +228,7 @@ void SceneMain::Update()
 
 void SceneMain::Draw()
 {
+	// スカイボックスの描画
 	m_pSkyBox->Draw();
 
 	// シャドウマップへの描画開始

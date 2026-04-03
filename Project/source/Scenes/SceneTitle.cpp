@@ -24,10 +24,7 @@ void SceneTitle::Init()
 	m_fontHandle = CreateFontToHandle(nullptr, 50, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
 	assert(m_fontHandle != -1 && "フォントが正しく生成されませんでした");
 
-	m_pCamera = std::make_shared<Camera>(m_input);
-	m_pCamera->Init();
-
-	m_pSkyBox = std::make_shared<SkyBox>(*m_pCamera);
+	m_pSkyBox = std::make_shared<SkyBox>();
 	m_pSkyBox->Init();
 }
 

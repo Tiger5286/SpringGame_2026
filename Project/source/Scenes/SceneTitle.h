@@ -20,7 +20,6 @@ private:
 	int m_titleFontHandle = -1;
 	int m_fontHandle = -1;
 
-	std::shared_ptr<Camera> m_pCamera;
 	std::shared_ptr<SkyBox> m_pSkyBox;
 };
 
