@@ -2,16 +2,13 @@
 #include "Dxlib.h"
 #include <cassert>
 
-ModelManager::ModelManager()
+ModelManager& ModelManager::GetInstance()
 {
+	static ModelManager instance;
+	return instance;
 }
 
 ModelManager::~ModelManager()
-{
-	assert(m_isEnd && "ModelManager::End()が呼ばれていません。インスタンスを削除する前にEnd()を呼んでください。");
-}
-
-void ModelManager::End()
 {
 	// すべてのロードしたモデルを削除
 	for (auto& handle : m_modelHandles)
@@ -19,7 +16,6 @@ void ModelManager::End()
 		MV1DeleteModel(handle.second);
 	}
 	m_modelHandles.clear();
-	m_isEnd = true;
 }
 
 void ModelManager::LoadModel(std::wstring fileName, std::wstring key)

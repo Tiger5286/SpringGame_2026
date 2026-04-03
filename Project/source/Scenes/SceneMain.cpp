@@ -145,9 +145,6 @@ void SceneMain::End()
 	DeleteFontToHandle(m_titleFontHandle);
 	DeleteFontToHandle(m_uiFontHandle);
 
-	// モデルマネージャーの終了処理(ロードしたモデルの削除)
-	m_pModelManager->End();
-
 	// プレイヤーの終了処理
 	m_pPlayer->End();
 
