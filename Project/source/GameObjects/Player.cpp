@@ -33,11 +33,11 @@ namespace
 	constexpr int kInvincibleFrickerInterval = 12;
 }
 
-Player::Player(Input& input, CollisionManager& collisionManager,EffectManager& effectManager) :
+Player::Player(Input& input, std::shared_ptr<CollisionManager> pCollisionManager, std::shared_ptr<EffectManager> pEffectManager) :
 	GameObject(kSphereRadius),
 	m_input(input),
-	m_collisionManager(collisionManager),
-	m_effectManager(effectManager)
+	m_pCollisionManager(pCollisionManager),
+	m_pEffectManager(pEffectManager)
 {
 }
 
@@ -169,6 +169,8 @@ void Player::Move()
 
 void Player::Punch()
 {
+	if (m_pCollisionManager == nullptr) return;
+
 	// Bボタンが押されたとき、入力が有効なら
 	if (m_input.IsTriggerd(XINPUT_BUTTON_B) && m_isCanControll)
 	{
@@ -178,9 +180,9 @@ void Player::Punch()
 			// パンチフレームをリセット
 			m_punchFrame = kPunchFrame;
 			// パンチコライダーを生成
-			m_pPunchCollider = std::make_shared<PunchCollider>(m_effectManager);
+			m_pPunchCollider = std::make_shared<PunchCollider>(*m_pEffectManager);
 			m_pPunchCollider->Init();
-			m_collisionManager.Register(m_pPunchCollider);
+			m_pCollisionManager->Register(m_pPunchCollider);
 			// パンチコライダーの位置をプレイヤーの前方に設定
 			float punchRadius = m_pPunchCollider->GetSphere().GetRadius();
 			Vector3 temp = { 0,0,-kPunchDistance };
@@ -204,7 +206,7 @@ void Player::Punch()
 	// パンチ中でないときはパンチコライダーを消す
 	if (m_punchFrame == 0)
 	{
-		m_collisionManager.Unregister(m_pPunchCollider);
+		m_pCollisionManager->Unregister(m_pPunchCollider);
 		m_pPunchCollider = nullptr;
 	}
 }

@@ -20,7 +20,7 @@ class Player :
     public GameObject
 {
 public:
-    Player(Input& input,CollisionManager& collisionManager,EffectManager& effectManager);
+    Player(Input& input, std::shared_ptr<CollisionManager> pCollisionManager,std::shared_ptr<EffectManager> pEffectManager);
     virtual ~Player() override;
 
     void Init() override;
@@ -46,8 +46,8 @@ private:
 
 private:
     Input& m_input;
-	CollisionManager& m_collisionManager;
-	EffectManager& m_effectManager;
+	std::shared_ptr<CollisionManager> m_pCollisionManager;
+	std::shared_ptr<EffectManager> m_pEffectManager;
 
 	PlayerState m_state = PlayerState::Idle;
 	PlayerState m_prevState = PlayerState::Idle;

@@ -96,7 +96,7 @@ void SceneMain::Init()
 	m_pCoinManager->Init();
 
 	// プレイヤーの生成と初期化
-	m_pPlayer = std::make_shared<Player>(m_input,*m_pCollisionManager,*m_pEffectManager);
+	m_pPlayer = std::make_shared<Player>(m_input,m_pCollisionManager,m_pEffectManager);
 	m_pPlayer->SetHandle(ModelManager::GetInstance().DuplicateModel(L"Player"));
 	m_pPlayer->Init();
 	m_pCollisionManager->Register(m_pPlayer);
