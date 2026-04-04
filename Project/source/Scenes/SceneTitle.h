@@ -4,6 +4,7 @@
 
 class Camera;
 class SkyBox;
+class Player;
 
 class SceneTitle : public SceneBase
 {
@@ -21,5 +22,6 @@ private:
 	int m_fontHandle = -1;
 
 	std::shared_ptr<SkyBox> m_pSkyBox;
+	std::shared_ptr<Player> m_pPlayer;
 };
 

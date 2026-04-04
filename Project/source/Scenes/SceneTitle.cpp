@@ -6,11 +6,12 @@
 #include <cassert>
 #include "../System/SkyBox.h"
 #include "../Managers/ModelManager.h"
+#include "../GameObjects/Player.h"
 
 namespace
 {
-	const Vector3 kCameraPos = Vector3(0.0f, 600.0f, -1000.0f);
-	const Vector3 kCameraTarget = Vector3(0.0f, 200.0f, 0.0f);
+	const Vector3 kCameraPos = Vector3(0.0f, 300.0f, -1300.0f);
+	const Vector3 kCameraTarget = Vector3(0.0f, 500.0f, 0.0f);
 	const Vector3 kLightDirection = Vector3(0.0f, -1.5f, 1.0f);
 }
 
@@ -34,6 +35,11 @@ void SceneTitle::Init()
 	SetCameraPositionAndTarget_UpVecY(kCameraPos.ToDxLib(), kCameraTarget.ToDxLib());
 	SetLightDirection(kLightDirection.ToDxLib());
 
+	m_pPlayer = std::make_shared<Player>(m_input,nullptr,nullptr);
+	m_pPlayer->SetHandle(ModelManager::GetInstance().DuplicateModel(L"Player"));
+	m_pPlayer->Init();
+	m_pPlayer->SetCanControll(false);
+
 	m_pSkyBox = std::make_shared<SkyBox>();
 	m_pSkyBox->Init();
 	m_pSkyBox->SetCameraPos(kCameraPos);
@@ -44,11 +50,15 @@ void SceneTitle::End()
 	DeleteFontToHandle(m_titleFontHandle);
 	DeleteFontToHandle(m_fontHandle);
 
+	m_pPlayer->End();
+
 	m_pSkyBox->End();
 }
 
 void SceneTitle::Update()
 {
+	m_pPlayer->Update();
+
 	if (m_input.IsTriggerd(XINPUT_BUTTON_A))
 	{
 		m_isEnd = true;
@@ -68,6 +78,8 @@ void SceneTitle::Draw()
 {
 	m_pSkyBox->Draw();
 
+	m_pPlayer->Draw();
+
 	MV1DrawModel(ModelManager::GetInstance().GetModelHandle(L"Floor"));
 
 	std::wstring titleText = L"コインラッシュ！";
@@ -76,10 +88,10 @@ void SceneTitle::Draw()
 	int subTextWidth = GetDrawFormatStringWidthToHandle(m_fontHandle, subText.c_str());
 
 	int x = Game::kScreenWidth / 2 - titleTextWidth / 2;
-	int y = Game::kScreenHeight / 2 - 100 / 2;
+	int y = Game::kScreenHeight / 3 - 100 / 2;
 	DrawFormatStringToHandle(x, y, 0xffffff, m_titleFontHandle, titleText.c_str());
 	x = Game::kScreenWidth / 2 - subTextWidth / 2;
-	y = Game::kScreenHeight / 2 + 100 / 2;
+	y = Game::kScreenHeight / 2 + 50 / 2;
 	DrawFormatStringToHandle(x, y, 0xffffff, m_fontHandle, subText.c_str());
 
 
