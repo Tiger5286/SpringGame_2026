@@ -9,8 +9,9 @@
 
 namespace
 {
-	const Vector3 kCameraPos = Vector3(0.0f, 500.0f, -1000.0f);
+	const Vector3 kCameraPos = Vector3(0.0f, 600.0f, -1000.0f);
 	const Vector3 kCameraTarget = Vector3(0.0f, 200.0f, 0.0f);
+	const Vector3 kLightDirection = Vector3(0.0f, -1.5f, 1.0f);
 }
 
 SceneTitle::SceneTitle(Input& input):
@@ -31,6 +32,7 @@ void SceneTitle::Init()
 	assert(m_fontHandle != -1 && "フォントが正しく生成されませんでした");
 
 	SetCameraPositionAndTarget_UpVecY(kCameraPos.ToDxLib(), kCameraTarget.ToDxLib());
+	SetLightDirection(kLightDirection.ToDxLib());
 
 	m_pSkyBox = std::make_shared<SkyBox>();
 	m_pSkyBox->Init();
