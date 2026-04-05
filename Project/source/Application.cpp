@@ -82,13 +82,13 @@ void Application::Run()
 	{
 		modelManager.LoadModel(names.first, names.second);
 	}
+	// サウンドマネージャーの生成と初期化
+	auto& soundManager = SoundManager::GetInstance();
+	soundManager.Init();
 
 	// シーンマネージャーの生成と初期化
 	auto pSceneManager = std::make_shared<SceneManager>();
 	pSceneManager->Init();
-	// サウンドマネージャーの生成と初期化
-	auto pSoundManager = std::make_shared<SoundManager>();
-	pSoundManager->Init();
 
 	while (ProcessMessage() != -1 && !m_isRequestExit)
 	{
@@ -97,7 +97,7 @@ void Application::Run()
 
 		// 更新処理
 		pSceneManager->Update();
-		pSoundManager->Update();
+		soundManager.Update();
 
 		// 描画処理
 		pSceneManager->Draw();
@@ -114,7 +114,7 @@ void Application::Run()
 
 	// 終了処理
 	pSceneManager->End();
-	pSoundManager->End();
+	soundManager.End();
 }
 
 void Application::Terminate()

@@ -7,6 +7,7 @@
 #include "../System/SkyBox.h"
 #include "../Managers/ModelManager.h"
 #include "../GameObjects/Player.h"
+#include "../Managers/SoundManager.h"
 
 namespace
 {
@@ -27,22 +28,29 @@ SceneTitle::~SceneTitle()
 
 void SceneTitle::Init()
 {
+	// フォントの生成
 	m_titleFontHandle = CreateFontToHandle(nullptr, 100, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
 	assert(m_titleFontHandle != -1 && "フォントが正しく生成されませんでした");
 	m_fontHandle = CreateFontToHandle(nullptr, 50, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
 	assert(m_fontHandle != -1 && "フォントが正しく生成されませんでした");
 
+	// カメラとライトの設定
 	SetCameraPositionAndTarget_UpVecY(kCameraPos.ToDxLib(), kCameraTarget.ToDxLib());
 	SetLightDirection(kLightDirection.ToDxLib());
 
+	// プレイヤーの生成と初期化
 	m_pPlayer = std::make_shared<Player>(m_input,nullptr,nullptr);
 	m_pPlayer->SetHandle(ModelManager::GetInstance().DuplicateModel(L"Player"));
 	m_pPlayer->Init();
 	m_pPlayer->SetCanControll(false);
 
+	// スカイボックスの生成と初期化
 	m_pSkyBox = std::make_shared<SkyBox>();
 	m_pSkyBox->Init();
 	m_pSkyBox->SetCameraPos(kCameraPos);
+
+	// BGMを再生
+	SoundManager::GetInstance().PlaySoundGame(L"TitleBGM", true, true);
 }
 
 void SceneTitle::End()
@@ -62,6 +70,7 @@ void SceneTitle::Update()
 	if (m_input.IsTriggerd(XINPUT_BUTTON_A))
 	{
 		m_isEnd = true;
+		SoundManager::GetInstance().StopSound(L"TitleBGM", true);
 	}
 
 	m_pSkyBox->Update();
@@ -70,6 +79,7 @@ void SceneTitle::Update()
 	if (CheckHitKey(KEY_INPUT_1))
 	{
 		m_isEnd = true;
+		SoundManager::GetInstance().StopSound(L"TitleBGM", true);
 	}
 #endif
 }
