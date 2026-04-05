@@ -10,11 +10,29 @@ namespace
 
 SoundManager::SoundManager()
 {
-
 }
 
 SoundManager::~SoundManager()
 {
+	if (!m_isEnd)
+	{
+		assert(false && "SoundManagerでEnd()が呼ばれていません");
+		DeleteSoundAll();
+	}
+}
+
+void SoundManager::Init()
+{
+	// 音の読み込み
+	// BGM
+	LoadSound(L"TitleBGM", L"data/Sounds/title.ogg", SoundType::BGM);
+	LoadSound(L"InGameBGM", L"data/Sounds/ingame.ogg", SoundType::BGM);
+	LoadSound(L"ResultBGM", L"data/Sounds/result.ogg", SoundType::BGM);
+}
+
+void SoundManager::End()
+{
+	m_isEnd = true;
 	DeleteSoundAll();
 }
 

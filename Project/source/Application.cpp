@@ -8,6 +8,7 @@
 
 #include "Scenes/SceneManager.h"
 #include "Managers/ModelManager.h"
+#include "Managers/SoundManager.h"
 
 namespace
 {
@@ -85,14 +86,20 @@ void Application::Run()
 	// シーンマネージャーの生成と初期化
 	auto pSceneManager = std::make_shared<SceneManager>();
 	pSceneManager->Init();
+	// サウンドマネージャーの生成と初期化
+	auto pSoundManager = std::make_shared<SoundManager>();
+	pSoundManager->Init();
 
 	while (ProcessMessage() != -1 && !m_isRequestExit)
 	{
 		auto start = GetNowHiPerformanceCount(); // フレーム開始時間を取得
 		ClearDrawScreen(); // 画面をクリア
 
-		// シーンマネージャーの更新と描画
+		// 更新処理
 		pSceneManager->Update();
+		pSoundManager->Update();
+
+		// 描画処理
 		pSceneManager->Draw();
 
 		// escキーで終了
@@ -105,8 +112,9 @@ void Application::Run()
 		while (GetNowHiPerformanceCount() - start < 16667) {} // 約16.667ミリ秒(1/60秒)待つことで60FPSに固定
 	}
 
-	// シーンマネージャーの終了
+	// 終了処理
 	pSceneManager->End();
+	pSoundManager->End();
 }
 
 void Application::Terminate()

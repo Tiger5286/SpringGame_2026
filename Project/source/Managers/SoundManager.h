@@ -29,6 +29,8 @@ public:
 	static SoundManager& GetInstance();
 	~SoundManager();
 
+	void Init();
+	void End();
 	void Update();
 
 	/// <summary>
@@ -92,5 +94,7 @@ private:
 	// 音量(0~255)
 	int _bgmVolume = 255;
 	int _seVolume = 255;
+
+	bool m_isEnd = false;
 };
 
