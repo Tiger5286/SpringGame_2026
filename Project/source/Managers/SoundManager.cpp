@@ -33,6 +33,9 @@ void SoundManager::Init()
 	LoadSound(L"Decision", L"data/Sounds/decision.mp3", SoundType::SE);
 	LoadSound(L"CountDown", L"data/Sounds/countdown.mp3", SoundType::SE);
 	LoadSound(L"Finish", L"data/Sounds/finish.mp3", SoundType::SE);
+	// ゲーム内の音
+	LoadSound(L"Punch", L"data/Sounds/punch.mp3", SoundType::SE);
+	LoadSound(L"HitPunch", L"data/Sounds/hitpunch.mp3", SoundType::SE);
 }
 
 void SoundManager::End()

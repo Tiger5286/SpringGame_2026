@@ -4,6 +4,7 @@
 #include <string>
 #include "PunchCollider.h"
 #include "../Managers/CollisionManager.h"
+#include "../Managers/SoundManager.h"
 
 namespace
 {
@@ -169,6 +170,7 @@ void Player::Move()
 
 void Player::Punch()
 {
+	// コライダーマネージャーがないときはパンチできない
 	if (m_pCollisionManager == nullptr) return;
 
 	// Bボタンが押されたとき、入力が有効なら
@@ -177,6 +179,8 @@ void Player::Punch()
 		// パンチ中でなければパンチする
 		if (m_punchFrame == 0)
 		{
+			// パンチの音を鳴らす
+			SoundManager::GetInstance().PlaySoundGame(L"Punch");
 			// パンチフレームをリセット
 			m_punchFrame = kPunchFrame;
 			// パンチコライダーを生成
