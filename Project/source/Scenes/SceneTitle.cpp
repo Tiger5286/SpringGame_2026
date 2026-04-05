@@ -70,6 +70,7 @@ void SceneTitle::Update()
 	if (m_input.IsTriggerd(XINPUT_BUTTON_A))
 	{
 		m_isEnd = true;
+		SoundManager::GetInstance().PlaySoundGame(L"Decision");
 		SoundManager::GetInstance().StopSound(L"TitleBGM", true);
 	}
 

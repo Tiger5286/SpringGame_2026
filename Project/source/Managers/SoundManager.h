@@ -93,7 +93,7 @@ private:
 
 	// 音量(0~255)
 	int _bgmVolume = 255 / 2;
-	int _seVolume = 255 / 2;
+	int _seVolume = 255;
 
 	bool m_isEnd = false;
 };

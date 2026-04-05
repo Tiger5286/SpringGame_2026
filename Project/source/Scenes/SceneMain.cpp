@@ -153,6 +153,12 @@ void SceneMain::Update()
 {
 	m_frameCount++;
 
+	// カウントダウン開始のタイミングでカウントダウンの音を鳴らす
+	if (m_startCount == 60)
+	{
+		SoundManager::GetInstance().PlaySoundGame(L"CountDown");
+	}
+
 	// ゲーム開始後の処理
 	if (m_isStarted)
 	{
@@ -214,6 +220,12 @@ void SceneMain::Update()
 		m_pPlayer->SetCanControll(false);
 		SoundManager::GetInstance().StopSound(L"InGameBGM", true);
 	}
+	// 時間切れのタイミングでフィニッシュの音を鳴らす
+	if (m_finishCount == 1)
+	{
+		SoundManager::GetInstance().PlaySoundGame(L"Finish");
+	}
+
 	// ゲーム終了後、一定時間が経ったらシーンを終了
 	if (m_finishCount > 120)
 	{

@@ -28,6 +28,11 @@ void SoundManager::Init()
 	LoadSound(L"TitleBGM", L"data/Sounds/title.ogg", SoundType::BGM);
 	LoadSound(L"InGameBGM", L"data/Sounds/ingame.ogg", SoundType::BGM);
 	LoadSound(L"ResultBGM", L"data/Sounds/result.ogg", SoundType::BGM);
+	// SE
+	// システム音
+	LoadSound(L"Decision", L"data/Sounds/decision.mp3", SoundType::SE);
+	LoadSound(L"CountDown", L"data/Sounds/countdown.mp3", SoundType::SE);
+	LoadSound(L"Finish", L"data/Sounds/finish.mp3", SoundType::SE);
 }
 
 void SoundManager::End()
