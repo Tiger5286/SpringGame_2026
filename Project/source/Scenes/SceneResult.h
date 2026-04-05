@@ -1,5 +1,9 @@
 ﻿#pragma once
 #include "SceneBase.h"
+#include <memory>
+
+class SkyBox;
+
 class SceneResult :
     public SceneBase
 {
@@ -16,6 +20,8 @@ public:
 
 private:
 	int m_fontHandle = -1;
+
+	std::shared_ptr<SkyBox> m_pSkyBox = nullptr;;
 
 	int m_score = 0;
 };
