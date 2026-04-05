@@ -6,6 +6,7 @@
 #include "../System/Input.h"
 #include "../Game.h"
 #include "../System/SkyBox.h"
+#include "../Managers/SoundManager.h"
 
 SceneResult::SceneResult(Input& input):
 	SceneBase(input)
@@ -27,6 +28,9 @@ void SceneResult::Init()
 	m_pSkyBox = std::make_shared<SkyBox>();
 	m_pSkyBox->Init();
 	m_pSkyBox->SetCameraPos(Vector3(0,0,-100));
+
+	// BGMの再生
+	SoundManager::GetInstance().PlaySoundGame(L"ResultBGM", true, true);
 }
 
 void SceneResult::End()
@@ -43,12 +47,14 @@ void SceneResult::Update()
 	if (m_input.IsTriggerd(XINPUT_BUTTON_A))
 	{
 		m_isEnd = true;
+		SoundManager::GetInstance().StopSound(L"ResultBGM", true);
 	}
 
 #ifdef _DEBUG
 	if (CheckHitKey(KEY_INPUT_1))
 	{
 		m_isEnd = true;
+		SoundManager::GetInstance().StopSound(L"ResultBGM", true);
 	}
 #endif
 }
