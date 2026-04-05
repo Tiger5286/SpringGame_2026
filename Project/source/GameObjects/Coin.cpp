@@ -1,6 +1,7 @@
 ﻿#include "Coin.h"
 #include "../Geometry.h"
 #include <cmath>
+#include "../Managers/SoundManager.h"
 
 namespace
 {
@@ -117,6 +118,10 @@ void Coin::OnCollision(const GameObject& other)
 {
 	if (other.GetTag() == ObjectTag::Player)
 	{
+		// すでにプレイヤーと当たっているなら何もしない
+		if (m_isHitPlayer) return;
+
+		SoundManager::GetInstance().PlaySoundGame(L"Coin");
 		m_isHitPlayer = true;
 		m_vel = kHitPlayerVec;
 	}

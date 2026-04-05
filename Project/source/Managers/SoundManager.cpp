@@ -34,8 +34,9 @@ void SoundManager::Init()
 	LoadSound(L"CountDown", L"data/Sounds/countdown.mp3", SoundType::SE);
 	LoadSound(L"Finish", L"data/Sounds/finish.mp3", SoundType::SE);
 	// ゲーム内の音
-	LoadSound(L"Punch", L"data/Sounds/punch.mp3", SoundType::SE);
-	LoadSound(L"HitPunch", L"data/Sounds/hitpunch.mp3", SoundType::SE);
+	LoadSound(L"Punch", L"data/Sounds/punch.mp3", SoundType::SE);	// パンチ空振り
+	LoadSound(L"HitPunch", L"data/Sounds/hitpunch.mp3", SoundType::SE);	// パンチヒット
+	LoadSound(L"Coin", L"data/Sounds/coin.mp3", SoundType::SE);	// コイン取得
 }
 
 void SoundManager::End()
