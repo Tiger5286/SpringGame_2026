@@ -19,6 +19,8 @@
 
 #include "../System/SkyBox.h"
 
+#include "../Managers/SoundManager.h"
+
 namespace
 {
 	// エフェクトのデータ
@@ -122,6 +124,9 @@ void SceneMain::Init()
 
 	// シャドウマップの生成
 	m_shadowMapHandle = MakeShadowMap(8192, 8192);
+
+	// BGMの再生
+	SoundManager::GetInstance().PlaySoundGame(L"InGameBGM", true, true);
 }
 
 void SceneMain::End()
@@ -207,17 +212,20 @@ void SceneMain::Update()
 	{
 		m_finishCount++;
 		m_pPlayer->SetCanControll(false);
+		SoundManager::GetInstance().StopSound(L"InGameBGM", true);
 	}
 	// ゲーム終了後、一定時間が経ったらシーンを終了
 	if (m_finishCount > 120)
 	{
 		m_isEnd = true;
+		SoundManager::GetInstance().StopSound(L"InGameBGM", true);
 	}
 
 #ifdef _DEBUG
 	if (CheckHitKey(KEY_INPUT_1))
 	{
 		m_isEnd = true;
+		SoundManager::GetInstance().StopSound(L"InGameBGM", true);
 	}
 	if (CheckHitKey(KEY_INPUT_2))
 	{
