@@ -70,7 +70,7 @@ void Player::Update()
 		Punch();
 	}
 	// 被弾
-	Hit();
+	HitUpdate();
 
 	// 無敵時間の更新
 	if (m_isInvincible)
@@ -123,6 +123,8 @@ void Player::OnCollision(const GameObject& other)
 		if (m_punchFrame == 0 && !m_isInvincible)
 		{
 			// 当たった処理をする
+			// 敵に当たった音を鳴らす(最初の1回だけ)
+			if (!m_isHitEnemy) SoundManager::GetInstance().PlaySoundGame(L"Damage");
 			m_isHitEnemy = true;
 			m_isCanControll = false;
 		}
@@ -215,7 +217,7 @@ void Player::Punch()
 	}
 }
 
-void Player::Hit()
+void Player::HitUpdate()
 {
 	if (m_isHitEnemy)
 	{

@@ -39,6 +39,7 @@ void SoundManager::Init()
 	LoadSound(L"Coin", L"data/Sounds/coin.mp3", SoundType::SE);	// コイン取得
 	LoadSound(L"OpenChest", L"data/Sounds/openchest.mp3", SoundType::SE);	// 宝箱を開ける
 	LoadSound(L"OutCoin", L"data/Sounds/outcoin.mp3", SoundType::SE);	// コインを出す
+	LoadSound(L"Damage", L"data/Sounds/damage.mp3", SoundType::SE);	// ダメージ
 }
 
 void SoundManager::End()
