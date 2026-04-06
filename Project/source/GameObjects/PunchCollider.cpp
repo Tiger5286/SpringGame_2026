@@ -48,6 +48,7 @@ void PunchCollider::OnCollision2(GameObject& other)
 		if (!other.IsHit())
 		{
 			SoundManager::GetInstance().PlaySoundGame(L"HitPunch");
+			SoundManager::GetInstance().StopSound(L"Punch");
 			auto effectPos = (other.GetSphere().GetPos() + m_pos) * 0.5f;
 			m_effectManager.PlayEffect(L"Hit", effectPos);
 			other.OnHit();
