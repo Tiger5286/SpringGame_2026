@@ -120,6 +120,7 @@ void SceneMain::Init()
 
 	// スカイボックスの生成
 	m_pSkyBox = std::make_shared<SkyBox>();
+	m_pSkyBox->SetCameraPos(m_pCamera->GetPos());
 	m_pSkyBox->Init();
 
 	// シャドウマップの生成
