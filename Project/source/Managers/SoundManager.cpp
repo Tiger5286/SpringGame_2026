@@ -37,6 +37,8 @@ void SoundManager::Init()
 	LoadSound(L"Punch", L"data/Sounds/punch.mp3", SoundType::SE);	// パンチ空振り
 	LoadSound(L"HitPunch", L"data/Sounds/hitpunch.mp3", SoundType::SE);	// パンチヒット
 	LoadSound(L"Coin", L"data/Sounds/coin.mp3", SoundType::SE);	// コイン取得
+	LoadSound(L"OpenChest", L"data/Sounds/openchest.mp3", SoundType::SE);	// 宝箱を開ける
+	LoadSound(L"OutCoin", L"data/Sounds/outcoin.mp3", SoundType::SE);	// コインを出す
 }
 
 void SoundManager::End()

@@ -1,6 +1,7 @@
 ﻿#include "Chest.h"
 #include "../Managers/CoinManager.h"
 #include "../Managers/EffectManager.h"
+#include "../Managers/SoundManager.h"
 
 namespace
 {
@@ -64,6 +65,8 @@ void Chest::Update()
 			if (m_spawnCoinCount >= kSpawnCoinNum) return;
 			m_coinManager.Spawn(m_pos);
 			m_spawnCoinCount++;
+			// コインが出る音を鳴らす(最初の1回だけ)
+			if (m_spawnCoinCount == 1) SoundManager::GetInstance().PlaySoundGame(L"OutCoin");
 		}
 	}
 	// 死ぬ
@@ -94,6 +97,7 @@ void Chest::OnCollision(const GameObject& other)
 {
 	if (other.GetTag() == ObjectTag::Punch)
 	{
+		if (!m_isHitPunch) SoundManager::GetInstance().PlaySoundGame(L"OpenChest");
 		m_isHitPunch = true;
 	}
 }
