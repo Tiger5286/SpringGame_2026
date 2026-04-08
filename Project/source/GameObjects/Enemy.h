@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "GameObject.h"
+#include "../System/Animation.h"
 
 class Player;
 
@@ -38,6 +39,8 @@ private:
 
     int m_animHandle = -1;
     float m_animTime = 0.0f;
+
+    Animation m_anim;
 
     bool m_isHitPunch = false;
 	int m_hitPunchFrame = 0;

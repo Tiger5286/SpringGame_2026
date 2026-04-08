@@ -16,6 +16,7 @@ namespace
 
 	// アニメーション名
 	const std::wstring kAnimName = L"MonsterArmature|Walk";
+	const std::wstring kDeathAnimName = L"MonsterArmature|Death";
 	// アニメーションの再生速度
 	constexpr float kAnimSpeed = 0.5f;
 
@@ -45,7 +46,9 @@ Enemy::~Enemy()
 void Enemy::Init()
 {
 	// アニメーションをアタッチ
-	m_animHandle = MV1AttachAnim(m_modelHandle, MV1GetAnimIndex(m_modelHandle, kAnimName.c_str()));
+	//m_animHandle = MV1AttachAnim(m_modelHandle, MV1GetAnimIndex(m_modelHandle, kAnimName.c_str()));
+	m_anim.Init(m_modelHandle, kAnimName);
+	// タグを設定
 	m_tag = ObjectTag::Enemy;
 }
 
@@ -68,15 +71,16 @@ void Enemy::Update()
 	}
 
 	// アニメーション
-	// アニメーションの進行
-	m_animTime += kAnimSpeed;
-	// アニメーションのループ
-	float totalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_animHandle);
-	while (m_animTime >= totalTime)
-	{
-		m_animTime -= totalTime;
-	}
-	MV1SetAttachAnimTime(m_modelHandle, m_animHandle, m_animTime);
+	m_anim.Update();
+	//// アニメーションの進行
+	//m_animTime += kAnimSpeed;
+	//// アニメーションのループ
+	//float totalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_animHandle);
+	//while (m_animTime >= totalTime)
+	//{
+	//	m_animTime -= totalTime;
+	//}
+	//MV1SetAttachAnimTime(m_modelHandle, m_animHandle, m_animTime);
 }
 
 void Enemy::Draw()
@@ -93,6 +97,7 @@ void Enemy::OnCollision(const GameObject& other)
 	if (other.GetTag() == ObjectTag::Punch)
 	{
 		OnHitPunch();
+		m_anim.ChangeAnim(kDeathAnimName,0.4f);
 	}
 	// 敵と当たったとき
 	if (other.GetTag() == ObjectTag::Enemy)
