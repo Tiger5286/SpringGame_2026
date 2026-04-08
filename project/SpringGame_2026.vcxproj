@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\System\Fade.cpp" />
     <ClCompile Include="source\Application.cpp" />
     <ClCompile Include="source\Managers\SoundManager.cpp" />
     <ClCompile Include="source\System\SkyBox.cpp" />
@@ -49,6 +50,7 @@
     <ClCompile Include="source\Utility\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\System\Fade.h" />
     <ClInclude Include="source\Application.h" />
     <ClInclude Include="source\Managers\SoundManager.h" />
     <ClInclude Include="source\System\SkyBox.h" />

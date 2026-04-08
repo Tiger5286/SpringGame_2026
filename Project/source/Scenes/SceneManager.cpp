@@ -4,6 +4,7 @@
 #include "SceneTitle.h"
 #include "SceneMain.h"
 #include "SceneResult.h"
+#include "../System/Fade.h"
 
 SceneManager::SceneManager()
 {
@@ -16,8 +17,11 @@ SceneManager::~SceneManager()
 void SceneManager::Init()
 {
 	m_pInput = std::make_shared<Input>();
+
 	m_pCurrentScene = std::make_shared<SceneTitle>(*m_pInput);
 	m_pCurrentScene->Init();
+
+	m_pFade = std::make_shared<Fade>();
 }
 
 void SceneManager::End()
@@ -27,12 +31,39 @@ void SceneManager::End()
 
 void SceneManager::Update()
 {
+	// 前のフレームでシーンが終わっているかどうかを覚えておく
+	m_isPrevSceneEnd = m_pCurrentScene->IsEnd();
+
+	// 入力の更新
 	m_pInput->Update();
-	m_pCurrentScene->Update();
+
+	// フェードの更新
+	m_pFade->Update();
+
+	// フェード中はシーンの更新を行わない
+	if (!m_pFade->IsFading())
+	{
+		m_pCurrentScene->Update();
+	}
+
+	// シーンが終了していたら
 	if (m_pCurrentScene->IsEnd())
 	{
-		switch (m_pCurrentScene->GetSceneType())
+		// シーンが終了した瞬間だけ
+		if (!m_isPrevSceneEnd)
 		{
+			// フェードアウトを開始する
+			m_pFade->StartFadeOut();
+		}
+
+		// フェードしていなければシーンを切り替える
+		if (!m_pFade->IsFading())
+		{
+			// フェードインを開始
+			m_pFade->StartFadeIn();
+			// シーンを切り替え
+			switch (m_pCurrentScene->GetSceneType())
+			{
 			case SceneType::Title:
 				ChangeScene(std::make_shared<SceneMain>(*m_pInput));
 				break;
@@ -49,6 +80,7 @@ void SceneManager::Update()
 			default:
 				assert(false && "存在しないシーンタイプです");
 				break;
+			}
 		}
 	}
 }
@@ -56,6 +88,7 @@ void SceneManager::Update()
 void SceneManager::Draw()
 {
 	m_pCurrentScene->Draw();
+	m_pFade->Draw();
 }
 
 void SceneManager::ChangeScene(std::shared_ptr<SceneBase> newScene)
