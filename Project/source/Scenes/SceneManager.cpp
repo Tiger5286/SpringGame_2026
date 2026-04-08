@@ -22,6 +22,7 @@ void SceneManager::Init()
 	m_pCurrentScene->Init();
 
 	m_pFade = std::make_shared<Fade>();
+	m_pFade->StartFadeIn();
 }
 
 void SceneManager::End()

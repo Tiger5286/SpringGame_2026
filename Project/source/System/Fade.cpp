@@ -46,8 +46,8 @@ void Fade::Draw()
 	DrawFade(alpha);
 
 #ifdef _DEBUG
-	DrawFormatString(50, 100, 0xffffff, L"FadeState: %d", static_cast<int>(m_state));
-	DrawFormatString(50, 116, 0xffffff, L"FadeFrame: %d", m_fadeFrame);
+	DrawFormatString(50, 150, 0xffffff, L"FadeState: %d", static_cast<int>(m_state));
+	DrawFormatString(50, 166, 0xffffff, L"FadeFrame: %d", m_fadeFrame);
 #endif
 }
 
