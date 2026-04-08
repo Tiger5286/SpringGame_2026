@@ -73,7 +73,7 @@ void Player::Update()
 	HitUpdate();
 
 	// 無敵時間の更新
-	if (m_isInvincible)
+	if (m_isInvincible && m_invincibleFrame >= 0)
 	{
 		m_invincibleFrame++;
 		if (m_invincibleFrame >= kInvincibleFrame)
@@ -91,14 +91,15 @@ void Player::Update()
 
 void Player::Draw()
 {
-	if (m_isInvincible)
+	// 無敵時間中の点滅描画
+	if (m_isInvincible && m_invincibleFrame > 0)
 	{
 		if (m_invincibleFrame % kInvincibleFrickerInterval * 2 < kInvincibleFrickerInterval)
 		{
 			MV1DrawModel(m_modelHandle);
 		}
 	}
-	else
+	else	// 通常描画
 	{
 		MV1DrawModel(m_modelHandle);
 	}
@@ -128,6 +129,20 @@ void Player::OnCollision(const GameObject& other)
 			m_isHitEnemy = true;
 			m_isCanControll = false;
 		}
+	}
+}
+
+void Player::SetInvincible(bool isInvincible)
+{
+	if (isInvincible)
+	{
+		m_isInvincible = true;
+		m_invincibleFrame = -1;
+	}
+	else
+	{
+		m_isInvincible = false;
+		m_invincibleFrame = 0;
 	}
 }
 

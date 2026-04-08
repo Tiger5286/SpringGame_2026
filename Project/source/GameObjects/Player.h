@@ -34,6 +34,8 @@ public:
 
 	void SetCanControll(bool isCanControll) { m_isCanControll = isCanControll; }
 
+    void SetInvincible(bool isInvincible);
+
 private:
     void Move();
     void Punch();
@@ -70,5 +72,6 @@ private:
     int m_hitFrame = 0;
 
     bool m_isInvincible = false;
+    // 負の数にすると無限に無敵になる
     int m_invincibleFrame = 0;
 };

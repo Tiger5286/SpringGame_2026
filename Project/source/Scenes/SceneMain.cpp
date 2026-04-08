@@ -230,6 +230,7 @@ void SceneMain::Update()
 	if (m_finishCount == 1)
 	{
 		SoundManager::GetInstance().PlaySoundGame(L"Finish");
+		m_pPlayer->SetInvincible(true);
 	}
 
 	// ゲーム終了後、一定時間が経ったらシーンを終了
