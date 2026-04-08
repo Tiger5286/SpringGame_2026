@@ -312,13 +312,13 @@ void SceneMain::Draw()
 	std::wstring text = std::format(L"残り時間:{:.1f}", sec);
 	auto strWidth = GetDrawFormatStringWidthToHandle(m_uiFontHandle, text.c_str());
 	int x = Game::kScreenWidth / 2 - strWidth / 2;
-	DrawFormatStringToHandle(x, 0, 0xffffff, m_uiFontHandle, text.c_str());
+	DrawFormatStringToHandle(x, 20, 0xffffff, m_uiFontHandle, text.c_str());
 
 	// スコアの描画
 	text = std::format(L"スコア:{:d}", m_score);
 	strWidth = GetDrawFormatStringWidthToHandle(m_uiFontHandle, text.c_str());
 	x = Game::kScreenWidth / 2 - strWidth / 2;
-	DrawFormatStringToHandle(x, kUIFontSize, 0xffffff, m_uiFontHandle, text.c_str());
+	DrawFormatStringToHandle(x, kUIFontSize + 20, 0xffffff, m_uiFontHandle, text.c_str());
 
 #ifdef _DEBUG
 	DrawGrid();
