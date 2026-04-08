@@ -34,9 +34,13 @@ void SceneTitle::Init()
 	m_fontHandle = CreateFontToHandle(nullptr, 50, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
 	assert(m_fontHandle != -1 && "フォントが正しく生成されませんでした");
 
-	// カメラとライトの設定
+	// シャドウマップの生成
+	m_shadowMapHandle = MakeShadowMap(8192, 8192);
+	// シャドウマップの初期化
+	//SetShadowMapLightDirection(m_shadowMapHandle, Vector3(0, -1, 0).ToDxLib());
+
+	// カメラの設定
 	SetCameraPositionAndTarget_UpVecY(kCameraPos.ToDxLib(), kCameraTarget.ToDxLib());
-	SetLightDirection(kLightDirection.ToDxLib());
 
 	// プレイヤーの生成と初期化
 	m_pPlayer = std::make_shared<Player>(m_input,nullptr,nullptr);
@@ -48,6 +52,10 @@ void SceneTitle::Init()
 	m_pSkyBox = std::make_shared<SkyBox>();
 	m_pSkyBox->Init();
 	m_pSkyBox->SetCameraPos(kCameraPos);
+
+	// ライトの設定
+	auto cameraToPlayer = m_pPlayer->GetPos() - kCameraPos;
+	SetLightDirection(cameraToPlayer.ToDxLib());
 
 	// BGMを再生
 	SoundManager::GetInstance().PlaySoundGame(L"TitleBGM", true, true);
@@ -88,10 +96,27 @@ void SceneTitle::Update()
 void SceneTitle::Draw()
 {
 	m_pSkyBox->Draw();
+	// シャドウマップに描画
+	ShadowMap_DrawSetup(m_shadowMapHandle);
 
 	m_pPlayer->Draw();
 
+	ShadowMap_DrawEnd();
+
+	// 通常描画
+	m_pPlayer->Draw();
+
+	// 床だけ特定のライトの方向で描画する
+	SetLightDirection(kLightDirection.ToDxLib());
+	// シャドウマップを使用する
+	SetUseShadowMap(0, m_shadowMapHandle);
+	// 床の描画
 	MV1DrawModel(ModelManager::GetInstance().GetModelHandle(L"Floor"));
+	// シャドウマップの設定を解除
+	SetUseShadowMap(0, -1);
+	// ライトを元に戻す
+	auto cameraToPlayer = m_pPlayer->GetPos() - kCameraPos;
+	SetLightDirection(cameraToPlayer.ToDxLib());
 
 	std::wstring titleText = L"コインラッシュ！";
 	std::wstring subText = L"Aボタンでスタート";
