@@ -17,6 +17,9 @@ public:
 	// DxLib用のベクトルに変換して返す
 	VECTOR ToDxLib() const;
 
+	// ベクトルの要素を描画する
+	void Draw(int x,int y) const;
+
 	// ベクトルの大きさの二乗を返す
 	float SquaredLength() const;
 	// ベクトルの大きさを返す
