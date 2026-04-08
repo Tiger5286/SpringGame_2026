@@ -57,6 +57,9 @@ namespace
 
 	// ゲームの制限時間(秒)
 	constexpr int kGameTimeLimit = 60;
+
+	// カメラの初期位置
+	const Vector3 kCameraFirstPos = Vector3(0, 400, -1000);
 }
 
 SceneMain::SceneMain(Input& input) :
@@ -92,6 +95,7 @@ void SceneMain::Init()
 	// カメラの生成と初期化
 	m_pCamera = std::make_shared<Camera>(m_input);
 	m_pCamera->Init();
+	m_pCamera->SetPos(kCameraFirstPos);
 
 	// コインマネージャーの生成と初期化
 	m_pCoinManager = std::make_shared<CoinManager>(*m_pCollisionManager);
@@ -320,6 +324,7 @@ void SceneMain::Draw()
 	DrawString(0,0,L"SceneMain",0xffffff);
 	DrawFormatString(0, 16, 0xffffff, L"FRAME:%d", m_frameCount);
 	DrawString(0, 32, L"1キーでシーンを終わる\n2キーで制限時間を1にする", 0xffffff);
+	m_pCamera->GetPos().Draw(0, 75);
 #endif
 }
 

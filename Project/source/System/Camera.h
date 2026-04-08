@@ -15,6 +15,7 @@ public:
 
 	float GetAngleY() const { return m_angleY; }
 	Vector3 GetPos() const { return m_pos; }
+	void SetPos(const Vector3& pos) { m_pos = pos; }
 
 	void SetPlayerPos(const Vector3& playerPos) { m_playerPos = playerPos; }
 
