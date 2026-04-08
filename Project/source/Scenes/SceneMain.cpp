@@ -153,6 +153,7 @@ void SceneMain::End()
 void SceneMain::Update()
 {
 	m_frameCount++;
+	UpdateStart();
 
 	// カウントダウン開始のタイミングでカウントダウンの音を鳴らす
 	if (m_startCount == 60)
@@ -322,10 +323,13 @@ void SceneMain::Draw()
 #endif
 }
 
-void SceneMain::DrawStart()
+void SceneMain::UpdateStart()
 {
 	m_startCount++;
+}
 
+void SceneMain::DrawStart()
+{
 	int second = m_startCount / 60;
 	if (second > 4)
 	{

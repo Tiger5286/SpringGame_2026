@@ -28,6 +28,7 @@ public:
 
 	int GetScore() const { return m_score; }
 private:
+	void UpdateStart();
 	void DrawStart();
 	void DrawFinish();
 
