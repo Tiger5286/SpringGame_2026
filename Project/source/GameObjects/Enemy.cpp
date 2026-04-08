@@ -12,15 +12,17 @@ namespace
 	// プレイヤーとの最短距離
 	constexpr float kMinDistanceToPlayer = 50.0f;
 	// 敵が地面から浮いている距離
-	constexpr float kFloatDist = 100.0f;
+	constexpr float kFloatDist = 0.0f;
 
 	// アニメーション名
-	const std::wstring kAnimName = L"MonsterArmature|Flying";
+	const std::wstring kAnimName = L"MonsterArmature|Walk";
 	// アニメーションの再生速度
 	constexpr float kAnimSpeed = 0.5f;
 
+	// 拡大率
+	constexpr float kModelScale = 1.5f;
 	// 当たり判定の半径
-	constexpr float kSphereRadius = 80.0f;
+	constexpr float kSphereRadius = 120.0f;
 
 	// プレイヤーに吹きとばされたときの横の速度
 	constexpr float kHitPunchSpeed = 20.0f;
@@ -147,8 +149,11 @@ void Enemy::Move()
 	// 回転行列を生成
 	auto rotMtx = Matrix4x4::GetRotYMatrix(-angle);
 
+	// 拡大行列を生成
+	auto scaleMtx = Matrix4x4::GetScaleMatrix(Vector3(kModelScale, kModelScale, kModelScale));
+
 	// 行列を合成
-	auto mtx = transMtx * rotMtx;
+	auto mtx = transMtx * rotMtx * scaleMtx;
 	// 行列をモデルに適用
 	MV1SetMatrix(m_modelHandle, mtx.ToDxLib());
 }
