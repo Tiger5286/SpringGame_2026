@@ -45,8 +45,7 @@ Enemy::~Enemy()
 
 void Enemy::Init()
 {
-	// アニメーションをアタッチ
-	//m_animHandle = MV1AttachAnim(m_modelHandle, MV1GetAnimIndex(m_modelHandle, kAnimName.c_str()));
+	// アニメーションの初期化
 	m_anim.Init(m_modelHandle, kAnimName);
 	// タグを設定
 	m_tag = ObjectTag::Enemy;
@@ -70,17 +69,8 @@ void Enemy::Update()
 		}
 	}
 
-	// アニメーション
+	// アニメーションの更新
 	m_anim.Update();
-	//// アニメーションの進行
-	//m_animTime += kAnimSpeed;
-	//// アニメーションのループ
-	//float totalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_animHandle);
-	//while (m_animTime >= totalTime)
-	//{
-	//	m_animTime -= totalTime;
-	//}
-	//MV1SetAttachAnimTime(m_modelHandle, m_animHandle, m_animTime);
 }
 
 void Enemy::Draw()
@@ -165,16 +155,14 @@ void Enemy::Move()
 
 void Enemy::PushBack(const Vector3& center, float radius)
 {
-	//auto otherToThis = m_sphere.GetPos() - center;
+	auto otherToThis = m_pos - center;
 
-	//float targetLength = m_sphere.GetRadius() + radius;
+	auto distance = otherToThis.Length();
 
-	//otherToThis.Normalize();
-	//otherToThis *= targetLength;
+	auto diff = kSphereRadius + radius - distance;
 
-	//// 当たり判定の中心を押し戻す
-	//auto pushBackColCenter = center + otherToThis;
-	//// 当たり判定の座標から実際に自身を置く座標を計算する
-	//auto pos = pushBackColCenter - Vector3(0.0f, kSphereRadius, 0.0f);
-	//m_pos = pos;
+	otherToThis.Normalize();
+	otherToThis *= diff;
+
+	m_pos += otherToThis;
 }

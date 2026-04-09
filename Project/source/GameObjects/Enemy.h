@@ -37,9 +37,6 @@ private:
 private:
     Player& m_player;
 
-    int m_animHandle = -1;
-    float m_animTime = 0.0f;
-
     Animation m_anim;
 
     bool m_isHitPunch = false;
