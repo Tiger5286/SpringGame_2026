@@ -7,6 +7,17 @@
 #include "../Game.h"
 #include "../System/SkyBox.h"
 #include "../Managers/SoundManager.h"
+#include "../Managers/ModelManager.h"
+#include "../System/ResultCoin.h"
+
+namespace
+{
+	const Vector3 kCameraPos = Vector3(0,0,-700);
+
+	constexpr int kResultCoinNum = 20;
+
+	constexpr int kFallFrame = 60 * 4;
+}
 
 SceneResult::SceneResult(Input& input):
 	SceneBase(input)
@@ -23,11 +34,19 @@ void SceneResult::Init()
 	m_fontHandle = CreateFontToHandle(nullptr, 50, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
 	assert(m_fontHandle != -1 && "フォントのハンドルの作成に失敗しました");
 
-	SetCameraPositionAndTarget_UpVecY(VGet(0, 0, -100), VGet(0, 0, 0));
+	SetCameraPositionAndTarget_UpVecY(kCameraPos.ToDxLib(), VGet(0, 0, 0));
+
+	m_pResultCoins.resize(kResultCoinNum);
+	for (auto& pCoin : m_pResultCoins)
+	{
+		pCoin = std::make_shared<ResultCoin>();
+		pCoin->Init(ModelManager::GetInstance().DuplicateModel(L"Coin"));
+		pCoin->Spawn();
+	}
 
 	m_pSkyBox = std::make_shared<SkyBox>();
 	m_pSkyBox->Init();
-	m_pSkyBox->SetCameraPos(Vector3(0,0,-100));
+	m_pSkyBox->SetCameraPos(kCameraPos);
 
 	// BGMの再生
 	SoundManager::GetInstance().PlaySoundGame(L"ResultBGM", true, true);
@@ -42,6 +61,11 @@ void SceneResult::End()
 
 void SceneResult::Update()
 {
+	for (auto& pCoin : m_pResultCoins)
+	{
+		pCoin->Update();
+	}
+
 	m_pSkyBox->Update();
 
 	if (m_input.IsTriggerd(XINPUT_BUTTON_A))
@@ -63,6 +87,11 @@ void SceneResult::Update()
 void SceneResult::Draw()
 {
 	m_pSkyBox->Draw();
+
+	for (auto& pCoin : m_pResultCoins)
+	{
+		pCoin->Draw();
+	}
 
 	std::wstring resultText = std::format(L"スコア:{:d}", m_score);
 	std::wstring subText = L"Aボタンでタイトルに戻る";

@@ -1,8 +1,10 @@
 ﻿#pragma once
 #include "SceneBase.h"
 #include <memory>
+#include <vector>
 
 class SkyBox;
+class ResultCoin;
 
 class SceneResult :
     public SceneBase
@@ -21,6 +23,7 @@ public:
 private:
 	int m_fontHandle = -1;
 
+	std::vector<std::shared_ptr<ResultCoin>> m_pResultCoins;
 	std::shared_ptr<SkyBox> m_pSkyBox = nullptr;;
 
 	int m_score = 0;
