@@ -1,4 +1,4 @@
-#include "ResultCoin.h"
+﻿#include "ResultCoin.h"
 #include "DxLib.h"
 #include "../Utility/Matrix4x4.h"
 
@@ -14,6 +14,8 @@ namespace
 void ResultCoin::Init(int modelHandle)
 {
 	m_modelHandle = modelHandle;
+	// 方向をランダムに設定
+	m_angleY = GetRand(359) * DX_PI_F / 180;
 
 	auto rotYMtx = Matrix4x4::GetRotYMatrix(m_angleY);
 	auto transMtx = Matrix4x4::GetTranslateMatrix(m_pos);
@@ -30,6 +32,11 @@ void ResultCoin::Update()
 {
 	m_angleY += kRotationSpeed;
 	m_pos.y -= 10.0f;
+
+	if (m_pos.y < -kSpawnPos.y)
+	{
+		Spawn();
+	}
 
 	auto rotYMtx = Matrix4x4::GetRotYMatrix(m_angleY);
 	auto transMtx = Matrix4x4::GetTranslateMatrix(m_pos);

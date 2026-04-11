@@ -16,7 +16,7 @@ namespace
 
 	constexpr int kResultCoinNum = 20;
 
-	constexpr int kFallFrame = 60 * 4;
+	constexpr float kResultCoinAppearY = 2000.0f;
 }
 
 SceneResult::SceneResult(Input& input):
@@ -37,11 +37,13 @@ void SceneResult::Init()
 	SetCameraPositionAndTarget_UpVecY(kCameraPos.ToDxLib(), VGet(0, 0, 0));
 
 	m_pResultCoins.resize(kResultCoinNum);
-	for (auto& pCoin : m_pResultCoins)
+	for (int i = 0; i < m_pResultCoins.size(); i++)
 	{
-		pCoin = std::make_shared<ResultCoin>();
-		pCoin->Init(ModelManager::GetInstance().DuplicateModel(L"Coin"));
-		pCoin->Spawn();
+		m_pResultCoins[i] = std::make_shared<ResultCoin>();
+		m_pResultCoins[i]->Init(ModelManager::GetInstance().DuplicateModel(L"Coin"));
+		m_pResultCoins[i]->Spawn();
+		// コインのY位置をそれぞれずらして配置することで継続的に降ってきてるように見せる
+		m_pResultCoins[i]->m_pos.y += kResultCoinAppearY / kResultCoinNum * i;
 	}
 
 	m_pSkyBox = std::make_shared<SkyBox>();

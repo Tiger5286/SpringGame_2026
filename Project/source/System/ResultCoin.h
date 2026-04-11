@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "../Utility/Vector3.h"
 
 class ResultCoin
@@ -13,10 +13,11 @@ public:
 	void Draw();
 
 	void Spawn();
+
+	Vector3 m_pos = { 0,0,-1000 };
 private:
 	int m_modelHandle = -1;
 
-	Vector3 m_pos = { 0,0,-1000 };
 	float m_angleY = 0.0f;
 };
 
