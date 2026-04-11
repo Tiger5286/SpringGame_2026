@@ -33,6 +33,7 @@ void SceneResult::Init()
 	assert(m_fontHandle != -1 && "フォントのハンドルの作成に失敗しました");
 
 	SetCameraPositionAndTarget_UpVecY(kCameraPos.ToDxLib(), VGet(0, 0, 0));
+	SetLightDirection((Vector3(0, 0, 0) - kCameraPos).ToDxLib());
 
 	int coinNum = m_score / 500 + 1;
 	// ゲームシーンでコインを1枚も取っていなかったら表示するコインも0にする
