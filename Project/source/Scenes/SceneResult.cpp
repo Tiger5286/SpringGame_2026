@@ -14,8 +14,6 @@ namespace
 {
 	const Vector3 kCameraPos = Vector3(0,0,-700);
 
-	constexpr int kResultCoinNum = 20;
-
 	constexpr float kResultCoinAppearY = 2000.0f;
 }
 
@@ -36,14 +34,21 @@ void SceneResult::Init()
 
 	SetCameraPositionAndTarget_UpVecY(kCameraPos.ToDxLib(), VGet(0, 0, 0));
 
-	m_pResultCoins.resize(kResultCoinNum);
+	int coinNum = m_score / 500 + 1;
+	// ゲームシーンでコインを1枚も取っていなかったら表示するコインも0にする
+	if (m_score == 0)
+	{
+		coinNum = 0;
+	}
+
+	m_pResultCoins.resize(coinNum);
 	for (int i = 0; i < m_pResultCoins.size(); i++)
 	{
 		m_pResultCoins[i] = std::make_shared<ResultCoin>();
 		m_pResultCoins[i]->Init(ModelManager::GetInstance().DuplicateModel(L"Coin"));
 		m_pResultCoins[i]->Spawn();
 		// コインのY位置をそれぞれずらして配置することで継続的に降ってきてるように見せる
-		m_pResultCoins[i]->m_pos.y += kResultCoinAppearY / kResultCoinNum * i;
+		m_pResultCoins[i]->m_pos.y += kResultCoinAppearY / coinNum * i;
 	}
 
 	m_pSkyBox = std::make_shared<SkyBox>();

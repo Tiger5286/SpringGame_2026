@@ -18,6 +18,7 @@ public:
 
 private:
 	void ChangeScene(std::shared_ptr<SceneBase> newScene);
+	void ChangeSceneMainToResult();
 
 private:
 	std::shared_ptr<Input> m_pInput = nullptr;

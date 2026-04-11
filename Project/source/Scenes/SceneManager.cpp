@@ -69,11 +69,7 @@ void SceneManager::Update()
 				ChangeScene(std::make_shared<SceneMain>(*m_pInput));
 				break;
 			case SceneType::Main:
-				// シーン遷移前にスコアを保存
-				m_score = std::dynamic_pointer_cast<SceneMain>(m_pCurrentScene)->GetScore();
-				ChangeScene(std::make_shared<SceneResult>(*m_pInput));
-				// シーン遷移後にスコアを渡す
-				std::dynamic_pointer_cast<SceneResult>(m_pCurrentScene)->SetScore(m_score);
+				ChangeSceneMainToResult();
 				break;
 			case SceneType::Result:
 				ChangeScene(std::make_shared<SceneTitle>(*m_pInput));
@@ -99,4 +95,19 @@ void SceneManager::ChangeScene(std::shared_ptr<SceneBase> newScene)
 	// 新しいシーンの初期化処理を行う
 	newScene->Init();
 	m_pCurrentScene = newScene;
+}
+
+void SceneManager::ChangeSceneMainToResult()
+{
+	// シーン遷移前にスコアを保存
+	m_score = std::dynamic_pointer_cast<SceneMain>(m_pCurrentScene)->GetScore();
+
+	// 現在のシーンの終了処理を行う
+	m_pCurrentScene->End();
+	// リザルトシーンを生成
+	m_pCurrentScene = std::make_shared<SceneResult>(*m_pInput);
+	// リザルトシーンにスコアを渡す
+	std::dynamic_pointer_cast<SceneResult>(m_pCurrentScene)->SetScore(m_score);
+	// シーンを初期化
+	m_pCurrentScene->Init();
 }
