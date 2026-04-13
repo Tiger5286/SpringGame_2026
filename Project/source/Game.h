@@ -12,5 +12,5 @@ namespace Game
 	constexpr int kFieldSize = 1500;
 
 	// フォント名
-	const wchar_t* const kFontName = L"廻想体 ネクスト UP B";
+	const wchar_t* const kFontName = L"07あかずきんポップ Heavy";
 }
