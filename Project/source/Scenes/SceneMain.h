@@ -37,6 +37,8 @@ private:
 private:
 	int m_frameCount = 0;
 
+	int m_howToPlayGraphHandle = -1;
+
 	std::shared_ptr<Camera> m_pCamera = nullptr;
 
 	std::shared_ptr<CollisionManager> m_pCollisionManager = nullptr;

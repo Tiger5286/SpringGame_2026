@@ -80,6 +80,10 @@ void SceneMain::Init()
 	m_uiFontHandle = CreateFontToHandle(Game::kFontName, kUIFontSize, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
 	assert(m_uiFontHandle != -1 && "フォントが正しく生成されませんでした");
 
+	// 画像のロード
+	m_howToPlayGraphHandle = LoadGraph(L"data/Graphs/howToPlay.png");
+	assert(m_howToPlayGraphHandle != -1 && "画像が正しくロードされませんでした");
+
 	// コリジョンマネージャーの生成
 	m_pCollisionManager = std::make_shared<CollisionManager>();
 
@@ -139,6 +143,9 @@ void SceneMain::End()
 	// フォントの削除
 	DeleteFontToHandle(m_titleFontHandle);
 	DeleteFontToHandle(m_uiFontHandle);
+
+	// 画像の削除
+	DeleteGraph(m_howToPlayGraphHandle);
 
 	// プレイヤーの終了処理
 	m_pPlayer->End();
@@ -296,6 +303,9 @@ void SceneMain::Draw()
 
 	// エフェクトの描画
 	m_pEffectManager->Draw();
+
+	// 操作説明の画像の描画
+	DrawGraph(0, Game::kScreenHeight - 150, m_howToPlayGraphHandle, true);
 
 	// ゲーム開始前のカウントダウンの描画
 	DrawStart();
