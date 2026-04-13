@@ -75,9 +75,9 @@ SceneMain::~SceneMain()
 void SceneMain::Init()
 {
 	// フォントの生成
-	m_titleFontHandle = CreateFontToHandle(nullptr, kTitleFontSize, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
+	m_titleFontHandle = CreateFontToHandle(Game::kFontName, kTitleFontSize, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
 	assert(m_titleFontHandle != -1 && "フォントが正しく生成されませんでした");
-	m_uiFontHandle = CreateFontToHandle(nullptr, kUIFontSize, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
+	m_uiFontHandle = CreateFontToHandle(Game::kFontName, kUIFontSize, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
 	assert(m_uiFontHandle != -1 && "フォントが正しく生成されませんでした");
 
 	// コリジョンマネージャーの生成

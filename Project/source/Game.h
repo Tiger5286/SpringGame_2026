@@ -10,4 +10,7 @@ namespace Game
 
 	// フィールドの大きさ(中心からの距離)(半分の長さ)
 	constexpr int kFieldSize = 1500;
+
+	// フォント名
+	const wchar_t* const kFontName = L"廻想体 ネクスト UP B";
 }

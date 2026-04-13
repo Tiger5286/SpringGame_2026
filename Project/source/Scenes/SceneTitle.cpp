@@ -29,9 +29,9 @@ SceneTitle::~SceneTitle()
 void SceneTitle::Init()
 {
 	// フォントの生成
-	m_titleFontHandle = CreateFontToHandle(nullptr, 100, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
+	m_titleFontHandle = CreateFontToHandle(Game::kFontName, 100, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
 	assert(m_titleFontHandle != -1 && "フォントが正しく生成されませんでした");
-	m_fontHandle = CreateFontToHandle(nullptr, 50, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
+	m_fontHandle = CreateFontToHandle(Game::kFontName, 50, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
 	assert(m_fontHandle != -1 && "フォントが正しく生成されませんでした");
 
 	// シャドウマップの生成

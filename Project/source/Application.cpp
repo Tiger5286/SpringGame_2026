@@ -57,6 +57,8 @@ bool Application::Init()
 	// ただし、DirectX11を使用する場合は実行する必要はない。
 	Effekseer_SetGraphicsDeviceLostCallbackFunctions();
 
+	AddFontResourceEx(L"data/Kaisotai-Next-UP-B.ttf", FR_PRIVATE, NULL); // フォントの追加
+
 	return true;
 }
 
@@ -119,6 +121,7 @@ void Application::Run()
 
 void Application::Terminate()
 {
+	RemoveFontResourceEx(L"data/Kaisotai-Next-UP-B.ttf", FR_PRIVATE, NULL); // フォントの削除
 	// Effekseerを終了する。
 	Effkseer_End();
 	DxLib_End();				// ＤＸライブラリ使用の終了処理
