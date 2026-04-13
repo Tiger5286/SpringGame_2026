@@ -18,8 +18,11 @@ public:
 	virtual void Draw() override;
 
 private:
-	int m_titleFontHandle = -1;
 	int m_fontHandle = -1;
+
+	int m_titleGraphHandle = -1;
+	int m_titleBackGraphHandle = -1;
+	float m_titleBackGraphAngle = 0.0f;
 
 	int m_shadowMapHandle = -1;
 

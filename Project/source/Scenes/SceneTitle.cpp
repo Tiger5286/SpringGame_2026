@@ -14,6 +14,10 @@ namespace
 	const Vector3 kCameraPos = Vector3(0.0f, 300.0f, -1300.0f);
 	const Vector3 kCameraTarget = Vector3(0.0f, 500.0f, 0.0f);
 	const Vector3 kLightDirection = Vector3(0.0f, -1.5f, 1.0f);
+
+	constexpr int kTitleY = 200;
+	constexpr float kTitleScale = 0.5f;
+	constexpr float kTitleRotateSpeed = 0.03f;
 }
 
 SceneTitle::SceneTitle(Input& input):
@@ -29,10 +33,11 @@ SceneTitle::~SceneTitle()
 void SceneTitle::Init()
 {
 	// フォントの生成
-	m_titleFontHandle = CreateFontToHandle(Game::kFontName, 100, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
-	assert(m_titleFontHandle != -1 && "フォントが正しく生成されませんでした");
 	m_fontHandle = CreateFontToHandle(Game::kFontName, 50, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
 	assert(m_fontHandle != -1 && "フォントが正しく生成されませんでした");
+	// タイトルの画像の読み込み
+	m_titleGraphHandle = LoadGraph(L"data/Graphs/title.png");
+	m_titleBackGraphHandle = LoadGraph(L"data/Graphs/titleBack.png");
 
 	// シャドウマップの生成
 	m_shadowMapHandle = MakeShadowMap(8192, 8192);
@@ -63,8 +68,11 @@ void SceneTitle::Init()
 
 void SceneTitle::End()
 {
-	DeleteFontToHandle(m_titleFontHandle);
+	// フォントの削除
 	DeleteFontToHandle(m_fontHandle);
+	// 画像の削除
+	DeleteGraph(m_titleGraphHandle);
+	DeleteGraph(m_titleBackGraphHandle);
 
 	m_pPlayer->End();
 
@@ -118,18 +126,17 @@ void SceneTitle::Draw()
 	auto cameraToPlayer = m_pPlayer->GetPos() - kCameraPos;
 	SetLightDirection(cameraToPlayer.ToDxLib());
 
-	std::wstring titleText = L"コインラッシュ！";
-	std::wstring subText = L"Aボタンでスタート";
-	int titleTextWidth = GetDrawFormatStringWidthToHandle(m_titleFontHandle, titleText.c_str());
-	int subTextWidth = GetDrawFormatStringWidthToHandle(m_fontHandle, subText.c_str());
+	// タイトルの画像の描画
+	m_titleBackGraphAngle += kTitleRotateSpeed;
+	DrawRotaGraph(Game::kScreenWidth / 2, kTitleY, kTitleScale, m_titleBackGraphAngle, m_titleBackGraphHandle, true);
+	DrawRotaGraph(Game::kScreenWidth / 2, kTitleY, kTitleScale, 0.0, m_titleGraphHandle, true);
 
-	int x = Game::kScreenWidth / 2 - titleTextWidth / 2;
-	int y = Game::kScreenHeight / 3 - 100 / 2;
-	DrawFormatStringToHandle(x, y, 0xffffff, m_titleFontHandle, titleText.c_str());
-	x = Game::kScreenWidth / 2 - subTextWidth / 2;
-	y = Game::kScreenHeight / 2 + 50 / 2;
-	DrawFormatStringToHandle(x, y, 0xffffff, m_fontHandle, subText.c_str());
-
+	// テキストUIの描画
+	std::wstring text = L"Aボタンでスタート";
+	int textWidth = GetDrawFormatStringWidthToHandle(m_fontHandle, text.c_str());
+	int x = Game::kScreenWidth / 2 - textWidth / 2;
+	int y = Game::kScreenHeight / 2 + 50 / 2;
+	DrawFormatStringToHandle(x, y, 0xffffff, m_fontHandle, text.c_str());
 
 #ifdef _DEBUG
 	DrawString(0, 0, L"SceneTitle\n1キーでシーンを終わる", 0xffffff);
