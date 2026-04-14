@@ -43,8 +43,6 @@ void SceneTitle::Init()
 
 	// シャドウマップの生成
 	m_shadowMapHandle = MakeShadowMap(8192, 8192);
-	// シャドウマップの初期化
-	//SetShadowMapLightDirection(m_shadowMapHandle, Vector3(0, -1, 0).ToDxLib());
 
 	// カメラの設定
 	SetCameraPositionAndTarget_UpVecY(kCameraPos.ToDxLib(), kCameraTarget.ToDxLib());
@@ -104,9 +102,9 @@ void SceneTitle::Update()
 		if (m_pressStartFrameCount == 0)
 		{
 			m_pressStartFrameCount = 1;
+			SoundManager::GetInstance().PlaySoundGame(L"Decision");
+			SoundManager::GetInstance().StopSound(L"TitleBGM", true);
 		}
-		SoundManager::GetInstance().PlaySoundGame(L"Decision");
-		SoundManager::GetInstance().StopSound(L"TitleBGM", true);
 	}
 
 	m_pSkyBox->Update();

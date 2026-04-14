@@ -109,9 +109,9 @@ void SceneResult::Update()
 			if (!m_pressStartFrameCount)
 			{
 				m_pressStartFrameCount = 1;
+				SoundManager::GetInstance().PlaySoundGame(L"Decision");
+				SoundManager::GetInstance().StopSound(L"ResultBGM", true);
 			}
-			SoundManager::GetInstance().PlaySoundGame(L"Decision");
-			SoundManager::GetInstance().StopSound(L"ResultBGM", true);
 		}
 		else	// スコアの表示が完了していなかったらスコアを完全に表示する
 		{
