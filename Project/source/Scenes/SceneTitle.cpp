@@ -92,6 +92,9 @@ void SceneTitle::Update()
 
 	m_pSkyBox->Update();
 
+	// タイトルの画像の回転
+	m_titleBackGraphAngle += kTitleRotateSpeed;
+
 #ifdef _DEBUG
 	if (CheckHitKey(KEY_INPUT_1))
 	{
@@ -127,7 +130,6 @@ void SceneTitle::Draw()
 	SetLightDirection(cameraToPlayer.ToDxLib());
 
 	// タイトルの画像の描画
-	m_titleBackGraphAngle += kTitleRotateSpeed;
 	DrawRotaGraph(Game::kScreenWidth / 2, kTitleY, kTitleScale, m_titleBackGraphAngle, m_titleBackGraphHandle, true);
 	DrawRotaGraph(Game::kScreenWidth / 2, kTitleY, kTitleScale, 0.0, m_titleGraphHandle, true);
 
