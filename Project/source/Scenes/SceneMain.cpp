@@ -320,7 +320,7 @@ void SceneMain::Draw()
 	float sec = kGameTimeLimit - static_cast<float>(m_gameCount) / 60.0f;
 	if (sec < 0) sec = 0.0f;
 	std::wstring text = std::format(L"残り時間:{:.1f}", sec);
-	auto strWidth = GetDrawFormatStringWidthToHandle(m_uiFontHandle, text.c_str());
+	auto strWidth = GetDrawFormatStringWidthToHandle(m_uiFontHandle, L"残り時間:60.0");
 	int x = Game::kScreenWidth / 2 - strWidth / 2;
 	DrawFormatStringToHandle(x, 20, 0xffffff, m_uiFontHandle, text.c_str());
 
