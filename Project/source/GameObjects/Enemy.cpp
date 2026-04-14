@@ -87,7 +87,7 @@ void Enemy::OnCollision(const GameObject& other)
 	if (other.GetTag() == ObjectTag::Punch)
 	{
 		OnHitPunch();
-		m_anim.ChangeAnim(kDeathAnimName,0.4f);
+		m_anim.ChangeAnim(kDeathAnimName,0.35f);
 	}
 	// 敵と当たったとき
 	if (other.GetTag() == ObjectTag::Enemy)
