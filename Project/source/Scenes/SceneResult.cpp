@@ -69,6 +69,18 @@ void SceneResult::End()
 
 void SceneResult::Update()
 {
+	m_frameCount++;
+	// Aボタンが押されたあとのフレーム数をカウント
+	if (m_pressStartFrameCount)
+	{
+		m_pressStartFrameCount++;
+	}
+	// Aボタンが押されてから一定のフレームが経過したらシーンを終わる
+	if (m_pressStartFrameCount > 40)
+	{
+		m_isEnd = true;
+	}
+
 	// コインを更新
 	for (auto& pCoin : m_pResultCoins)
 	{
@@ -80,9 +92,22 @@ void SceneResult::Update()
 	// Aボタンが押されたらシーンを終わる
 	if (m_input.IsTriggerd(XINPUT_BUTTON_A))
 	{
-		m_isEnd = true;
-		SoundManager::GetInstance().PlaySoundGame(L"Decision");
-		SoundManager::GetInstance().StopSound(L"ResultBGM", true);
+		// スコアの表示が完了していたらシーンを終わる準備をする
+		if (m_isDispScoreComplete)
+		{
+			// Aボタンが押されたあとのフレーム数をカウント開始する
+			if (!m_pressStartFrameCount)
+			{
+				m_pressStartFrameCount = 1;
+			}
+			SoundManager::GetInstance().PlaySoundGame(L"Decision");
+			SoundManager::GetInstance().StopSound(L"ResultBGM", true);
+		}
+		else	// スコアの表示が完了していなかったらスコアを完全に表示する
+		{
+			m_dispScore = m_score;
+			m_isDispScoreComplete = true;
+		}
 	}
 
 	// スコアを徐々に上げる
@@ -91,6 +116,7 @@ void SceneResult::Update()
 	if (m_score - m_dispScore < 0.05f)
 	{
 		m_dispScore = m_score;
+		m_isDispScoreComplete = true;
 	}
 
 #ifdef _DEBUG
@@ -111,22 +137,40 @@ void SceneResult::Draw()
 		pCoin->Draw();
 	}
 
+	// スコアを描画
 	// テキストを準備
 	std::wstring resultText = std::format(L"スコア:{:d}", m_score);
 	std::wstring dispResultText = std::format(L"スコア:{:d}", static_cast<int>(m_dispScore));
-	std::wstring subText = L"Aボタンでタイトルに戻る";
 	// テキストの幅を取得
 	int resultTextWidth = GetDrawStringWidthToHandle(resultText.c_str(), resultText.size(), m_fontHandle);	// スコアのテキストの幅(表示用ではない方のスコアの幅)
-	int subTextWidth = GetDrawStringWidthToHandle(subText.c_str(), subText.size(), m_fontHandle);
 	// スコアのテキストを描画
 	int x = Game::kScreenWidth / 2 - resultTextWidth / 2;
 	int y = Game::kScreenHeight / 2 - 50 / 2;
 	DrawStringToHandle(x, y, dispResultText.c_str(), 0xffffff, m_fontHandle);	// 表示用のスコアのテキストを描画
-	// サブテキストを描画
-	x = Game::kScreenWidth / 2 - subTextWidth / 2;
-	y = Game::kScreenHeight / 2 + 50 / 2;
-	DrawStringToHandle(x, y, subText.c_str(), 0xffffff, m_fontHandle);
 
+	// サブテキストを描画
+	if (m_pressStartFrameCount)
+	{
+		if (m_frameCount % 6 < 3)
+		{
+			std::wstring subText = L"Aボタンでタイトルに戻る";
+			int subTextWidth = GetDrawStringWidthToHandle(subText.c_str(), subText.size(), m_fontHandle);
+			x = Game::kScreenWidth / 2 - subTextWidth / 2;
+			y = Game::kScreenHeight / 2 + 50 / 2;
+			DrawStringToHandle(x, y, subText.c_str(), 0xffffff, m_fontHandle);
+		}
+	}
+	else
+	{
+		if (m_frameCount % 60 < 30)
+		{
+			std::wstring subText = L"Aボタンでタイトルに戻る";
+			int subTextWidth = GetDrawStringWidthToHandle(subText.c_str(), subText.size(), m_fontHandle);
+			x = Game::kScreenWidth / 2 - subTextWidth / 2;
+			y = Game::kScreenHeight / 2 + 50 / 2;
+			DrawStringToHandle(x, y, subText.c_str(), 0xffffff, m_fontHandle);
+		}
+	}
 
 #ifdef _DEBUG
 	DrawString(0, 0, L"SceneResult\n1キーでシーンを終わる", 0xffffff);
