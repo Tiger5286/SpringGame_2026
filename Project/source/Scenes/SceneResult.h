@@ -22,6 +22,10 @@ public:
 	void SetScore(int score) { m_score = score; }
 
 private:
+	void DrawScoreText();
+	void DrawSubText();
+
+private:
 	int m_frameCount = 0;
 	// Aボタンが押されたあとのフレーム数
 	int m_pressStartFrameCount = 0;
@@ -29,6 +33,7 @@ private:
 	bool m_isDispScoreComplete = false;
 
 	// フォントのハンドル
+	int m_scoreFontHandle = -1;
 	int m_fontHandle = -1;
 
 	// 結果画面で表示するコイン

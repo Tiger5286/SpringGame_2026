@@ -29,10 +29,15 @@ SceneResult::~SceneResult()
 
 void SceneResult::Init()
 {
+	// フォントの生成
 	m_fontHandle = CreateFontToHandle(Game::kFontName, 50, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
 	assert(m_fontHandle != -1 && "フォントのハンドルの作成に失敗しました");
+	m_scoreFontHandle = CreateFontToHandle(Game::kFontName, 70, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
+	assert(m_scoreFontHandle != -1 && "フォントのハンドルの作成に失敗しました");
 
+	// カメラの設定
 	SetCameraPositionAndTarget_UpVecY(kCameraPos.ToDxLib(), VGet(0, 0, 0));
+	// ライトの向きを設定
 	SetLightDirection((Vector3(0, 0, 0) - kCameraPos).ToDxLib());
 
 	int coinNum = m_score / 500 + 1;
@@ -138,37 +143,21 @@ void SceneResult::Draw()
 	}
 
 	// スコアを描画
-	// テキストを準備
-	std::wstring resultText = std::format(L"スコア:{:d}", m_score);
-	std::wstring dispResultText = std::format(L"スコア:{:d}", static_cast<int>(m_dispScore));
-	// テキストの幅を取得
-	int resultTextWidth = GetDrawStringWidthToHandle(resultText.c_str(), resultText.size(), m_fontHandle);	// スコアのテキストの幅(表示用ではない方のスコアの幅)
-	// スコアのテキストを描画
-	int x = Game::kScreenWidth / 2 - resultTextWidth / 2;
-	int y = Game::kScreenHeight / 2 - 50 / 2;
-	DrawStringToHandle(x, y, dispResultText.c_str(), 0xffffff, m_fontHandle);	// 表示用のスコアのテキストを描画
+	DrawScoreText();
 
 	// サブテキストを描画
 	if (m_pressStartFrameCount)
-	{
+	{	// Aボタンが押されたあとはサブテキストを早く点滅させる
 		if (m_frameCount % 6 < 3)
 		{
-			std::wstring subText = L"Aボタンでタイトルに戻る";
-			int subTextWidth = GetDrawStringWidthToHandle(subText.c_str(), subText.size(), m_fontHandle);
-			x = Game::kScreenWidth / 2 - subTextWidth / 2;
-			y = Game::kScreenHeight / 2 + 50 / 2;
-			DrawStringToHandle(x, y, subText.c_str(), 0xffffff, m_fontHandle);
+			DrawSubText();
 		}
 	}
 	else
-	{
+	{	// Aボタンが押されるまではサブテキストをゆっくり点滅させる
 		if (m_frameCount % 60 < 30)
 		{
-			std::wstring subText = L"Aボタンでタイトルに戻る";
-			int subTextWidth = GetDrawStringWidthToHandle(subText.c_str(), subText.size(), m_fontHandle);
-			x = Game::kScreenWidth / 2 - subTextWidth / 2;
-			y = Game::kScreenHeight / 2 + 50 / 2;
-			DrawStringToHandle(x, y, subText.c_str(), 0xffffff, m_fontHandle);
+			DrawSubText();
 		}
 	}
 
@@ -176,4 +165,26 @@ void SceneResult::Draw()
 	DrawString(0, 0, L"SceneResult\n1キーでシーンを終わる", 0xffffff);
 	DrawFormatString(100, 100, 0xffffff, L"%f", m_dispScore);
 #endif
+}
+
+void SceneResult::DrawScoreText()
+{
+	// テキストを準備
+	std::wstring resultText = std::format(L"スコア:{:d}", m_score);
+	std::wstring dispResultText = std::format(L"スコア:{:d}", static_cast<int>(m_dispScore));
+	// テキストの幅を取得
+	int resultTextWidth = GetDrawStringWidthToHandle(resultText.c_str(), resultText.size(), m_scoreFontHandle);	// スコアのテキストの幅(表示用ではない方のスコアの幅)
+	// スコアのテキストを描画
+	int x = Game::kScreenWidth / 2 - resultTextWidth / 2;
+	int y = Game::kScreenHeight / 2 - 70 / 2;
+	DrawStringToHandle(x, y, dispResultText.c_str(), 0xffffff, m_scoreFontHandle);	// 表示用のスコアのテキストを描画
+}
+
+void SceneResult::DrawSubText()
+{
+	std::wstring subText = L"Aボタンでタイトルに戻る";
+	int subTextWidth = GetDrawStringWidthToHandle(subText.c_str(), subText.size(), m_fontHandle);
+	int x = Game::kScreenWidth / 2 - subTextWidth / 2;
+	int y = Game::kScreenHeight / 4 * 3 - 50 / 2;
+	DrawStringToHandle(x, y, subText.c_str(), 0xffffff, m_fontHandle);
 }
