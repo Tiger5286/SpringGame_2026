@@ -31,7 +31,8 @@ void SoundManager::Init()
 	// SE
 	// システム音
 	LoadSound(L"Decision", L"data/Sounds/decision.mp3", SoundType::SE);
-	LoadSound(L"CountDown", L"data/Sounds/countdown.mp3", SoundType::SE);
+	LoadSound(L"CountDown", L"data/Sounds/countdown.wav", SoundType::SE);
+	LoadSound(L"Start", L"data/Sounds/start.wav", SoundType::SE);
 	LoadSound(L"Finish", L"data/Sounds/finish.mp3", SoundType::SE);
 	// ゲーム内の音
 	LoadSound(L"Punch", L"data/Sounds/punch.mp3", SoundType::SE);	// パンチ空振り
