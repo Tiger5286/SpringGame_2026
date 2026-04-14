@@ -44,10 +44,17 @@ void EnemyManager::Update()
 {
 	// 死んでいる敵リスト
 	std::list<std::shared_ptr<Enemy>> deadEnemies;
-	// 更新と同時に死んでいる敵を探す
+	// すべての敵を回す
 	for (auto& pEnemy : m_pEnemies)
 	{
+		// 更新
 		pEnemy->Update();
+		// パンチを受けた敵を当たり判定から外す
+		if (pEnemy->IsHitPunch())
+		{
+			m_collisionManager.Unregister(pEnemy);
+		}
+		// 死んでいる敵を死んでいる敵リストに入れる
 		if (pEnemy->IsDead())
 		{
 			deadEnemies.push_back(pEnemy);
@@ -61,7 +68,7 @@ void EnemyManager::Update()
 	// 死んでいる敵をリストから削除
 	for (auto& pEnemy : deadEnemies)
 	{
-		m_collisionManager.Unregister(pEnemy);
+		//m_collisionManager.Unregister(pEnemy);
 		pEnemy->End();
 		m_pEnemies.remove(pEnemy);
 	}

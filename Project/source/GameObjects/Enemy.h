@@ -23,6 +23,7 @@ public:
 	void OnHitPunch();
 
 	bool IsDead() const { return m_isDead; }
+	bool IsHitPunch() const { return m_isHitPunch; }
 
 private:
     void Move();
