@@ -30,6 +30,11 @@ public:
 	/// <param name="pos">再生するエフェクトの位置</param>
 	void PlayEffect(const std::wstring& name, const Vector3& pos);
 
+	/// <summary>
+	/// すべての再生中のエフェクトを停止する
+	/// </summary>
+	void StopEffectAll();
+
 private:
 	std::map<std::wstring, int> m_effectResourceHandles;
 	std::list<int> m_effectPlayingHandles;

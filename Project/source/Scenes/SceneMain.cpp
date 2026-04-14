@@ -163,6 +163,10 @@ void SceneMain::End()
 
 	// シャドウマップを削除
 	DeleteShadowMap(m_shadowMapHandle);
+
+	// エフェクトマネージャーの終了処理
+	m_pEffectManager->StopEffectAll();
+	m_pEffectManager->End();
 }
 
 void SceneMain::Update()

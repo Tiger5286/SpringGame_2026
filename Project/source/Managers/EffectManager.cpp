@@ -15,6 +15,7 @@ void EffectManager::Init()
 
 void EffectManager::End()
 {
+	StopEffectAll();
 }
 
 void EffectManager::Update()
@@ -37,6 +38,10 @@ void EffectManager::Update()
 
 void EffectManager::Draw()
 {
+	if (m_effectPlayingHandles.empty())
+	{
+		return;	// 再生中のエフェクトがなければ描画しない
+	}
 	DrawEffekseer3D();
 }
 
@@ -67,4 +72,16 @@ void EffectManager::PlayEffect(const std::wstring& name, const Vector3& pos)
 	SetPosPlayingEffekseer3DEffect(handle, pos.x, pos.y, pos.z);
 	// リストに登録
 	m_effectPlayingHandles.push_back(handle);
+}
+
+void EffectManager::StopEffectAll()
+{
+	// 再生中のエフェクトをすべて停止する
+	for (auto& effect : m_effectPlayingHandles)
+	{
+		StopEffekseer3DEffect(effect);
+		effect = -1;	// ハンドルを無効にする
+	}
+	// 再生中のエフェクトのリストを空にする
+	m_effectPlayingHandles.clear();
 }
