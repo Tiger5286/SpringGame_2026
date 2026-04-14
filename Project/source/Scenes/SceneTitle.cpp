@@ -81,11 +81,27 @@ void SceneTitle::End()
 
 void SceneTitle::Update()
 {
+	m_frameCount++;
+	// Aボタンが押されたあとのフレーム数をカウント
+	if (m_pressStartFrameCount > 0)
+	{
+		m_pressStartFrameCount++;
+	}
+	// Aボタンが押されたあと、一定フレーム数経過したらシーンを終了
+	if (m_pressStartFrameCount > 40)
+	{
+		m_isEnd = true;
+	}
+
 	m_pPlayer->Update();
 
 	if (m_input.IsTriggerd(XINPUT_BUTTON_A))
 	{
-		m_isEnd = true;
+		// Aボタンが押された瞬間からフレームをカウント
+		if (m_pressStartFrameCount == 0)
+		{
+			m_pressStartFrameCount = 1;
+		}
 		SoundManager::GetInstance().PlaySoundGame(L"Decision");
 		SoundManager::GetInstance().StopSound(L"TitleBGM", true);
 	}
@@ -134,12 +150,29 @@ void SceneTitle::Draw()
 	DrawRotaGraph(Game::kScreenWidth / 2, kTitleY, kTitleScale, 0.0, m_titleGraphHandle, true);
 
 	// テキストUIの描画
-	std::wstring text = L"Aボタンでスタート";
-	int textWidth = GetDrawFormatStringWidthToHandle(m_fontHandle, text.c_str());
-	int x = Game::kScreenWidth / 2 - textWidth / 2;
-	int y = Game::kScreenHeight / 2 + 50 / 2;
-	DrawFormatStringToHandle(x, y, 0xffffff, m_fontHandle, text.c_str());
-
+	// Aボタンが押されたあとだったら早く点滅
+	if (m_pressStartFrameCount)
+	{
+		if (m_frameCount % 6 < 3)
+		{
+			std::wstring text = L"Aボタンでスタート";
+			int textWidth = GetDrawFormatStringWidthToHandle(m_fontHandle, text.c_str());
+			int x = Game::kScreenWidth / 2 - textWidth / 2;
+			int y = Game::kScreenHeight / 2 + 50 / 2;
+			DrawFormatStringToHandle(x, y, 0xffffff, m_fontHandle, text.c_str());
+		}
+	}
+	else	// Aボタンが押されていなかったら普通に点滅
+	{
+		if (m_frameCount % 60 < 30)
+		{
+			std::wstring text = L"Aボタンでスタート";
+			int textWidth = GetDrawFormatStringWidthToHandle(m_fontHandle, text.c_str());
+			int x = Game::kScreenWidth / 2 - textWidth / 2;
+			int y = Game::kScreenHeight / 2 + 50 / 2;
+			DrawFormatStringToHandle(x, y, 0xffffff, m_fontHandle, text.c_str());
+		}
+	}
 #ifdef _DEBUG
 	DrawString(0, 0, L"SceneTitle\n1キーでシーンを終わる", 0xffffff);
 #endif

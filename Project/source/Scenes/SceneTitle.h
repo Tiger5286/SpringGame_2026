@@ -18,14 +18,24 @@ public:
 	virtual void Draw() override;
 
 private:
+	int m_frameCount = 0;
+
+	// Aボタンが押されたあとのフレーム数
+	int m_pressStartFrameCount = 0;
+
+	// フォントのハンドル
 	int m_fontHandle = -1;
 
+	// タイトルの画像のハンドル
 	int m_titleGraphHandle = -1;
 	int m_titleBackGraphHandle = -1;
+	// タイトルの画像の回転角度
 	float m_titleBackGraphAngle = 0.0f;
 
+	// シャドウマップのハンドル
 	int m_shadowMapHandle = -1;
 
+	// スカイボックスとプレイヤー
 	std::shared_ptr<SkyBox> m_pSkyBox;
 	std::shared_ptr<Player> m_pPlayer;
 };
