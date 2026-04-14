@@ -23,6 +23,7 @@
 
 #include "SceneManager.h"
 #include "SceneResult.h"
+#include "ScenePause.h"
 
 namespace
 {
@@ -175,6 +176,13 @@ void SceneMain::Update()
 		SoundManager::GetInstance().PlaySoundGame(L"CountDown");
 	}
 
+	// スタートボタンでポーズする
+	if (m_input.IsTriggerd(XINPUT_BUTTON_START))
+	{
+		m_sceneManager.PushScene(std::make_shared<ScenePause>(m_input, m_sceneManager));
+		return;
+	}
+
 	// ゲーム開始後の処理
 	if (m_isStarted)
 	{
@@ -246,15 +254,17 @@ void SceneMain::Update()
 	// ゲーム終了後、一定時間が経ったらシーンを終了
 	if (m_finishCount > 120)
 	{
-		m_sceneManager.ChangeScene(std::make_shared<SceneResult>(m_input, m_sceneManager, m_score));
 		SoundManager::GetInstance().StopSound(L"InGameBGM", true);
+		m_sceneManager.ChangeScene(std::make_shared<SceneResult>(m_input, m_sceneManager, m_score));
+		return;
 	}
 
 #ifdef _DEBUG
 	if (CheckHitKey(KEY_INPUT_1))
 	{
-		m_sceneManager.ChangeScene(std::make_shared<SceneResult>(m_input, m_sceneManager,m_score));
 		SoundManager::GetInstance().StopSound(L"InGameBGM", true);
+		m_sceneManager.ChangeScene(std::make_shared<SceneResult>(m_input, m_sceneManager,m_score));
+		return;
 	}
 	if (CheckHitKey(KEY_INPUT_2))
 	{

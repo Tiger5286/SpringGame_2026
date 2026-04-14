@@ -75,10 +75,26 @@ void SceneManager::Update()
 			// フェードインを開始
 			m_pFade->StartFadeIn();
 
-			// シーンを切り替え
-			m_pScenes.back()->End();
-			m_pScenes.back() = m_pNextScene;
-			m_pScenes.back()->Init();
+			if (!m_isRequestReset)
+			{
+				// シーンを切り替え
+				m_pScenes.back()->End();
+				m_pScenes.back() = m_pNextScene;
+				m_pScenes.back()->Init();
+			}
+			else
+			{
+				// 全てのシーンの終了処理を行う
+				for (auto& scene : m_pScenes)
+				{
+					scene->End();
+				}
+				// シーンのリストをクリアする
+				m_pScenes.clear();
+
+				m_pScenes.push_back(m_pNextScene);
+				m_pScenes.back()->Init();
+			}
 
 			// 次のシーンをリセット
 			m_pNextScene = nullptr;
@@ -127,6 +143,22 @@ void SceneManager::ChangeScene(std::shared_ptr<SceneBase> newScene)
 	//// 新しいシーンの初期化処理を行う
 	//newScene->Init();
 	//m_pScenes.push_back(newScene);
+}
+
+void SceneManager::ResetScene(std::shared_ptr<SceneBase> newScene)
+{
+	m_pNextScene = newScene;
+	m_isRequestReset = true;
+}
+
+void SceneManager::PushScene(std::shared_ptr<SceneBase> newScene)
+{
+	m_pScenes.push_back(newScene);
+}
+
+void SceneManager::PopScene()
+{
+	m_pScenes.pop_back();
 }
 
 //void SceneManager::ChangeSceneMainToResult()

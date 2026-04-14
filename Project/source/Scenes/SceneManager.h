@@ -17,8 +17,14 @@ public:
 	void Update();
 	void Draw();
 
-	// リストの全てのシーンを終了し、新しいシーンを開始する
+	// 一番最後のシーンを新しいシーンに切り替える
 	void ChangeScene(std::shared_ptr<SceneBase> newScene);
+	// すべてのシーンを削除し、新しいシーンを追加する
+	void ResetScene(std::shared_ptr<SceneBase> newScene);
+	// リストの最後に新しいシーンを追加する
+	void PushScene(std::shared_ptr<SceneBase> newScene);
+	// リストの最後のシーンを終了し、削除する
+	void PopScene();
 
 private:
 	// SceneMainからSceneResultに切り替える際、スコアを渡すために特別な関数を用意
@@ -31,6 +37,8 @@ private:
 	std::list<std::shared_ptr<SceneBase>> m_pScenes;
 
 	std::shared_ptr<Fade> m_pFade = nullptr;
+
+	bool m_isRequestReset = false;
 
 	int m_sceneChangeFrame = 0;
 

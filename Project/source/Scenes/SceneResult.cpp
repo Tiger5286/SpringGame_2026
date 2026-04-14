@@ -88,6 +88,7 @@ void SceneResult::Update()
 	if (m_pressStartFrameCount > 40)
 	{
 		m_sceneManager.ChangeScene(std::make_shared<SceneTitle>(m_input, m_sceneManager));
+		return;
 	}
 
 	// コインを更新
@@ -131,8 +132,9 @@ void SceneResult::Update()
 #ifdef _DEBUG
 	if (CheckHitKey(KEY_INPUT_1))
 	{
-		m_sceneManager.ChangeScene(std::make_shared<SceneTitle>(m_input, m_sceneManager));
 		SoundManager::GetInstance().StopSound(L"ResultBGM", true);
+		m_sceneManager.ChangeScene(std::make_shared<SceneTitle>(m_input, m_sceneManager));
+		return;
 	}
 #endif
 }
