@@ -170,17 +170,16 @@ void SceneMain::Update()
 	m_frameCount++;
 	UpdateStart();
 
-	// カウントダウン開始のタイミングでカウントダウンの音を鳴らす
-	if (m_startCount == 60)
-	{
-		SoundManager::GetInstance().PlaySoundGame(L"CountDown");
-	}
-
 	// スタートボタンでポーズする
 	if (m_input.IsTriggerd(XINPUT_BUTTON_START))
-	{
+	{	// ボタンが押された瞬間ポーズにする
+		m_isPause = true;
 		m_sceneManager.PushScene(std::make_shared<ScenePause>(m_input, m_sceneManager));
 		return;
+	}
+	else
+	{	// 押されていければポーズではないと判断する
+		m_isPause = false;
 	}
 
 	// ゲーム開始後の処理
@@ -317,6 +316,45 @@ void SceneMain::Draw()
 	// エフェクトの描画
 	m_pEffectManager->Draw();
 
+	// ポーズ中でなければUIを描画
+	if (!m_isPause)
+	{
+		DrawUI();
+	}
+
+#ifdef _DEBUG
+	DrawGrid();
+	DrawString(0,0,L"SceneMain",0xffffff);
+	DrawFormatString(0, 16, 0xffffff, L"FRAME:%d", m_frameCount);
+	DrawString(0, 32, L"1キーでシーンを終わる\n2キーで制限時間を1にする", 0xffffff);
+	m_pCamera->GetPos().Draw(0, 75);
+#endif
+}
+
+void SceneMain::UpdateStart()
+{
+	// ゲーム開始前のフレームをカウント
+	m_startCount++;
+
+	// カウントダウンの音を鳴らすかどうか
+	bool isPlayCountDownSound = false;
+	// 適切なタイミングでカウントダウンの音を鳴らす
+	if (m_startCount == 60 * 1) isPlayCountDownSound = true;
+	if (m_startCount == 60 * 2) isPlayCountDownSound = true;
+	if (m_startCount == 60 * 3) isPlayCountDownSound = true;
+	if (isPlayCountDownSound)
+	{
+		SoundManager::GetInstance().PlaySoundGame(L"CountDown");
+	}
+	// 適切なタイミングでスタートの音を鳴らす
+	if (m_startCount == 60 * 4)
+	{
+		SoundManager::GetInstance().PlaySoundGame(L"Start");
+	}
+}
+
+void SceneMain::DrawUI()
+{
 	// 操作説明の画像の描画
 	DrawGraph(0, Game::kScreenHeight - 150, m_howToPlayGraphHandle, true);
 
@@ -346,19 +384,6 @@ void SceneMain::Draw()
 	// テキストを描画
 	text = std::format(L"スコア:{:d}", m_dispScore);
 	DrawFormatStringToHandle(x, kUIFontSize + 20, 0xffffff, m_uiFontHandle, text.c_str());
-
-#ifdef _DEBUG
-	DrawGrid();
-	DrawString(0,0,L"SceneMain",0xffffff);
-	DrawFormatString(0, 16, 0xffffff, L"FRAME:%d", m_frameCount);
-	DrawString(0, 32, L"1キーでシーンを終わる\n2キーで制限時間を1にする", 0xffffff);
-	m_pCamera->GetPos().Draw(0, 75);
-#endif
-}
-
-void SceneMain::UpdateStart()
-{
-	m_startCount++;
 }
 
 void SceneMain::DrawStart()

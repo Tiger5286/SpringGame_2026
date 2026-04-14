@@ -29,6 +29,7 @@ public:
 	int GetScore() const { return m_score; }
 private:
 	void UpdateStart();
+	void DrawUI();
 	void DrawStart();
 	void DrawFinish();
 
@@ -72,5 +73,8 @@ private:
 
 	// ゲーム終了のカウント
 	int m_finishCount = 0;
+
+	// ポーズ中かどうか
+	bool m_isPause = false;
 };
 
