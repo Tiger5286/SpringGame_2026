@@ -325,7 +325,11 @@ void SceneMain::Draw()
 	DrawFormatStringToHandle(x, 20, 0xffffff, m_uiFontHandle, text.c_str());
 
 	// スコアの描画
-	text = std::format(L"スコア:{:d}", m_score);
+	// 表示用スコアの更新
+	if (m_dispScore < m_score) m_dispScore += 13;
+	if (m_dispScore > m_score) m_dispScore = m_score;
+	// テキストを描画
+	text = std::format(L"スコア:{:d}", m_dispScore);
 	DrawFormatStringToHandle(x, kUIFontSize + 20, 0xffffff, m_uiFontHandle, text.c_str());
 
 #ifdef _DEBUG

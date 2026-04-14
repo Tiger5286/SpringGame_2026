@@ -37,6 +37,7 @@ private:
 private:
 	int m_frameCount = 0;
 
+	// 操作説明の画像のハンドル
 	int m_howToPlayGraphHandle = -1;
 
 	std::shared_ptr<Camera> m_pCamera = nullptr;
@@ -51,18 +52,25 @@ private:
 
 	std::shared_ptr<SkyBox> m_pSkyBox = nullptr;
 
+	// シャドウマップのハンドル
 	int m_shadowMapHandle = -1;
 
+	// フォントのハンドル
 	int m_titleFontHandle = -1;
 	int m_uiFontHandle = -1;
 
+	// ゲームのスコア
 	int m_score = 0;
+	int m_dispScore = 0;	// 表示用スコア
 
+	// ゲーム開始のフラグとカウント
 	bool m_isStarted = false;
 	int m_startCount = 0;
 
+	// ゲーム中のカウント
 	int m_gameCount = 0;
 
+	// ゲーム終了のカウント
 	int m_finishCount = 0;
 };
 
