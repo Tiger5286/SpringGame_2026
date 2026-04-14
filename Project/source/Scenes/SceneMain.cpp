@@ -317,12 +317,14 @@ void SceneMain::Draw()
 	}
 
 	// 残り時間の描画
+	unsigned int color = 0xffffff;	// 最初は白で描画
 	float sec = kGameTimeLimit - static_cast<float>(m_gameCount) / 60.0f;
+	if (sec <= 10.0f) color = 0xff0000;	// 残り時間が10秒を切ったら赤で描画
 	if (sec < 0) sec = 0.0f;
 	std::wstring text = std::format(L"残り時間:{:.1f}", sec);
 	auto strWidth = GetDrawFormatStringWidthToHandle(m_uiFontHandle, L"残り時間:60.0");
 	int x = Game::kScreenWidth / 2 - strWidth / 2;
-	DrawFormatStringToHandle(x, 20, 0xffffff, m_uiFontHandle, text.c_str());
+	DrawFormatStringToHandle(x, 20, color, m_uiFontHandle, text.c_str());
 
 	// スコアの描画
 	// 表示用スコアの更新
