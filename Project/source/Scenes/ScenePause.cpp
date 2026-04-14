@@ -3,6 +3,7 @@
 #include "../Game.h"
 #include "../System/Input.h"
 #include "../Managers/SoundManager.h"
+#include <cassert>
 
 #include "SceneManager.h"
 #include "SceneTitle.h"
@@ -18,10 +19,18 @@ ScenePause::~ScenePause()
 
 void ScenePause::Init()
 {
+	// フォントハンドルを作成
+	m_titleFontHandle = CreateFontToHandle(Game::kFontName, 70, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
+	m_fontHandle = CreateFontToHandle(Game::kFontName, 50, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
+	assert(m_titleFontHandle != -1 && "フォントが正しく生成できませんでした");
+	assert(m_fontHandle != -1 && "フォントが正しく生成できませんでした");
 }
 
 void ScenePause::End()
 {
+	// フォントハンドルを削除
+	DeleteFontToHandle(m_titleFontHandle);
+	DeleteFontToHandle(m_fontHandle);
 }
 
 void ScenePause::Update()
@@ -48,7 +57,20 @@ void ScenePause::Draw()
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
+	// テキストを準備
+	std::wstring titleText = L"ポーズ";
+	std::wstring resumeText = L"START:ゲームを再開";
+	std::wstring returnTitleText = L"BACK:タイトルに戻る";
+	// テキストの幅を取得
+	int titleWidth = GetDrawStringWidthToHandle(titleText.c_str(), titleText.size(), m_titleFontHandle);
+	int resumeWidth = GetDrawStringWidthToHandle(resumeText.c_str(), resumeText.size(), m_fontHandle);
+	int returnTitleWidth = GetDrawStringWidthToHandle(returnTitleText.c_str(), returnTitleText.size(), m_fontHandle);
+	// テキストを描画
+	DrawStringToHandle((Game::kScreenWidth - titleWidth) / 2, 100, titleText.c_str(), 0xffffff, m_titleFontHandle);
+	DrawStringToHandle((Game::kScreenWidth - resumeWidth) / 2, 500, resumeText.c_str(), 0xffffff, m_fontHandle);
+	DrawStringToHandle((Game::kScreenWidth - returnTitleWidth) / 2, 600, returnTitleText.c_str(), 0xffffff, m_fontHandle);
+
 #ifdef _DEBUG
-	DrawString(0, 0, L"ScenePause\nStart :ゲームを再開\nSelect:タイトルに戻る", 0xffffff);
+	DrawString(0, 0, L"ScenePause\nStart :ゲームを再開\nBack:タイトルに戻る", 0xffffff);
 #endif
 }

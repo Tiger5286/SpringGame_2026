@@ -153,11 +153,18 @@ void SceneManager::ResetScene(std::shared_ptr<SceneBase> newScene)
 
 void SceneManager::PushScene(std::shared_ptr<SceneBase> newScene)
 {
+	newScene->Init();
 	m_pScenes.push_back(newScene);
 }
 
 void SceneManager::PopScene()
 {
+	if (m_pScenes.size() <= 1)
+	{
+		assert(false && "シーンが残り1つの状態でPopScene()が呼ばれました");
+		return;
+	}
+	m_pScenes.back()->End();
 	m_pScenes.pop_back();
 }
 

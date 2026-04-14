@@ -14,5 +14,6 @@ public:
 	void Draw() override;
 
 private:
-
+	int m_titleFontHandle = -1;
+	int m_fontHandle = -1;
 };
