@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 class Input;
+class SceneManager;
 
 enum class SceneType
 {
@@ -13,7 +14,7 @@ enum class SceneType
 class SceneBase
 {
 public:
-	SceneBase(Input& input);
+	SceneBase(Input& input,SceneManager& sceneManager);
 	virtual ~SceneBase();
 
 	virtual void Init() abstract;
@@ -21,11 +22,11 @@ public:
 	virtual void Update() abstract;
 	virtual void Draw() abstract;
 
-	bool IsEnd() const { return m_isEnd; }
 	SceneType GetSceneType() const { return m_sceneType; }
 
 protected:
 	Input& m_input;
+	SceneManager& m_sceneManager;
+
 	SceneType m_sceneType = SceneType::None;
-	bool m_isEnd = false;
 };

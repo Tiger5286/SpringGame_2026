@@ -8,6 +8,8 @@
 #include "../Managers/ModelManager.h"
 #include "../GameObjects/Player.h"
 #include "../Managers/SoundManager.h"
+#include "SceneManager.h"
+#include "SceneMain.h"
 
 namespace
 {
@@ -20,8 +22,8 @@ namespace
 	constexpr float kTitleRotateSpeed = 0.03f;
 }
 
-SceneTitle::SceneTitle(Input& input):
-	SceneBase(input)
+SceneTitle::SceneTitle(Input& input, SceneManager& sceneManager):
+	SceneBase(input,sceneManager)
 {
 	m_sceneType = SceneType::Title;
 }
@@ -90,7 +92,7 @@ void SceneTitle::Update()
 	// Aボタンが押されたあと、一定フレーム数経過したらシーンを終了
 	if (m_pressStartFrameCount > 40)
 	{
-		m_isEnd = true;
+		m_sceneManager.ChangeScene(std::make_shared<SceneMain>(m_input,m_sceneManager));
 	}
 
 	m_pPlayer->Update();
@@ -114,7 +116,7 @@ void SceneTitle::Update()
 #ifdef _DEBUG
 	if (CheckHitKey(KEY_INPUT_1))
 	{
-		m_isEnd = true;
+		m_sceneManager.ChangeScene(std::make_shared<SceneMain>(m_input, m_sceneManager));
 		SoundManager::GetInstance().StopSound(L"TitleBGM", true);
 	}
 #endif

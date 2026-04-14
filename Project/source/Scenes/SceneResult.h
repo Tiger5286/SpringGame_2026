@@ -10,16 +10,13 @@ class SceneResult :
     public SceneBase
 {
 public:
-	SceneResult(Input& input);
+	SceneResult(Input& input,SceneManager& sceneManager,int score);
 	virtual ~SceneResult() override;
 
 	virtual void Init() override;
 	virtual void End() override;
 	virtual void Update() override;
 	virtual void Draw() override;
-
-	// スコアを受け取る(Initの前に実行する)
-	void SetScore(int score) { m_score = score; }
 
 private:
 	void DrawScoreText();

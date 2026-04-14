@@ -10,6 +10,9 @@
 #include "../Managers/ModelManager.h"
 #include "../System/ResultCoin.h"
 
+#include "SceneManager.h"
+#include "SceneTitle.h"
+
 namespace
 {
 	const Vector3 kCameraPos = Vector3(0,0,-700);
@@ -17,8 +20,9 @@ namespace
 	constexpr float kResultCoinAppearY = 2000.0f;
 }
 
-SceneResult::SceneResult(Input& input):
-	SceneBase(input)
+SceneResult::SceneResult(Input& input, SceneManager& sceneManager, int score):
+	SceneBase(input,sceneManager),
+	m_score(score)
 {
 	m_sceneType = SceneType::Result;
 }
@@ -83,7 +87,7 @@ void SceneResult::Update()
 	// Aボタンが押されてから一定のフレームが経過したらシーンを終わる
 	if (m_pressStartFrameCount > 40)
 	{
-		m_isEnd = true;
+		m_sceneManager.ChangeScene(std::make_shared<SceneTitle>(m_input, m_sceneManager));
 	}
 
 	// コインを更新
@@ -127,7 +131,7 @@ void SceneResult::Update()
 #ifdef _DEBUG
 	if (CheckHitKey(KEY_INPUT_1))
 	{
-		m_isEnd = true;
+		m_sceneManager.ChangeScene(std::make_shared<SceneTitle>(m_input, m_sceneManager));
 		SoundManager::GetInstance().StopSound(L"ResultBGM", true);
 	}
 #endif

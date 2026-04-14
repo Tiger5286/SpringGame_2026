@@ -21,6 +21,9 @@
 
 #include "../Managers/SoundManager.h"
 
+#include "SceneManager.h"
+#include "SceneResult.h"
+
 namespace
 {
 	// エフェクトのデータ
@@ -62,8 +65,8 @@ namespace
 	const Vector3 kCameraFirstPos = Vector3(0, 400, -1000);
 }
 
-SceneMain::SceneMain(Input& input) :
-	SceneBase(input)
+SceneMain::SceneMain(Input& input, SceneManager& sceneManager) :
+	SceneBase(input,sceneManager)
 {
 	m_sceneType = SceneType::Main;
 }
@@ -243,14 +246,14 @@ void SceneMain::Update()
 	// ゲーム終了後、一定時間が経ったらシーンを終了
 	if (m_finishCount > 120)
 	{
-		m_isEnd = true;
+		m_sceneManager.ChangeScene(std::make_shared<SceneResult>(m_input, m_sceneManager, m_score));
 		SoundManager::GetInstance().StopSound(L"InGameBGM", true);
 	}
 
 #ifdef _DEBUG
 	if (CheckHitKey(KEY_INPUT_1))
 	{
-		m_isEnd = true;
+		m_sceneManager.ChangeScene(std::make_shared<SceneResult>(m_input, m_sceneManager,m_score));
 		SoundManager::GetInstance().StopSound(L"InGameBGM", true);
 	}
 	if (CheckHitKey(KEY_INPUT_2))

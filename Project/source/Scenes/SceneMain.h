@@ -18,7 +18,7 @@ class SkyBox;
 class SceneMain : public SceneBase
 {
 public:
-	SceneMain(Input& input);
+	SceneMain(Input& input,SceneManager& sceneManager);
 	~SceneMain() override;
 
 	void Init() override;

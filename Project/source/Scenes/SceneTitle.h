@@ -9,7 +9,7 @@ class Player;
 class SceneTitle : public SceneBase
 {
 public:
-	SceneTitle(Input& input);
+	SceneTitle(Input& input,SceneManager& sceneManager);
 	virtual ~SceneTitle();
 
 	virtual void Init() override;

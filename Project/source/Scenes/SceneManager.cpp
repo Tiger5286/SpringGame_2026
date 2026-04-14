@@ -18,7 +18,7 @@ void SceneManager::Init()
 {
 	m_pInput = std::make_shared<Input>();
 
-	auto firstScene = std::make_shared<SceneTitle>(*m_pInput);
+	auto firstScene = std::make_shared<SceneTitle>(*m_pInput,*this);
 	firstScene->Init();
 	m_pScenes.push_back(firstScene);
 
@@ -36,8 +36,15 @@ void SceneManager::End()
 
 void SceneManager::Update()
 {
-	// 前のフレームでシーンが終わっているかどうかを覚えておく
-	m_isPrevSceneEnd = m_pScenes.back()->IsEnd();
+	// シーン遷移のフレーム数をカウントする
+	if (m_pNextScene != nullptr)
+	{
+		m_sceneChangeFrame++;
+	}
+	else
+	{
+		m_sceneChangeFrame = 0;
+	}
 
 	// 入力の更新
 	m_pInput->Update();
@@ -52,11 +59,11 @@ void SceneManager::Update()
 		m_pScenes.back()->Update();
 	}
 
-	// シーンが終了していたら
-	if (m_pScenes.back()->IsEnd())
+	// 次のシーンがある場合
+	if (m_pNextScene != nullptr)
 	{
 		// シーンが終了した瞬間だけ
-		if (!m_isPrevSceneEnd)
+		if (m_sceneChangeFrame == 0)
 		{
 			// フェードアウトを開始する
 			m_pFade->StartFadeOut();
@@ -67,22 +74,30 @@ void SceneManager::Update()
 		{
 			// フェードインを開始
 			m_pFade->StartFadeIn();
+
 			// シーンを切り替え
-			switch (m_pScenes.back()->GetSceneType())
-			{
-			case SceneType::Title:
-				ChangeScene(std::make_shared<SceneMain>(*m_pInput));
-				break;
-			case SceneType::Main:
-				ChangeSceneMainToResult();
-				break;
-			case SceneType::Result:
-				ChangeScene(std::make_shared<SceneTitle>(*m_pInput));
-				break;
-			default:
-				assert(false && "存在しないシーンタイプです");
-				break;
-			}
+			m_pScenes.back()->End();
+			m_pScenes.back() = m_pNextScene;
+			m_pScenes.back()->Init();
+
+			// 次のシーンをリセット
+			m_pNextScene = nullptr;
+			
+			//switch (m_pScenes.back()->GetSceneType())
+			//{
+			//case SceneType::Title:
+			//	ChangeScene(std::make_shared<SceneMain>(*m_pInput));
+			//	break;
+			//case SceneType::Main:
+			//	ChangeSceneMainToResult();
+			//	break;
+			//case SceneType::Result:
+			//	ChangeScene(std::make_shared<SceneTitle>(*m_pInput));
+			//	break;
+			//default:
+			//	assert(false && "存在しないシーンタイプです");
+			//	break;
+			//}
 		}
 	}
 }
@@ -99,39 +114,41 @@ void SceneManager::Draw()
 
 void SceneManager::ChangeScene(std::shared_ptr<SceneBase> newScene)
 {
-	// 全てのシーンの終了処理を行う
-	for (auto& scene : m_pScenes)
-	{
-		scene->End();
-	}
-	// シーンのリストをクリアする
-	m_pScenes.clear();
+	m_pNextScene = newScene;
 
-	// 新しいシーンの初期化処理を行う
-	newScene->Init();
-	m_pScenes.push_back(newScene);
+	//// 全てのシーンの終了処理を行う
+	//for (auto& scene : m_pScenes)
+	//{
+	//	scene->End();
+	//}
+	//// シーンのリストをクリアする
+	//m_pScenes.clear();
+
+	//// 新しいシーンの初期化処理を行う
+	//newScene->Init();
+	//m_pScenes.push_back(newScene);
 }
 
-void SceneManager::ChangeSceneMainToResult()
-{
-	// シーン遷移前にスコアを保存
-	m_score = std::dynamic_pointer_cast<SceneMain>(m_pScenes.back())->GetScore();
-
-	// 全てのシーンの終了処理を行う
-	for (auto& scene : m_pScenes)
-	{
-		scene->End();
-	}
-	// シーンのリストをクリアする
-	m_pScenes.clear();
-
-	// リザルトシーンを生成
-	auto resultScene = std::make_shared<SceneResult>(*m_pInput);
-	// リザルトシーンにスコアを渡す
-	resultScene->SetScore(m_score);
-	// シーンを初期化
-	resultScene->Init();
-
-	// シーンをリストに追加
-	m_pScenes.push_back(resultScene);
-}
+//void SceneManager::ChangeSceneMainToResult()
+//{
+//	// シーン遷移前にスコアを保存
+//	m_score = std::dynamic_pointer_cast<SceneMain>(m_pScenes.back())->GetScore();
+//
+//	// 全てのシーンの終了処理を行う
+//	for (auto& scene : m_pScenes)
+//	{
+//		scene->End();
+//	}
+//	// シーンのリストをクリアする
+//	m_pScenes.clear();
+//
+//	// リザルトシーンを生成
+//	auto resultScene = std::make_shared<SceneResult>(*m_pInput);
+//	// リザルトシーンにスコアを渡す
+//	resultScene->SetScore(m_score);
+//	// シーンを初期化
+//	resultScene->Init();
+//
+//	// シーンをリストに追加
+//	m_pScenes.push_back(resultScene);
+//}
