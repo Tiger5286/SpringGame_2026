@@ -326,8 +326,6 @@ void SceneMain::Draw()
 
 	// スコアの描画
 	text = std::format(L"スコア:{:d}", m_score);
-	strWidth = GetDrawFormatStringWidthToHandle(m_uiFontHandle, text.c_str());
-	x = Game::kScreenWidth / 2 - strWidth / 2;
 	DrawFormatStringToHandle(x, kUIFontSize + 20, 0xffffff, m_uiFontHandle, text.c_str());
 
 #ifdef _DEBUG
