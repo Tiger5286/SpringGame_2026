@@ -4,7 +4,7 @@
 
 namespace
 {
-	constexpr int kFadeFrame = 60; // フェードにかかるフレーム数
+	constexpr int kFadeFrame = 40; // フェードにかかるフレーム数
 }
 
 void Fade::Update()
