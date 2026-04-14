@@ -69,6 +69,7 @@ void SceneResult::End()
 
 void SceneResult::Update()
 {
+	// コインを更新
 	for (auto& pCoin : m_pResultCoins)
 	{
 		pCoin->Update();
@@ -76,11 +77,20 @@ void SceneResult::Update()
 
 	m_pSkyBox->Update();
 
+	// Aボタンが押されたらシーンを終わる
 	if (m_input.IsTriggerd(XINPUT_BUTTON_A))
 	{
 		m_isEnd = true;
 		SoundManager::GetInstance().PlaySoundGame(L"Decision");
 		SoundManager::GetInstance().StopSound(L"ResultBGM", true);
+	}
+
+	// スコアを徐々に上げる
+	m_dispScore = std::lerp(m_dispScore, m_score, 0.05f);
+	// スコアがほぼ等しくなったら完全に等しくする
+	if (m_score - m_dispScore < 0.05f)
+	{
+		m_dispScore = m_score;
 	}
 
 #ifdef _DEBUG
@@ -101,15 +111,18 @@ void SceneResult::Draw()
 		pCoin->Draw();
 	}
 
+	// テキストを準備
 	std::wstring resultText = std::format(L"スコア:{:d}", m_score);
+	std::wstring dispResultText = std::format(L"スコア:{:d}", static_cast<int>(m_dispScore));
 	std::wstring subText = L"Aボタンでタイトルに戻る";
-
-	int resultTextWidth = GetDrawStringWidthToHandle(resultText.c_str(), resultText.size(), m_fontHandle);
+	// テキストの幅を取得
+	int resultTextWidth = GetDrawStringWidthToHandle(resultText.c_str(), resultText.size(), m_fontHandle);	// スコアのテキストの幅(表示用ではない方のスコアの幅)
 	int subTextWidth = GetDrawStringWidthToHandle(subText.c_str(), subText.size(), m_fontHandle);
-
+	// スコアのテキストを描画
 	int x = Game::kScreenWidth / 2 - resultTextWidth / 2;
 	int y = Game::kScreenHeight / 2 - 50 / 2;
-	DrawStringToHandle(x, y, resultText.c_str(), 0xffffff, m_fontHandle);
+	DrawStringToHandle(x, y, dispResultText.c_str(), 0xffffff, m_fontHandle);	// 表示用のスコアのテキストを描画
+	// サブテキストを描画
 	x = Game::kScreenWidth / 2 - subTextWidth / 2;
 	y = Game::kScreenHeight / 2 + 50 / 2;
 	DrawStringToHandle(x, y, subText.c_str(), 0xffffff, m_fontHandle);
@@ -117,5 +130,6 @@ void SceneResult::Draw()
 
 #ifdef _DEBUG
 	DrawString(0, 0, L"SceneResult\n1キーでシーンを終わる", 0xffffff);
+	DrawFormatString(100, 100, 0xffffff, L"%f", m_dispScore);
 #endif
 }
