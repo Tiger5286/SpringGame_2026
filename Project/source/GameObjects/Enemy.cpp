@@ -11,8 +11,6 @@ namespace
 	constexpr float kMoveSpeed = 4.0f;
 	// プレイヤーとの最短距離
 	constexpr float kMinDistanceToPlayer = 50.0f;
-	// 敵が地面から浮いている距離
-	constexpr float kFloatDist = 0.0f;
 
 	// アニメーション名
 	const std::wstring kAnimName = L"MonsterArmature|Walk";
@@ -57,6 +55,8 @@ void Enemy::End()
 
 void Enemy::Update()
 {
+	m_frameCount++;
+
 	Move();
 
 	if (m_isHitPunch)
@@ -121,7 +121,9 @@ void Enemy::Move()
 	auto enemyToPlayer = playerPos - m_pos;
 	// プレイヤーとの距離が遠い、かつパンチを受けていないときだけ移動する
 	bool isFarFromPlayer = enemyToPlayer.SquaredLength() > kMinDistanceToPlayer * kMinDistanceToPlayer;
-	if (isFarFromPlayer && !m_isHitPunch)
+	// 最初の60フレームは移動しない
+	bool canMove = m_frameCount > 60;
+	if (isFarFromPlayer && !m_isHitPunch && canMove)
 	{
 		// ベクトルを移動用に加工
 		enemyToPlayer.Normalize();
@@ -129,7 +131,7 @@ void Enemy::Move()
 		// 位置に足す
 		m_pos += enemyToPlayer;
 		// 高さを固定
-		m_pos.y = kFloatDist;
+		m_pos.y = 0;
 	}
 	LimitPos();
 	// 当たり判定の位置を設定

@@ -11,9 +11,6 @@ namespace
 {
 	// 敵を倒したときに出るコインの数
 	constexpr int kSpawnCoinNum = 5;
-
-	// 敵が地面から浮いている距離
-	constexpr float kFloatDist = 100.0f;
 }
 
 EnemyManager::EnemyManager(CollisionManager& collisionManager, CoinManager& coinManager, EffectManager& effectManager, Player& player):
@@ -103,13 +100,13 @@ Vector3 EnemyManager::GetSpawnPos()
 	switch (rand)
 	{
 	case 0:
-		return Vector3(Game::kFieldSize, kFloatDist, randPos);
+		return Vector3(Game::kFieldSize, 0.0f, randPos);
 	case 1:
-		return Vector3(-Game::kFieldSize, kFloatDist, randPos);
+		return Vector3(-Game::kFieldSize, 0.0f, randPos);
 	case 2:
-		return Vector3(randPos, kFloatDist, Game::kFieldSize);
+		return Vector3(randPos, 0.0f, Game::kFieldSize);
 	case 3:
-		return Vector3(randPos, kFloatDist, -Game::kFieldSize);
+		return Vector3(randPos, 0.0f, -Game::kFieldSize);
 	default :
 		assert(false && "不正な値が生成されました");
 		return Vector3();

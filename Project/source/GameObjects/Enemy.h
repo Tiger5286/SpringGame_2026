@@ -25,6 +25,7 @@ public:
 	bool IsDead() const { return m_isDead; }
 	bool IsHitPunch() const { return m_isHitPunch; }
 
+	int GetFrameCount() const { return m_frameCount; }
 private:
     void Move();
 
@@ -36,6 +37,8 @@ private:
     void PushBack(const Vector3& center, float radius);
 
 private:
+    int m_frameCount = 0;
+
     Player& m_player;
 
     Animation m_anim;

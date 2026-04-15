@@ -5,6 +5,7 @@
 #include "PunchCollider.h"
 #include "../Managers/CollisionManager.h"
 #include "../Managers/SoundManager.h"
+#include "Enemy.h"
 
 namespace
 {
@@ -120,6 +121,10 @@ void Player::OnCollision(const GameObject& other)
 	// 敵に当たった
 	if (other.GetTag() == ObjectTag::Enemy)
 	{
+		// 敵が生まれたばかりなら当たらないようにする
+		const Enemy* pEnemy = dynamic_cast<const Enemy*>(&other);
+		if (pEnemy->GetFrameCount() < 60) return;
+
 		// パンチ中でなければ、かつ無敵でなければ
 		if (m_punchFrame == 0 && !m_isInvincible)
 		{
