@@ -51,7 +51,6 @@ void SceneTitle::Init()
 	m_pPlayer = std::make_shared<Player>(m_input,nullptr,nullptr);
 	m_pPlayer->SetHandle(ModelManager::GetInstance().DuplicateModel(L"Player"));
 	m_pPlayer->Init();
-	m_pPlayer->SetCanControll(false);
 
 	// スカイボックスの生成と初期化
 	m_pSkyBox = std::make_shared<SkyBox>();

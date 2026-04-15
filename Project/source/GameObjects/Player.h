@@ -39,6 +39,7 @@ public:
 private:
     void Move();
     void Punch();
+    void PunchNoCollider();
     void HitUpdate();
     void UpdateState();
     void UpdateAnimation();

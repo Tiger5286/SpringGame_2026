@@ -192,8 +192,12 @@ void Player::Move()
 
 void Player::Punch()
 {
-	// コライダーマネージャーがないときはパンチできない
-	if (m_pCollisionManager == nullptr) return;
+	// コライダーマネージャーがないときはモーションのみ行う
+	if (m_pCollisionManager == nullptr)
+	{
+		PunchNoCollider();
+		return;
+	}
 
 	// Bボタンが押されたとき、入力が有効なら
 	if (m_input.IsTriggerd(XINPUT_BUTTON_B) && m_isCanControll)
@@ -234,6 +238,27 @@ void Player::Punch()
 	{
 		m_pCollisionManager->Unregister(m_pPunchCollider);
 		m_pPunchCollider = nullptr;
+	}
+}
+
+void Player::PunchNoCollider()
+{
+	// Bボタンが押されたとき、入力が有効なら
+	if (m_input.IsTriggerd(XINPUT_BUTTON_B) && m_isCanControll)
+	{
+		// パンチ中でなければパンチする
+		if (m_punchFrame == 0)
+		{
+			// パンチの音を鳴らす
+			SoundManager::GetInstance().PlaySoundGame(L"Punch");
+			// パンチフレームをリセット
+			m_punchFrame = kPunchFrame;
+		}
+	}
+	// パンチ中はカウントを減らし、位置をプレイヤーの前方に設定し続ける
+	if (m_punchFrame > 0)
+	{
+		m_punchFrame--;
 	}
 }
 
