@@ -8,6 +8,18 @@
 #include "SceneManager.h"
 #include "SceneTitle.h"
 
+namespace
+{
+	// フォントのサイズ
+	constexpr int kTitleFontSize = 70;
+	constexpr int kFontSize = 50;
+
+	// UIのY位置
+	constexpr int kTitleTextY = 100;
+	constexpr int kResumeTextY = 500;
+	constexpr int kReturnTitleTextY = 600;
+}
+
 ScenePause::ScenePause(Input& input, SceneManager& sceneManager):
 	SceneBase(input, sceneManager)
 {
@@ -20,8 +32,8 @@ ScenePause::~ScenePause()
 void ScenePause::Init()
 {
 	// フォントハンドルを作成
-	m_titleFontHandle = CreateFontToHandle(Game::kFontName, 70, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
-	m_fontHandle = CreateFontToHandle(Game::kFontName, 50, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
+	m_titleFontHandle = CreateFontToHandle(Game::kFontName, kTitleFontSize, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
+	m_fontHandle = CreateFontToHandle(Game::kFontName, kFontSize, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
 	assert(m_titleFontHandle != -1 && "フォントが正しく生成できませんでした");
 	assert(m_fontHandle != -1 && "フォントが正しく生成できませんでした");
 }
@@ -66,9 +78,9 @@ void ScenePause::Draw()
 	int resumeWidth = GetDrawStringWidthToHandle(resumeText.c_str(), resumeText.size(), m_fontHandle);
 	int returnTitleWidth = GetDrawStringWidthToHandle(returnTitleText.c_str(), returnTitleText.size(), m_fontHandle);
 	// テキストを描画
-	DrawStringToHandle((Game::kScreenWidth - titleWidth) / 2, 100, titleText.c_str(), 0xffffff, m_titleFontHandle);
-	DrawStringToHandle((Game::kScreenWidth - resumeWidth) / 2, 500, resumeText.c_str(), 0xffffff, m_fontHandle);
-	DrawStringToHandle((Game::kScreenWidth - returnTitleWidth) / 2, 600, returnTitleText.c_str(), 0xffffff, m_fontHandle);
+	DrawStringToHandle((Game::kScreenWidth - titleWidth) / 2, kTitleTextY, titleText.c_str(), 0xffffff, m_titleFontHandle);
+	DrawStringToHandle((Game::kScreenWidth - resumeWidth) / 2, kResumeTextY, resumeText.c_str(), 0xffffff, m_fontHandle);
+	DrawStringToHandle((Game::kScreenWidth - returnTitleWidth) / 2, kReturnTitleTextY, returnTitleText.c_str(), 0xffffff, m_fontHandle);
 
 #ifdef _DEBUG
 	DrawString(0, 0, L"ScenePause\nStart :ゲームを再開\nBack:タイトルに戻る", 0xffffff);
