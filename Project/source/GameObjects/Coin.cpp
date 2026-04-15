@@ -168,4 +168,5 @@ void Coin::Spawn(const Vector3& pos)
 void Coin::ActivateAtract()
 {
 	m_isAtract = true;
+	m_aliveFrame = 0;	// 引き寄せが発動してからの生存時間をリセット
 }

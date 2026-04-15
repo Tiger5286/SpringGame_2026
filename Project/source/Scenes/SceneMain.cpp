@@ -145,7 +145,7 @@ void SceneMain::Init()
 	m_pPlayer->SetCanControll(false);
 
 	// マグネットの生成と初期化
-	m_pMagnet = std::make_shared<Magnet>(m_input,*m_pCoinManager);
+	m_pMagnet = std::make_shared<Magnet>(m_input,*m_pPlayer,*m_pCoinManager);
 	m_pMagnet->Init();
 
 	// カメラの更新

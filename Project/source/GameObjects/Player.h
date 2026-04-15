@@ -35,6 +35,7 @@ public:
 
 	// プレイヤーの操作ができるかどうかを設定する関数
 	void SetCanControll(bool isCanControll) { m_isCanControll = isCanControll; }
+	bool IsCanControll() const { return m_isCanControll; }  // 現在の操作可能状態を取得する関数
 
 	// プレイヤーの無敵状態を設定する関数
     void SetInvincible(bool isInvincible);

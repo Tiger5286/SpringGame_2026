@@ -1,13 +1,13 @@
 ﻿#pragma once
-#include "../Utility/Vector3.h"
 
 class Input;
+class Player;
 class CoinManager;
 
 class Magnet
 {
 public:
-	Magnet(Input& input, CoinManager& coinManager);
+	Magnet(Input& input,Player& player, CoinManager& coinManager);
 	virtual ~Magnet();
 
 	void Init();
@@ -16,7 +16,10 @@ public:
 	void Draw();
 
 private:
-	// 入力とコインマネージャーへの参照
+	// 参照たち
 	Input& m_input;
+	Player& m_player;
 	CoinManager& m_coinManager;
+
+	int m_cooldown = 0; // 引き寄せのクールダウンタイム
 };
