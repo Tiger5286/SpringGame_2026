@@ -13,7 +13,7 @@
 
 namespace
 {
-	const Vector3 kCameraPos = Vector3(0.0f, 300.0f, -1300.0f);
+	const Vector3 kCameraPos = Vector3(0.0f, 300.0f, -1700.0f);
 	const Vector3 kCameraTarget = Vector3(0.0f, 500.0f, 0.0f);
 	const Vector3 kLightDirection = Vector3(0.0f, -1.5f, 1.0f);
 
@@ -45,7 +45,8 @@ void SceneTitle::Init()
 	m_shadowMapHandle = MakeShadowMap(8192, 8192);
 
 	// カメラの設定
-	SetCameraPositionAndTarget_UpVecY(kCameraPos.ToDxLib(), kCameraTarget.ToDxLib());
+	m_cameraTarget = kCameraTarget;
+	SetCameraPositionAndTarget_UpVecY(kCameraPos.ToDxLib(), m_cameraTarget.ToDxLib());
 
 	// プレイヤーの生成と初期化
 	m_pPlayer = std::make_shared<Player>(m_input,nullptr,nullptr);
@@ -93,7 +94,11 @@ void SceneTitle::Update()
 		return;
 	}
 
+	// プレイヤーの更新
 	m_pPlayer->Update();
+
+	// カメラの制御
+	ControlCamera();
 
 	if (m_input.IsTriggerd(XINPUT_BUTTON_A))
 	{
@@ -177,4 +182,13 @@ void SceneTitle::Draw()
 #ifdef _DEBUG
 	DrawString(0, 0, L"SceneTitle\n1キーでシーンを終わる", 0xffffff);
 #endif
+}
+
+void SceneTitle::ControlCamera()
+{
+	Vector3 stickInput = m_input.GetStickInput(LR::Right);
+	Vector3 target = kCameraTarget;
+	target += stickInput * 400.0f;
+	m_cameraTarget.Lerp(target, 0.05f);
+	SetCameraPositionAndTarget_UpVecY(kCameraPos.ToDxLib(), m_cameraTarget.ToDxLib());
 }

@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "SceneBase.h"
+#include "../Utility/Vector3.h"
 #include <memory>
 
 class Camera;
@@ -16,6 +17,9 @@ public:
 	virtual void End() override;
 	virtual void Update() override;
 	virtual void Draw() override;
+
+private:
+	void ControlCamera();
 
 private:
 	int m_frameCount = 0;
@@ -38,5 +42,8 @@ private:
 	// スカイボックスとプレイヤー
 	std::shared_ptr<SkyBox> m_pSkyBox;
 	std::shared_ptr<Player> m_pPlayer;
+
+	// カメラの注視点
+	Vector3 m_cameraTarget;
 };
 
