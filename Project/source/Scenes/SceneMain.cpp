@@ -445,8 +445,8 @@ void SceneMain::DrawStart()
 
 	// 拡大率を計算 60フレームかけて徐々に大きくなるのを繰り返す
 	float scale = (m_startCount % Game::kFPS) / static_cast<float>(Game::kFPS);	// 1.0 ~ 0.0
-	scale *= 1.5f;	// 1.5をかけて0~1.5の値にする
-	scale += 1.0f;	// 1.0を足して1.0~1.5の値にする
+	scale *= 1.3f;	// 1.3をかけて0~1.3の値にする
+	scale += 1.0f;	// 1.0を足して1.0~1.3の値にする
 
 #ifdef _DEBUG
 	DrawFormatString(0, 200, 0xffffff, L"float alpha = %.2f", alpha);
@@ -477,7 +477,8 @@ void SceneMain::DrawFinish()
 	if (alpha > 255) alpha = 255;	// 255を超えないようにする
 	// 拡大率を計算
 	float scale = m_finishCount / static_cast<float>(Game::kFPS) * 2;	// 0.0~1.0
-	scale += 1.0f;	// 1.0~2.0
+	scale *= 0.3f;	// 0.0~0.3
+	scale += 1.0f;	// 1.0~1.3
 
 	// テキストを描画
 	std::wstring text = L"Finish!";
