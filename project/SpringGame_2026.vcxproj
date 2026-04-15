@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\System\Magnet.cpp" />
     <ClCompile Include="source\Scenes\ScenePause.cpp" />
     <ClCompile Include="source\System\ResultCoin.cpp" />
     <ClCompile Include="source\System\Fade.cpp" />
@@ -52,6 +53,7 @@
     <ClCompile Include="source\Utility\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\System\Magnet.h" />
     <ClInclude Include="source\Scenes\ScenePause.h" />
     <ClInclude Include="source\System\ResultCoin.h" />
     <ClInclude Include="source\System\Fade.h" />
