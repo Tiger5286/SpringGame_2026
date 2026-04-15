@@ -443,11 +443,26 @@ void SceneMain::DrawStart()
 
 void SceneMain::DrawFinish()
 {
+#ifdef _DEBUG
+	DrawFormatString(0, 200, 0xffffff, L"FinishCount:%d", m_finishCount);
+#endif
+	// 透明度を計算
+	float alpha = (120 - m_finishCount) / 120.0f;	// 1.0~0.0
+	alpha *= 255 * 2;	// 510~0
+	if (alpha > 255) alpha = 255;	// 255を超えないようにする
+	// 拡大率を計算
+	float scale = m_finishCount / 120.0f;	// 0.0~1.0
+	scale += 1.0f;	// 1.0~2.0
+
+	// テキストを描画
 	std::wstring text = L"Finish!";
-	auto stringWidth = GetDrawFormatStringWidthToHandle(m_titleFontHandle, text.c_str());
-	int x = Game::kScreenWidth / 2 - stringWidth / 2;
-	int y = Game::kScreenHeight / 2 - kTitleFontSize / 2;
-	DrawFormatStringToHandle(x, y, 0xffffff, m_titleFontHandle, text.c_str());
+	int width, height, lineCount;
+	GetDrawExtendFormatStringSizeToHandle(&width, &height, &lineCount, scale, scale, m_titleFontHandle, text.c_str());
+	int x = Game::kScreenWidth / 2 - width / 2;
+	int y = Game::kScreenHeight / 2 - height / 2;
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(alpha));
+	DrawExtendFormatStringToHandle(x, y, scale, scale, 0xffffff, m_titleFontHandle, text.c_str());
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
 void SceneMain::DrawGrid()
