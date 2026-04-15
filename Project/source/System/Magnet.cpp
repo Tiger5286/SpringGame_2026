@@ -24,10 +24,14 @@ Magnet::~Magnet()
 
 void Magnet::Init()
 {
+	// アイコンの画像をロード
+	m_graphHandle = LoadGraph(L"data/Graphs/magnet_ui.png");
 }
 
 void Magnet::End()
 {
+	// アイコンの画像を削除
+	DeleteGraph(m_graphHandle);
 }
 
 void Magnet::Update()
@@ -51,12 +55,17 @@ void Magnet::Update()
 
 void Magnet::Draw()
 {
-	DrawBox(Game::kScreenWidth - 50 - 150,
-		Game::kScreenHeight - 50 - 150,
-		Game::kScreenWidth - 50,
-		Game::kScreenHeight - 50,
-		0x0000ff, true);
+	// アイコンの描画
+	DrawGraph(Game::kScreenWidth - 200, Game::kScreenHeight - 200, m_graphHandle, true);
 
+	// アイコンの代わりにボックスを描画
+	//DrawBox(Game::kScreenWidth - 50 - 150,
+	//	Game::kScreenHeight - 50 - 150,
+	//	Game::kScreenWidth - 50,
+	//	Game::kScreenHeight - 50,
+	//	0x000088, true);
+
+	// クールダウンタイムを元に、アイコンの上にクールダウンの残りを示すボックスを描画
 	float cooldownRate = static_cast<float>(m_cooldown) / static_cast<float>(kCooldownTime);
 	int temp = 150 * cooldownRate;
 
@@ -65,6 +74,7 @@ void Magnet::Draw()
 	DrawFormatString(Game::kScreenWidth - 200, Game::kScreenHeight - 50 - 200 - 16, 0xffffff, L"temp:%d", temp);
 #endif
 
+	// クールダウンの残りを示すボックスの描画
 	DrawBox(Game::kScreenWidth - 50 - 150,
 		Game::kScreenHeight - 50 - temp,
 		Game::kScreenWidth - 50,

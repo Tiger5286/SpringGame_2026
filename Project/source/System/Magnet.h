@@ -21,5 +21,7 @@ private:
 	Player& m_player;
 	CoinManager& m_coinManager;
 
+	int m_graphHandle = -1;	// 引き寄せのアイコンのグラフィックハンドル
+
 	int m_cooldown = 0; // 引き寄せのクールダウンタイム
 };
