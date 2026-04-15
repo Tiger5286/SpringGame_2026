@@ -15,9 +15,30 @@
 
 namespace
 {
+	// フォントのサイズ
+	constexpr int kFontSize = 50;
+	constexpr int kScoreFontSize = 70;
+
+	// カメラの位置
 	const Vector3 kCameraPos = Vector3(0,0,-700);
 
+	// 結果画面でコインが出現するY位置
 	constexpr float kResultCoinAppearY = 2000.0f;
+
+	// 落ちてくるコインの数をスコアに応じて変えるための係数
+	constexpr int kCoinNumCoefficient = 500;
+	// スコアを徐々に上げるための係数
+	constexpr float kScoreLerpCoefficient = 0.05f;
+
+	// サブテキストのY位置
+	constexpr int kSubTextY = Game::kScreenHeight / 4 * 3;
+	// テキストの点滅の周期
+	constexpr int kTextFrickerInterval = 30;
+	// Aボタンが押されたあとのテキストの点滅の周期
+	constexpr int kTextFrickerIntervalFast = 3;
+
+	// ボタンが押されてからシーンが切り替わるまでのフレーム数
+	constexpr int kPressButtonFrameCountToChangeScene = 40;
 }
 
 SceneResult::SceneResult(Input& input, SceneManager& sceneManager, int score):
@@ -34,9 +55,9 @@ SceneResult::~SceneResult()
 void SceneResult::Init()
 {
 	// フォントの生成
-	m_fontHandle = CreateFontToHandle(Game::kFontName, 50, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
+	m_fontHandle = CreateFontToHandle(Game::kFontName, kFontSize, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
 	assert(m_fontHandle != -1 && "フォントのハンドルの作成に失敗しました");
-	m_scoreFontHandle = CreateFontToHandle(Game::kFontName, 70, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
+	m_scoreFontHandle = CreateFontToHandle(Game::kFontName, kScoreFontSize, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
 	assert(m_scoreFontHandle != -1 && "フォントのハンドルの作成に失敗しました");
 
 	// カメラの設定
@@ -44,7 +65,7 @@ void SceneResult::Init()
 	// ライトの向きを設定
 	SetLightDirection((Vector3(0, 0, 0) - kCameraPos).ToDxLib());
 
-	int coinNum = m_score / 500 + 1;
+	int coinNum = m_score / kCoinNumCoefficient + 1;
 	// ゲームシーンでコインを1枚も取っていなかったら表示するコインも0にする
 	if (m_score == 0)
 	{
@@ -80,12 +101,12 @@ void SceneResult::Update()
 {
 	m_frameCount++;
 	// Aボタンが押されたあとのフレーム数をカウント
-	if (m_pressStartFrameCount)
+	if (m_pressButtonFrameCount)
 	{
-		m_pressStartFrameCount++;
+		m_pressButtonFrameCount++;
 	}
 	// Aボタンが押されてから一定のフレームが経過したらシーンを終わる
-	if (m_pressStartFrameCount > 40)
+	if (m_pressButtonFrameCount > kPressButtonFrameCountToChangeScene)
 	{
 		m_sceneManager.ChangeScene(std::make_shared<SceneTitle>(m_input, m_sceneManager));
 		return;
@@ -106,9 +127,9 @@ void SceneResult::Update()
 		if (m_isDispScoreComplete)
 		{
 			// Aボタンが押されたあとのフレーム数をカウント開始する
-			if (!m_pressStartFrameCount)
+			if (!m_pressButtonFrameCount)
 			{
-				m_pressStartFrameCount = 1;
+				m_pressButtonFrameCount = 1;
 				SoundManager::GetInstance().PlaySoundGame(L"Decision");
 				SoundManager::GetInstance().StopSound(L"ResultBGM", true);
 			}
@@ -121,7 +142,7 @@ void SceneResult::Update()
 	}
 
 	// スコアを徐々に上げる
-	m_dispScore = std::lerp(m_dispScore, m_score, 0.05f);
+	m_dispScore = std::lerp(m_dispScore, m_score, kScoreLerpCoefficient);
 	// スコアがほぼ等しくなったら完全に等しくする
 	if (m_score - m_dispScore < 0.05f)
 	{
@@ -152,16 +173,16 @@ void SceneResult::Draw()
 	DrawScoreText();
 
 	// サブテキストを描画
-	if (m_pressStartFrameCount)
+	if (m_pressButtonFrameCount)
 	{	// Aボタンが押されたあとはサブテキストを早く点滅させる
-		if (m_frameCount % 6 < 3)
+		if (m_frameCount % kTextFrickerIntervalFast * 2 < kTextFrickerIntervalFast)
 		{
 			DrawSubText();
 		}
 	}
 	else
 	{	// Aボタンが押されるまではサブテキストをゆっくり点滅させる
-		if (m_frameCount % 60 < 30)
+		if (m_frameCount % kTextFrickerInterval * 2 < kTextFrickerInterval)
 		{
 			DrawSubText();
 		}
@@ -182,7 +203,7 @@ void SceneResult::DrawScoreText()
 	int resultTextWidth = GetDrawStringWidthToHandle(resultText.c_str(), resultText.size(), m_scoreFontHandle);	// スコアのテキストの幅(表示用ではない方のスコアの幅)
 	// スコアのテキストを描画
 	int x = Game::kScreenWidth / 2 - resultTextWidth / 2;
-	int y = Game::kScreenHeight / 2 - 70 / 2;
+	int y = Game::kScreenHeight / 2 - kScoreFontSize / 2;
 	DrawStringToHandle(x, y, dispResultText.c_str(), 0xffffff, m_scoreFontHandle);	// 表示用のスコアのテキストを描画
 }
 
@@ -191,6 +212,6 @@ void SceneResult::DrawSubText()
 	std::wstring subText = L"Aボタンでタイトルに戻る";
 	int subTextWidth = GetDrawStringWidthToHandle(subText.c_str(), subText.size(), m_fontHandle);
 	int x = Game::kScreenWidth / 2 - subTextWidth / 2;
-	int y = Game::kScreenHeight / 4 * 3 - 50 / 2;
+	int y = kSubTextY - kFontSize / 2;
 	DrawStringToHandle(x, y, subText.c_str(), 0xffffff, m_fontHandle);
 }

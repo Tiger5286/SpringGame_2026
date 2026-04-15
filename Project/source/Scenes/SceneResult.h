@@ -25,7 +25,7 @@ private:
 private:
 	int m_frameCount = 0;
 	// Aボタンが押されたあとのフレーム数
-	int m_pressStartFrameCount = 0;
+	int m_pressButtonFrameCount = 0;
 	// スコアが表示完了したかどうか
 	bool m_isDispScoreComplete = false;
 
