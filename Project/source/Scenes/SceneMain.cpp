@@ -16,6 +16,7 @@
 #include "../Managers/EffectManager.h"
 
 #include "../GameObjects/Player.h"
+#include "../System/Magnet.h"
 
 #include "../System/SkyBox.h"
 
@@ -71,6 +72,10 @@ namespace
 
 	// 表示用スコアが実際のスコアに追いつくまでの増加速度
 	constexpr int kScoreIncreaseSpeed = 13;
+	// スコア増加を加速させるかどうかのスコア差
+	constexpr int kScoreDiffToAccelerate = 1000;
+	// スコア増加が加速しているときの増加量
+	constexpr int kAcceleratedScoreIncreaseSpeed = 100;
 
 	// ゲーム終了後、シーンを切り替えるまでの時間(フレーム)
 	constexpr int kFinishInterval = Game::kFPS * 2;
@@ -139,6 +144,10 @@ void SceneMain::Init()
 	// 最初は操作不能にする
 	m_pPlayer->SetCanControll(false);
 
+	// マグネットの生成と初期化
+	m_pMagnet = std::make_shared<Magnet>(m_input,*m_pCoinManager);
+	m_pMagnet->Init();
+
 	// カメラの更新
 	m_pCamera->SetPlayerPos(m_pPlayer->GetPos());
 	m_pPlayer->SetCameraAngleY(m_pCamera->GetAngleY());	// プレイヤーにカメラの角度を渡す
@@ -175,6 +184,8 @@ void SceneMain::End()
 
 	// プレイヤーの終了処理
 	m_pPlayer->End();
+
+	m_pMagnet->End();
 
 	// 敵マネージャーの終了処理
 	m_pEnemyManager->End();
@@ -241,8 +252,13 @@ void SceneMain::Update()
 	// 各オブジェクトの更新
 	m_pCamera->Update();
 	m_pPlayer->Update();
+
+	m_pMagnet->Update();
+
 	m_pEnemyManager->Update();
 	m_pChestManager->Update();
+
+	m_pCoinManager->SetPlayerPos(m_pPlayer->GetPos());
 	m_pCoinManager->Update();
 
 	// スコアの更新
@@ -383,6 +399,9 @@ void SceneMain::UpdateStart()
 
 void SceneMain::DrawUI()
 {
+	// マグネットの描画
+	m_pMagnet->Draw();
+
 	// 操作説明の画像の描画
 	DrawGraph(kHowToPlayGraphX, kHowToPlayGraphY, m_howToPlayGraphHandle, true);
 
@@ -407,8 +426,14 @@ void SceneMain::DrawUI()
 
 	// スコアの描画
 	// 表示用スコアの更新
+	// 表示用スコアと実際のスコアの差が定数より大きい場合は、表示用スコアを定数だけ増加させる
+	if (m_score - m_dispScore > kScoreDiffToAccelerate)
+	{
+		m_dispScore += kAcceleratedScoreIncreaseSpeed;
+	}
+	// 表示用スコアが実際のスコアに追いつくまで、徐々に増加させる
 	if (m_dispScore < m_score) m_dispScore += kScoreIncreaseSpeed;
-	if (m_dispScore > m_score) m_dispScore = m_score;
+	if (m_dispScore > m_score) m_dispScore = m_score;	// 表示用スコアが実際のスコアを超えないようにする
 	// テキストを描画
 	text = std::format(L"スコア:{:d}", m_dispScore);
 	DrawFormatStringToHandle(x, kUIFontSize + kTimeY, 0xffffff, m_uiFontHandle, text.c_str());

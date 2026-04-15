@@ -46,6 +46,7 @@ void CoinManager::Update()
 			continue;
 		}
 
+		coin->SetPlayerPos(m_playerPos);
 		coin->Update();
 
 		// 一定時間経過したコインに当たり判定をつける
@@ -106,5 +107,18 @@ void CoinManager::Spawn(const Vector3& pos)
 			coin->Spawn(pos);
 			return;
 		}
+	}
+}
+
+void CoinManager::ActivateAtract()
+{
+	for (auto& coin : m_coins)
+	{
+		// 死んでいるコインは引き寄せない
+		if (coin->IsDead())
+		{
+			continue;
+		}
+		coin->ActivateAtract();
 	}
 }

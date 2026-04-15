@@ -18,6 +18,8 @@ namespace
 	constexpr int kAliveFrame = 60 * 10;
 	constexpr int kStartFrickerFrame = kAliveFrame - 60 * 3;
 	constexpr int kFrickerFrame = 10;
+
+	constexpr float kAtractSpeed = 20.0f;
 }
 
 Coin::Coin():
@@ -53,6 +55,16 @@ void Coin::Update()
 
 	if (!m_isHitPlayer)
 	{	// 通常の移動
+
+		// 引き寄せが発動しているならプレイヤーの位置に向かって移動する
+		if (m_isAtract)
+		{
+			Vector3 atractVec = m_playerPos - m_pos;
+			atractVec.Normalize();
+			atractVec *= kAtractSpeed;	// 引き寄せの速さ
+			m_vel = atractVec;
+		}
+
 		// 位置に速度を加算して移動
 		m_pos += m_vel;
 		// 抵抗をかける
@@ -72,12 +84,12 @@ void Coin::Update()
 			m_isDead = true;
 		}
 	}
+
 	// 生存時間が一定時間たつと死ぬ
 	if (m_aliveFrame > kAliveFrame)
 	{
 		m_isDead = true;
 	}
-
 
 	// y0の位置に置くと半分埋まるため、y座標を半径分上げる
 	auto pos = m_pos;
@@ -123,6 +135,7 @@ void Coin::OnCollision(const GameObject& other)
 
 		SoundManager::GetInstance().PlaySoundGame(L"Coin");
 		m_isHitPlayer = true;
+		m_isAtract = false;
 		m_vel = kHitPlayerVec;
 	}
 }
@@ -150,4 +163,9 @@ void Coin::Spawn(const Vector3& pos)
 	// コインの向きをランダムにする
 	randRad = GetRand(359) * DX_PI_F / 180.0f;
 	m_angle = randRad;
+}
+
+void Coin::ActivateAtract()
+{
+	m_isAtract = true;
 }

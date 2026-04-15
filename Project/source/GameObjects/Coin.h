@@ -16,6 +16,12 @@ public:
 
 	void Spawn(const Vector3& pos);
 
+	// プレイヤーの位置を設定する(Updateの前に毎フレーム呼ぶ)
+	void SetPlayerPos(const Vector3& pos) { m_playerPos = pos; }
+
+	// 引き寄せを発動させる
+    void ActivateAtract();
+
     bool IsHit() const { return m_isHitPlayer; }
     bool IsDead() const { return m_isDead; }
     /// <summary>
@@ -25,6 +31,8 @@ public:
     int GetAliveFrame() const { return m_aliveFrame; }
 
 private:
+	Vector3 m_playerPos; // プレイヤーの位置
+
     float m_angle = 0.0f;
 
     int m_aliveFrame = 0;
@@ -32,4 +40,6 @@ private:
 
     bool m_isHitPlayer = false;
     bool m_isDead = true;
+
+	bool m_isAtract = false; // 引き寄せが発動しているか
 };

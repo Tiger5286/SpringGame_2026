@@ -12,6 +12,7 @@ class ChestManager;
 class EffectManager;
 
 class Player;
+class Magnet;
 
 class SkyBox;
 
@@ -50,6 +51,7 @@ private:
 	std::shared_ptr<EffectManager> m_pEffectManager = nullptr;
 
 	std::shared_ptr<Player> m_pPlayer = nullptr;
+	std::shared_ptr<Magnet> m_pMagnet = nullptr;
 
 	std::shared_ptr<SkyBox> m_pSkyBox = nullptr;
 
