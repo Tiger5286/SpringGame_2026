@@ -13,13 +13,37 @@
 
 namespace
 {
+	// カメラの位置と注視点
 	const Vector3 kCameraPos = Vector3(0.0f, 300.0f, -1700.0f);
 	const Vector3 kCameraTarget = Vector3(0.0f, 500.0f, 0.0f);
+	// 注視点の位置のスケール
+	constexpr float kTargetMoveScale = 400.0f;
+	// 注視点の位置の線形補間の割合
+	constexpr float kTargetMoveLerp = 0.05f;
+
+	// ライトの方向
 	const Vector3 kLightDirection = Vector3(0.0f, -1.5f, 1.0f);
 
+	// タイトルの画像の定数
 	constexpr int kTitleY = 250;
 	constexpr float kTitleScale = 0.6f;
 	constexpr float kTitleRotateSpeed = 0.03f;
+
+	// フォントのサイズ
+	constexpr int kFontSize = 50;
+
+	// シャドウマップのサイズ
+	constexpr int kShadowMapSize = 8192;
+
+	// 開始ボタンを押した後の間隔
+	constexpr int kStartButtonInterval = 40;
+	// 開始ボタンのテキストの点滅の間隔
+	constexpr int kStartTextFrickerInterval = 30;
+	constexpr int kStartTextFrickerIntervalFast = 3;
+
+	// スタートのテキストの定数
+	const std::wstring kStartText = L"Aボタンでスタート";
+	constexpr int kStartTextY = Game::kScreenHeight / 4 * 3;
 }
 
 SceneTitle::SceneTitle(Input& input, SceneManager& sceneManager):
@@ -35,14 +59,14 @@ SceneTitle::~SceneTitle()
 void SceneTitle::Init()
 {
 	// フォントの生成
-	m_fontHandle = CreateFontToHandle(Game::kFontName, 50, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
+	m_fontHandle = CreateFontToHandle(Game::kFontName, kFontSize, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
 	assert(m_fontHandle != -1 && "フォントが正しく生成されませんでした");
 	// タイトルの画像の読み込み
 	m_titleGraphHandle = LoadGraph(L"data/Graphs/title.png");
 	m_titleBackGraphHandle = LoadGraph(L"data/Graphs/titleBack.png");
 
 	// シャドウマップの生成
-	m_shadowMapHandle = MakeShadowMap(8192, 8192);
+	m_shadowMapHandle = MakeShadowMap(kShadowMapSize, kShadowMapSize);
 
 	// カメラの設定
 	m_cameraTarget = kCameraTarget;
@@ -89,7 +113,7 @@ void SceneTitle::Update()
 		m_pressStartFrameCount++;
 	}
 	// Aボタンが押されたあと、一定フレーム数経過したらシーンを終了
-	if (m_pressStartFrameCount > 40)
+	if (m_pressStartFrameCount > kStartButtonInterval)
 	{
 		m_sceneManager.ChangeScene(std::make_shared<SceneMain>(m_input,m_sceneManager));
 		return;
@@ -160,14 +184,14 @@ void SceneTitle::Draw()
 	// Aボタンが押されたあとだったら早く点滅
 	if (m_pressStartFrameCount)
 	{
-		if (m_frameCount % 6 < 3)
+		if (m_frameCount % kStartTextFrickerIntervalFast * 2 < kStartTextFrickerIntervalFast)
 		{
 			DrawStartText();
 		}
 	}
 	else	// Aボタンが押されていなかったら普通に点滅
 	{
-		if (m_frameCount % 60 < 30)
+		if (m_frameCount % kStartTextFrickerInterval * 2 < kStartTextFrickerInterval)
 		{
 			DrawStartText();
 		}
@@ -179,18 +203,17 @@ void SceneTitle::Draw()
 
 void SceneTitle::DrawStartText()
 {
-	std::wstring text = L"Aボタンでスタート";
-	int textWidth = GetDrawFormatStringWidthToHandle(m_fontHandle, text.c_str());
+	int textWidth = GetDrawFormatStringWidthToHandle(m_fontHandle, kStartText.c_str());
 	int x = Game::kScreenWidth / 2 - textWidth / 2;
-	int y = Game::kScreenHeight / 4 * 3;
-	DrawFormatStringToHandle(x, y, 0xffffff, m_fontHandle, text.c_str());
+	int y = kStartTextY;
+	DrawFormatStringToHandle(x, y, 0xffffff, m_fontHandle, kStartText.c_str());
 }
 
 void SceneTitle::ControlCamera()
 {
 	Vector3 stickInput = m_input.GetStickInput(LR::Right);
 	Vector3 target = kCameraTarget;
-	target += stickInput * 400.0f;
-	m_cameraTarget.Lerp(target, 0.05f);
+	target += stickInput * kTargetMoveScale;
+	m_cameraTarget.Lerp(target, kTargetMoveLerp);
 	SetCameraPositionAndTarget_UpVecY(kCameraPos.ToDxLib(), m_cameraTarget.ToDxLib());
 }
