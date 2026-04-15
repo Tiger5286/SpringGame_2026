@@ -33,6 +33,12 @@ namespace
 	constexpr int kInvincibleFrame = 120;
 	// 無敵時間の点滅の間隔(フレーム)
 	constexpr int kInvincibleFrickerInterval = 12;
+
+	// 敵が生まれてから当たり判定が有効になるまでのフレーム数
+	constexpr int kEnemySpawnInvincibleFrame = 60;
+
+	// タイトルシーンでのプレイヤーの初期位置
+	const Vector3 kTitleFirstPos = { 0.0f, 0.0f, -800.0f };
 }
 
 Player::Player(Input& input, std::shared_ptr<CollisionManager> pCollisionManager, std::shared_ptr<EffectManager> pEffectManager) :
@@ -123,7 +129,7 @@ void Player::OnCollision(const GameObject& other)
 	{
 		// 敵が生まれたばかりなら当たらないようにする
 		const Enemy* pEnemy = dynamic_cast<const Enemy*>(&other);
-		if (pEnemy->GetFrameCount() < 60) return;
+		if (pEnemy->GetFrameCount() < kEnemySpawnInvincibleFrame) return;
 
 		// パンチ中でなければ、かつ無敵でなければ
 		if (m_punchFrame == 0 && !m_isInvincible)
@@ -153,7 +159,7 @@ void Player::SetInvincible(bool isInvincible)
 
 void Player::SetFirstTitlePos()
 {
-	m_pos = Vector3(0.0f, 0.0f, -800.0f);
+	m_pos = kTitleFirstPos;
 	MV1SetMatrix(m_modelHandle, Matrix4x4::GetTranslateMatrix(m_pos).ToDxLib());
 }
 
