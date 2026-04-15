@@ -60,9 +60,10 @@ void ChestManager::Spawn(const Vector3& playerPos)
 	auto newChest = std::make_shared<Chest>(m_coinManager,m_effectManager);
 	newChest->SetHandle(ModelManager::GetInstance().DuplicateModel(L"Chest"));
 	newChest->Init();
-	Vector3 spawnPos = Vector3(static_cast<float>(GetRand(Game::kFieldSize * 2) - Game::kFieldSize),
+	int spawnFieldSize = Game::kFieldSize - 300;	// 外側300はスポーンさせない
+	Vector3 spawnPos = Vector3(static_cast<float>(GetRand(spawnFieldSize * 2) - spawnFieldSize),
 		0.0f,
-		static_cast<float>(GetRand(Game::kFieldSize * 2) - Game::kFieldSize));
+		static_cast<float>(GetRand(spawnFieldSize * 2) - spawnFieldSize));
 	newChest->Spawn(spawnPos,playerPos);
 	m_collisionManager.Register(newChest);
 
