@@ -50,13 +50,16 @@ void ScenePause::Update()
 	// スタートボタンが押されたらシーンを閉じ、一つ前のシーンに戻る
 	if (m_input.IsTriggerd(XINPUT_BUTTON_START))
 	{
+		SoundManager::GetInstance().PlaySoundGame(L"Cancel");
 		m_sceneManager.PopScene();
 		return;
 	}
 	// セレクトボタンが押されたらシーンをすべて閉じ、タイトルシーンに戻る
 	if (m_input.IsTriggerd(XINPUT_BUTTON_BACK))
 	{
-		SoundManager::GetInstance().StopSound(L"InGameBGM");
+		auto& soundManager = SoundManager::GetInstance();
+		soundManager.PlaySoundGame(L"Decision");
+		soundManager.StopSound(L"InGameBGM", true);
 		m_sceneManager.ResetScene(std::make_shared<SceneTitle>(m_input, m_sceneManager));
 		return;
 	}

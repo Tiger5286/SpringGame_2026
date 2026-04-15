@@ -200,6 +200,7 @@ void SceneMain::Update()
 	if (m_input.IsTriggerd(XINPUT_BUTTON_START))
 	{	// ボタンが押された瞬間ポーズにする
 		m_isPause = true;
+		SoundManager::GetInstance().PlaySoundGame(L"Pause");
 		m_sceneManager.PushScene(std::make_shared<ScenePause>(m_input, m_sceneManager));
 		return;
 	}

@@ -31,6 +31,8 @@ void SoundManager::Init()
 	// SE
 	// システム音
 	LoadSound(L"Decision", L"data/Sounds/decision.mp3", SoundType::SE);
+	LoadSound(L"Cancel", L"data/Sounds/cancel.mp3", SoundType::SE);
+	LoadSound(L"Pause", L"data/Sounds/pause.mp3", SoundType::SE);
 	LoadSound(L"CountDown", L"data/Sounds/countdown.wav", SoundType::SE);
 	LoadSound(L"Start", L"data/Sounds/start.wav", SoundType::SE);
 	LoadSound(L"Finish", L"data/Sounds/finish.mp3", SoundType::SE);
