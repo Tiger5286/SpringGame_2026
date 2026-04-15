@@ -392,31 +392,53 @@ void SceneMain::DrawUI()
 
 void SceneMain::DrawStart()
 {
+	// フレームから秒数を計算
 	int second = m_startCount / 60;
+	// 5秒以上経っていたら描画しない
 	if (second > 4)
 	{
 		return;
 	}
-
+	// 60フレームに満たないうちは描画しない
 	if (m_startCount < 60)
 	{
 		return;
 	}
-
+	// 開始のカウントダウン秒数テキストを生成
 	std::wstring text = L"temp";
 	text = std::to_wstring(4 - second);
-
+	// 3秒経ったらSTART!に
 	if (second > 3)
 	{
 		text = L"START!";
 		m_isStarted = true;
 		m_pPlayer->SetCanControll(true);
 	}
+	// 透明度を計算 60フレームかけて徐々に消えるのを繰り返す
+	float alpha = (60 - (m_startCount % 60)) / 60.0f;	// 1.0 ~ 0.0
+	alpha *= 2.0f;	// 2.0をかけて2.0~ 0.0の値にする
+	alpha *= 255;	// 255をかけて0~510の値にする
+	if (alpha > 255) alpha = 255;	// 255を超えないようにする
 
-	auto stringWidth = GetDrawFormatStringWidthToHandle(m_titleFontHandle, text.c_str());
-	int x = Game::kScreenWidth / 2 - stringWidth / 2;
-	int y = Game::kScreenHeight / 2 - kTitleFontSize / 2;
-	DrawFormatStringToHandle(x, y, 0xffffff, m_titleFontHandle, text.c_str());
+	// 拡大率を計算 60フレームかけて徐々に大きくなるのを繰り返す
+	float scale = (m_startCount % 60) / 60.0f;	// 1.0 ~ 0.0
+	scale *= 1.5f;	// 1.5をかけて0~1.5の値にする
+	scale += 1.0f;	// 1.0を足して1.0~1.5の値にする
+
+#ifdef _DEBUG
+	DrawFormatString(0, 200, 0xffffff, L"float alpha = %.2f", alpha);
+#endif
+
+	// 事前に計算したアルファ値で半透明にする
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(alpha));
+	// テキストを描画
+	int width, height, lineCount;	// 拡大率も考慮してテキストの描画サイズを取得	// 幅、高さ、行数
+	GetDrawExtendFormatStringSizeToHandle(&width, &height, &lineCount, scale, scale, m_titleFontHandle, text.c_str());
+	int x = Game::kScreenWidth / 2 - width / 2;	// テキストの描画サイズを元にテキストの描画位置を計算
+	int y = Game::kScreenHeight / 2 - height / 2;
+	DrawExtendFormatStringToHandle(x, y, scale, scale, 0xffffff, m_titleFontHandle, text.c_str());	// テキストを拡大して描画
+	// ブレンドモードを元に戻す
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
 void SceneMain::DrawFinish()
