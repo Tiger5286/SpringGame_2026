@@ -13,4 +13,7 @@ namespace Game
 
 	// フォント名
 	const wchar_t* const kFontName = L"07あかずきんポップ Heavy";
+
+	// フレームレート
+	constexpr int kFPS = 60;
 }

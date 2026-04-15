@@ -46,13 +46,16 @@ namespace
 	constexpr int kTitleFontSize = 100;
 	constexpr int kUIFontSize = 50;
 
-	// 地面の色
-	constexpr unsigned int kGroundColor = 0x44cc44;
+	// シャドウマップのサイズ
+	constexpr int kShadowMapSize = 8192;
+
+	// コイン1枚あたりのスコア
+	constexpr int kScorePerCoin = 100;
 
 	// 敵がスポーンする間隔(フレーム)
-	constexpr int kEnemySpawnInterval = 120;
+	constexpr int kEnemySpawnInterval = Game::kFPS * 2;
 	// 宝箱がスポーンする間隔(フレーム)
-	constexpr int kChestSpawnInterval = 300;
+	constexpr int kChestSpawnInterval = Game::kFPS * 5;
 
 	// 敵の存在上限数
 	constexpr int kEnemyMaxNum = 10;
@@ -61,9 +64,28 @@ namespace
 
 	// ゲームの制限時間(秒)
 	constexpr int kGameTimeLimit = 60;
+	// 残り時間が少なくなった時に赤になる時間(秒)
+	constexpr int kTimeLimitToRed = 10.0f;
+	// 残り時間UIのY位置
+	constexpr int kTimeY = 20;
+
+	// 表示用スコアが実際のスコアに追いつくまでの増加速度
+	constexpr int kScoreIncreaseSpeed = 13;
+
+	// ゲーム終了後、シーンを切り替えるまでの時間(フレーム)
+	constexpr int kFinishInterval = Game::kFPS * 2;
+
+
 
 	// カメラの初期位置
 	const Vector3 kCameraFirstPos = Vector3(0, 400, -1000);
+
+	// 床用のライトの向き
+	const Vector3 kFloorLightDirection = Vector3(0.0f, -1.5f, 1.0f);
+
+	// 操作説明画像の位置
+	constexpr int kHowToPlayGraphX = 0;
+	constexpr int kHowToPlayGraphY = Game::kScreenHeight - 150;
 }
 
 SceneMain::SceneMain(Input& input, SceneManager& sceneManager) :
@@ -136,7 +158,7 @@ void SceneMain::Init()
 	m_pSkyBox->Init();
 
 	// シャドウマップの生成
-	m_shadowMapHandle = MakeShadowMap(8192, 8192);
+	m_shadowMapHandle = MakeShadowMap(kShadowMapSize, kShadowMapSize);
 
 	// BGMの再生
 	SoundManager::GetInstance().PlaySoundGame(L"InGameBGM", true, true);
@@ -223,7 +245,7 @@ void SceneMain::Update()
 	m_pCoinManager->Update();
 
 	// スコアの更新
-	m_score = m_pCoinManager->GetCoinNum() * 100;
+	m_score = m_pCoinManager->GetCoinNum() * kScorePerCoin;
 
 	// 当たり判定の更新
 	m_pCollisionManager->Update();
@@ -241,7 +263,7 @@ void SceneMain::Update()
 	m_pSkyBox->Update();
 
 	// ゲームの制限時間を超えたらゲーム終了
-	if (m_gameCount > kGameTimeLimit * 60)
+	if (m_gameCount > kGameTimeLimit * Game::kFPS)
 	{
 		m_finishCount++;
 		m_pPlayer->SetCanControll(false);
@@ -255,7 +277,7 @@ void SceneMain::Update()
 	}
 
 	// ゲーム終了後、一定時間が経ったらシーンを終了
-	if (m_finishCount > 120)
+	if (m_finishCount > kFinishInterval)
 	{
 		SoundManager::GetInstance().StopSound(L"InGameBGM", true);
 		m_sceneManager.ChangeScene(std::make_shared<SceneResult>(m_input, m_sceneManager, m_score));
@@ -263,12 +285,14 @@ void SceneMain::Update()
 	}
 
 #ifdef _DEBUG
+	// 1キーでシーンを終了
 	if (CheckHitKey(KEY_INPUT_1))
 	{
 		SoundManager::GetInstance().StopSound(L"InGameBGM", true);
 		m_sceneManager.ChangeScene(std::make_shared<SceneResult>(m_input, m_sceneManager,m_score));
 		return;
 	}
+	// 2キーで制限時間を1秒にする
 	if (CheckHitKey(KEY_INPUT_2))
 	{
 		m_gameCount = kGameTimeLimit * (60 - 1);
@@ -302,9 +326,8 @@ void SceneMain::Draw()
 	// シャドウマップを使用して描画開始
 	SetUseShadowMap(0, m_shadowMapHandle);
 
-	// 床用のライトの向きを生成
-	auto temp = Vector3(0.0f, -1.5f, 1.0f);
-	temp = Matrix4x4::GetRotYMatrix(m_pCamera->GetAngleY()) * temp;
+	// 床用のライトの向きを設定(カメラを上下に動かすと床の反射光がちらつくため、上下の向きを固定)
+	auto temp = Matrix4x4::GetRotYMatrix(m_pCamera->GetAngleY()) * kFloorLightDirection;
 	SetLightDirection(temp.ToDxLib());
 
 	// 床の描画
@@ -343,15 +366,15 @@ void SceneMain::UpdateStart()
 	// カウントダウンの音を鳴らすかどうか
 	bool isPlayCountDownSound = false;
 	// 適切なタイミングでカウントダウンの音を鳴らす
-	if (m_startCount == 60 * 1) isPlayCountDownSound = true;
-	if (m_startCount == 60 * 2) isPlayCountDownSound = true;
-	if (m_startCount == 60 * 3) isPlayCountDownSound = true;
+	if (m_startCount == Game::kFPS * 1) isPlayCountDownSound = true;
+	if (m_startCount == Game::kFPS * 2) isPlayCountDownSound = true;
+	if (m_startCount == Game::kFPS * 3) isPlayCountDownSound = true;
 	if (isPlayCountDownSound)
 	{
 		SoundManager::GetInstance().PlaySoundGame(L"CountDown");
 	}
 	// 適切なタイミングでスタートの音を鳴らす
-	if (m_startCount == 60 * 4)
+	if (m_startCount == Game::kFPS * 4)
 	{
 		SoundManager::GetInstance().PlaySoundGame(L"Start");
 	}
@@ -360,7 +383,7 @@ void SceneMain::UpdateStart()
 void SceneMain::DrawUI()
 {
 	// 操作説明の画像の描画
-	DrawGraph(0, Game::kScreenHeight - 150, m_howToPlayGraphHandle, true);
+	DrawGraph(kHowToPlayGraphX, kHowToPlayGraphY, m_howToPlayGraphHandle, true);
 
 	// ゲーム開始前のカウントダウンの描画
 	DrawStart();
@@ -373,34 +396,34 @@ void SceneMain::DrawUI()
 
 	// 残り時間の描画
 	unsigned int color = 0xffffff;	// 最初は白で描画
-	float sec = kGameTimeLimit - static_cast<float>(m_gameCount) / 60.0f;
-	if (sec <= 10.0f) color = 0xff0000;	// 残り時間が10秒を切ったら赤で描画
+	float sec = kGameTimeLimit - static_cast<float>(m_gameCount) / static_cast<float>(kGameTimeLimit);
+	if (sec <= kTimeLimitToRed) color = 0xff0000;	// 残り時間が10秒を切ったら赤で描画
 	if (sec < 0) sec = 0.0f;
 	std::wstring text = std::format(L"残り時間:{:.1f}", sec);
 	auto strWidth = GetDrawFormatStringWidthToHandle(m_uiFontHandle, L"残り時間:60.0");
 	int x = Game::kScreenWidth / 2 - strWidth / 2;
-	DrawFormatStringToHandle(x, 20, color, m_uiFontHandle, text.c_str());
+	DrawFormatStringToHandle(x, kTimeY, color, m_uiFontHandle, text.c_str());
 
 	// スコアの描画
 	// 表示用スコアの更新
-	if (m_dispScore < m_score) m_dispScore += 13;
+	if (m_dispScore < m_score) m_dispScore += kScoreIncreaseSpeed;
 	if (m_dispScore > m_score) m_dispScore = m_score;
 	// テキストを描画
 	text = std::format(L"スコア:{:d}", m_dispScore);
-	DrawFormatStringToHandle(x, kUIFontSize + 20, 0xffffff, m_uiFontHandle, text.c_str());
+	DrawFormatStringToHandle(x, kUIFontSize + kTimeY, 0xffffff, m_uiFontHandle, text.c_str());
 }
 
 void SceneMain::DrawStart()
 {
 	// フレームから秒数を計算
-	int second = m_startCount / 60;
+	int second = m_startCount / Game::kFPS;
 	// 5秒以上経っていたら描画しない
 	if (second > 4)
 	{
 		return;
 	}
 	// 60フレームに満たないうちは描画しない
-	if (m_startCount < 60)
+	if (m_startCount < Game::kFPS)
 	{
 		return;
 	}
@@ -415,13 +438,13 @@ void SceneMain::DrawStart()
 		m_pPlayer->SetCanControll(true);
 	}
 	// 透明度を計算 60フレームかけて徐々に消えるのを繰り返す
-	float alpha = (60 - (m_startCount % 60)) / 60.0f;	// 1.0 ~ 0.0
+	float alpha = (Game::kFPS - (m_startCount % Game::kFPS)) / static_cast<float>(Game::kFPS);	// 1.0 ~ 0.0
 	alpha *= 2.0f;	// 2.0をかけて2.0~ 0.0の値にする
 	alpha *= 255;	// 255をかけて0~510の値にする
 	if (alpha > 255) alpha = 255;	// 255を超えないようにする
 
 	// 拡大率を計算 60フレームかけて徐々に大きくなるのを繰り返す
-	float scale = (m_startCount % 60) / 60.0f;	// 1.0 ~ 0.0
+	float scale = (m_startCount % Game::kFPS) / static_cast<float>(Game::kFPS);	// 1.0 ~ 0.0
 	scale *= 1.5f;	// 1.5をかけて0~1.5の値にする
 	scale += 1.0f;	// 1.0を足して1.0~1.5の値にする
 
@@ -429,14 +452,16 @@ void SceneMain::DrawStart()
 	DrawFormatString(0, 200, 0xffffff, L"float alpha = %.2f", alpha);
 #endif
 
-	// 事前に計算したアルファ値で半透明にする
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(alpha));
+	
 	// テキストを描画
 	int width, height, lineCount;	// 拡大率も考慮してテキストの描画サイズを取得	// 幅、高さ、行数
 	GetDrawExtendFormatStringSizeToHandle(&width, &height, &lineCount, scale, scale, m_titleFontHandle, text.c_str());
 	int x = Game::kScreenWidth / 2 - width / 2;	// テキストの描画サイズを元にテキストの描画位置を計算
 	int y = Game::kScreenHeight / 2 - height / 2;
-	DrawExtendFormatStringToHandle(x, y, scale, scale, 0xffffff, m_titleFontHandle, text.c_str());	// テキストを拡大して描画
+	// 事前に計算したアルファ値で半透明にする
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(alpha));
+	// テキストを拡大して描画
+	DrawExtendFormatStringToHandle(x, y, scale, scale, 0xffffff, m_titleFontHandle, text.c_str());
 	// ブレンドモードを元に戻す
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
@@ -447,11 +472,11 @@ void SceneMain::DrawFinish()
 	DrawFormatString(0, 200, 0xffffff, L"FinishCount:%d", m_finishCount);
 #endif
 	// 透明度を計算
-	float alpha = (120 - m_finishCount) / 120.0f;	// 1.0~0.0
+	float alpha = (Game::kFPS * 2 - m_finishCount) / static_cast<float>(Game::kFPS) * 2;	// 1.0~0.0
 	alpha *= 255 * 2;	// 510~0
 	if (alpha > 255) alpha = 255;	// 255を超えないようにする
 	// 拡大率を計算
-	float scale = m_finishCount / 120.0f;	// 0.0~1.0
+	float scale = m_finishCount / static_cast<float>(Game::kFPS) * 2;	// 0.0~1.0
 	scale += 1.0f;	// 1.0~2.0
 
 	// テキストを描画
