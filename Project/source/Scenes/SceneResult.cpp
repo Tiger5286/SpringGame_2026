@@ -175,14 +175,14 @@ void SceneResult::Draw()
 	// サブテキストを描画
 	if (m_pressButtonFrameCount)
 	{	// Aボタンが押されたあとはサブテキストを早く点滅させる
-		if (m_frameCount % kTextFrickerIntervalFast * 2 < kTextFrickerIntervalFast)
+		if (m_frameCount % (kTextFrickerIntervalFast * 2) < kTextFrickerIntervalFast)
 		{
 			DrawSubText();
 		}
 	}
 	else
 	{	// Aボタンが押されるまではサブテキストをゆっくり点滅させる
-		if (m_frameCount % kTextFrickerInterval * 2 < kTextFrickerInterval)
+		if (m_frameCount % (kTextFrickerInterval * 2) < kTextFrickerInterval)
 		{
 			DrawSubText();
 		}

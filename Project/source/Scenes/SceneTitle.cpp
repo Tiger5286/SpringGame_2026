@@ -184,14 +184,14 @@ void SceneTitle::Draw()
 	// Aボタンが押されたあとだったら早く点滅
 	if (m_pressStartFrameCount)
 	{
-		if (m_frameCount % kStartTextFrickerIntervalFast * 2 < kStartTextFrickerIntervalFast)
+		if (m_frameCount % (kStartTextFrickerIntervalFast * 2) < kStartTextFrickerIntervalFast)
 		{
 			DrawStartText();
 		}
 	}
 	else	// Aボタンが押されていなかったら普通に点滅
 	{
-		if (m_frameCount % kStartTextFrickerInterval * 2 < kStartTextFrickerInterval)
+		if (m_frameCount % (kStartTextFrickerInterval * 2) < kStartTextFrickerInterval)
 		{
 			DrawStartText();
 		}
