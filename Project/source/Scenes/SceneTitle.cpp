@@ -17,8 +17,8 @@ namespace
 	const Vector3 kCameraTarget = Vector3(0.0f, 500.0f, 0.0f);
 	const Vector3 kLightDirection = Vector3(0.0f, -1.5f, 1.0f);
 
-	constexpr int kTitleY = 200;
-	constexpr float kTitleScale = 0.5f;
+	constexpr int kTitleY = 250;
+	constexpr float kTitleScale = 0.6f;
 	constexpr float kTitleRotateSpeed = 0.03f;
 }
 
@@ -52,6 +52,7 @@ void SceneTitle::Init()
 	m_pPlayer = std::make_shared<Player>(m_input,nullptr,nullptr);
 	m_pPlayer->SetHandle(ModelManager::GetInstance().DuplicateModel(L"Player"));
 	m_pPlayer->Init();
+	m_pPlayer->SetFirstTitlePos();
 
 	// スカイボックスの生成と初期化
 	m_pSkyBox = std::make_shared<SkyBox>();
@@ -161,27 +162,28 @@ void SceneTitle::Draw()
 	{
 		if (m_frameCount % 6 < 3)
 		{
-			std::wstring text = L"Aボタンでスタート";
-			int textWidth = GetDrawFormatStringWidthToHandle(m_fontHandle, text.c_str());
-			int x = Game::kScreenWidth / 2 - textWidth / 2;
-			int y = Game::kScreenHeight / 2 + 50 / 2;
-			DrawFormatStringToHandle(x, y, 0xffffff, m_fontHandle, text.c_str());
+			DrawStartText();
 		}
 	}
 	else	// Aボタンが押されていなかったら普通に点滅
 	{
 		if (m_frameCount % 60 < 30)
 		{
-			std::wstring text = L"Aボタンでスタート";
-			int textWidth = GetDrawFormatStringWidthToHandle(m_fontHandle, text.c_str());
-			int x = Game::kScreenWidth / 2 - textWidth / 2;
-			int y = Game::kScreenHeight / 2 + 50 / 2;
-			DrawFormatStringToHandle(x, y, 0xffffff, m_fontHandle, text.c_str());
+			DrawStartText();
 		}
 	}
 #ifdef _DEBUG
 	DrawString(0, 0, L"SceneTitle\n1キーでシーンを終わる", 0xffffff);
 #endif
+}
+
+void SceneTitle::DrawStartText()
+{
+	std::wstring text = L"Aボタンでスタート";
+	int textWidth = GetDrawFormatStringWidthToHandle(m_fontHandle, text.c_str());
+	int x = Game::kScreenWidth / 2 - textWidth / 2;
+	int y = Game::kScreenHeight / 4 * 3;
+	DrawFormatStringToHandle(x, y, 0xffffff, m_fontHandle, text.c_str());
 }
 
 void SceneTitle::ControlCamera()

@@ -19,6 +19,8 @@ public:
 	virtual void Draw() override;
 
 private:
+	void DrawStartText();
+
 	void ControlCamera();
 
 private:

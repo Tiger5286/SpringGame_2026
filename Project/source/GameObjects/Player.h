@@ -30,11 +30,17 @@ public:
 
 	void OnCollision(const GameObject& other) override;
 
+	// カメラの角度をプレイヤーに渡す関数
     void SetCameraAngleY(float angle) { m_cameraAngleY = angle; }
 
+	// プレイヤーの操作ができるかどうかを設定する関数
 	void SetCanControll(bool isCanControll) { m_isCanControll = isCanControll; }
 
+	// プレイヤーの無敵状態を設定する関数
     void SetInvincible(bool isInvincible);
+
+	// プレイヤーの位置をタイトルシーンでの初期位置に設定する関数
+    void SetFirstTitlePos();
 
 private:
     void Move();

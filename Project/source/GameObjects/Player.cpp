@@ -151,6 +151,12 @@ void Player::SetInvincible(bool isInvincible)
 	}
 }
 
+void Player::SetFirstTitlePos()
+{
+	m_pos = Vector3(0.0f, 0.0f, -800.0f);
+	MV1SetMatrix(m_modelHandle, Matrix4x4::GetTranslateMatrix(m_pos).ToDxLib());
+}
+
 void Player::Move()
 {
 	// 左スティックの入力を取得
