@@ -51,6 +51,26 @@ void Magnet::Update()
 
 void Magnet::Draw()
 {
+	DrawBox(Game::kScreenWidth - 50 - 150,
+		Game::kScreenHeight - 50 - 150,
+		Game::kScreenWidth - 50,
+		Game::kScreenHeight - 50,
+		0x0000ff, true);
+
+	float cooldownRate = static_cast<float>(m_cooldown) / static_cast<float>(kCooldownTime);
+	int temp = 150 * cooldownRate;
+
+#ifdef _DEBUG
+	DrawFormatString(Game::kScreenWidth - 200, Game::kScreenHeight - 50 - 200, 0xffffff, L"cooldownRate:%.2f", cooldownRate);
+	DrawFormatString(Game::kScreenWidth - 200, Game::kScreenHeight - 50 - 200 - 16, 0xffffff, L"temp:%d", temp);
+#endif
+
+	DrawBox(Game::kScreenWidth - 50 - 150,
+		Game::kScreenHeight - 50 - temp,
+		Game::kScreenWidth - 50,
+		Game::kScreenHeight - 50,
+		0x000088, true);
+
 #ifdef _DEBUG
 	// クールダウンタイムを秒数で表示
 	DrawFormatString(Game::kScreenWidth - 80, Game::kScreenHeight - 50, 0xffffff, L"M:%.1f", m_cooldown / static_cast<float>(Game::kFPS));
