@@ -28,6 +28,7 @@ private:
 	int m_pressButtonFrameCount = 0;
 	// スコアが表示完了したかどうか
 	bool m_isDispScoreComplete = false;
+	int m_dispScoreCompleteAfterFrame = 0;
 
 	// フォントのハンドル
 	int m_scoreFontHandle = -1;

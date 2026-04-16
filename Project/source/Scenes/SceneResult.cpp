@@ -157,6 +157,13 @@ void SceneResult::End()
 void SceneResult::Update()
 {
 	m_frameCount++;
+
+	// スコアが完全に表示された後のフレームをカウント
+	if (m_isDispScoreComplete)
+	{
+		m_dispScoreCompleteAfterFrame++;
+	}
+
 	// Aボタンが押されたあとのフレーム数をカウント
 	if (m_pressButtonFrameCount)
 	{
@@ -185,6 +192,23 @@ void SceneResult::Update()
 		if (m_rankGraphScale > 1.0f) m_rankGraphScale = 1.0f;	// スケールの上限を設定
 		// ランク背景画像を回す
 		m_rankBackAngle += 0.03f;
+
+		// スコアが完全に出た瞬間だけ
+		if (m_dispScoreCompleteAfterFrame == 1)
+		{	// ランクに応じた歓声を鳴らす
+			if (m_score > kRankScores[static_cast<int>(Rank::S)])
+			{
+				SoundManager::GetInstance().PlaySoundGame(L"CheersBig");
+			}
+			else if (m_score > kRankScores[static_cast<int>(Rank::B)])
+			{
+				SoundManager::GetInstance().PlaySoundGame(L"CheersNormal");
+			}
+			else
+			{
+				SoundManager::GetInstance().PlaySoundGame(L"CheersSmall");
+			}
+		}
 	}
 
 	m_pSkyBox->Update();

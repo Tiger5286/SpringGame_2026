@@ -46,6 +46,10 @@ void SoundManager::Init()
 	LoadSound(L"Damage", L"data/Sounds/damage.mp3", SoundType::SE);	// ダメージ
 	LoadSound(L"MagnetRecharge", L"data/Sounds/magnet_recharge.mp3", SoundType::SE);
 	LoadSound(L"MagnetActive", L"data/Sounds/magnet_active.mp3", SoundType::SE);
+	// その他
+	LoadSound(L"CheersBig", L"data/Sounds/cheers_big.mp3", SoundType::SE);
+	LoadSound(L"CheersNormal", L"data/Sounds/cheers_normal.mp3", SoundType::SE);
+	LoadSound(L"CheersSmall", L"data/Sounds/cheers_small.mp3", SoundType::SE);
 }
 
 void SoundManager::End()
