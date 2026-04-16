@@ -40,7 +40,9 @@ namespace
 	{
 		{L"data/Effects/Benediction.efk", L"Benediction", 20.0f  },
 		{L"data/Effects/Hit.efkefc",L"Hit",100.0f},
-		{L"data/Effects/fire.efkefc",L"Explosion",100.0f}
+		{L"data/Effects/fire.efkefc",L"Explosion",100.0f},
+		{L"data/Effects/MagnetActive.efkefc",L"MagnetActive",100.0f},
+		{L"data/Effects/MagnetRecharge.efkefc",L"MagnetRecharge",300.0f}
 	};
 
 	// フォントのサイズ
@@ -145,7 +147,7 @@ void SceneMain::Init()
 	m_pPlayer->SetCanControll(false);
 
 	// マグネットの生成と初期化
-	m_pMagnet = std::make_shared<Magnet>(m_input,*m_pPlayer,*m_pCoinManager);
+	m_pMagnet = std::make_shared<Magnet>(m_input,*m_pPlayer,*m_pCoinManager,*m_pEffectManager);
 	m_pMagnet->Init();
 
 	// カメラの更新

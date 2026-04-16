@@ -5,6 +5,7 @@
 #include "../GameObjects/Player.h"
 #include "../Game.h"
 #include "../Managers/SoundManager.h"
+#include "../Managers/EffectManager.h"
 #include <cassert>
 
 namespace
@@ -38,10 +39,11 @@ enum class GraphType
 	Num
 };
 
-Magnet::Magnet(Input& input, Player& player, CoinManager& coinManager):
+Magnet::Magnet(Input& input, Player& player, CoinManager& coinManager, EffectManager& effectManager):
 	m_input(input),
 	m_player(player),
-	m_coinManager(coinManager)
+	m_coinManager(coinManager),
+	m_effectManager(effectManager)
 {
 	// 使用する画像数とロードする画像数が合ってなかったらエラー
 	assert(static_cast<int>(GraphType::Num) == kGraphFileNames.size());
@@ -76,14 +78,16 @@ void Magnet::Update()
 	m_frameCount++;
 
 	auto& soundManager = SoundManager::GetInstance();
+	Vector3 effectPos = m_player.GetPos() + Vector3(0, 150, 0);
 
 	// クールダウンタイムを減らす
 	if (m_cooldown > 0) m_cooldown--;
 
-	// クールタイムが終わるタイミングで音を鳴らす
+	// クールタイムが終わるタイミングで音を鳴らし、エフェクトを出す
 	if (m_cooldown == 1)
 	{
 		soundManager.PlaySoundGame(L"MagnetRecharge");
+		m_effectManager.PlayEffect(L"MagnetRecharge", effectPos);
 	}
 
 	// UIの背景を回転させる
@@ -103,7 +107,9 @@ void Magnet::Update()
 		{
 			m_coinManager.ActivateAtract();
 			m_cooldown = kCooldownTime; // クールダウンタイムを設定
+			// 音を鳴らし、エフェクトを出す
 			soundManager.PlaySoundGame(L"MagnetActive");
+			m_effectManager.PlayEffect(L"MagnetActive", effectPos);
 		}
 		else	// クールタイム中なら発動できない音を鳴らす
 		{

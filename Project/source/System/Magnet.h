@@ -4,11 +4,12 @@
 class Input;
 class Player;
 class CoinManager;
+class EffectManager;
 
 class Magnet
 {
 public:
-	Magnet(Input& input,Player& player, CoinManager& coinManager);
+	Magnet(Input& input,Player& player, CoinManager& coinManager,EffectManager& effectManager);
 	virtual ~Magnet();
 
 	void Init();
@@ -21,6 +22,7 @@ private:
 	Input& m_input;
 	Player& m_player;
 	CoinManager& m_coinManager;
+	EffectManager& m_effectManager;
 
 	int m_frameCount = 0;
 
