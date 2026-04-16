@@ -32,6 +32,7 @@ void SoundManager::Init()
 	// システム音
 	LoadSound(L"Decision", L"data/Sounds/decision.mp3", SoundType::SE);
 	LoadSound(L"Cancel", L"data/Sounds/cancel.mp3", SoundType::SE);
+	LoadSound(L"No", L"data/Sounds/no.mp3", SoundType::SE);
 	LoadSound(L"Pause", L"data/Sounds/pause.mp3", SoundType::SE);
 	LoadSound(L"CountDown", L"data/Sounds/countdown.wav", SoundType::SE);
 	LoadSound(L"Start", L"data/Sounds/start.wav", SoundType::SE);
@@ -43,6 +44,8 @@ void SoundManager::Init()
 	LoadSound(L"OpenChest", L"data/Sounds/openchest.mp3", SoundType::SE);	// 宝箱を開ける
 	LoadSound(L"OutCoin", L"data/Sounds/outcoin.mp3", SoundType::SE);	// コインを出す
 	LoadSound(L"Damage", L"data/Sounds/damage.mp3", SoundType::SE);	// ダメージ
+	LoadSound(L"MagnetRecharge", L"data/Sounds/magnet_recharge.mp3", SoundType::SE);
+	LoadSound(L"MagnetActive", L"data/Sounds/magnet_active.mp3", SoundType::SE);
 }
 
 void SoundManager::End()

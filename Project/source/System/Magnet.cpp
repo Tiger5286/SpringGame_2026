@@ -4,6 +4,7 @@
 #include "../Managers/CoinManager.h"
 #include "../GameObjects/Player.h"
 #include "../Game.h"
+#include "../Managers/SoundManager.h"
 #include <cassert>
 
 namespace
@@ -74,23 +75,40 @@ void Magnet::Update()
 {
 	m_frameCount++;
 
+	auto& soundManager = SoundManager::GetInstance();
+
 	// クールダウンタイムを減らす
 	if (m_cooldown > 0) m_cooldown--;
+
+	// クールタイムが終わるタイミングで音を鳴らす
+	if (m_cooldown == 1)
+	{
+		soundManager.PlaySoundGame(L"MagnetRecharge");
+	}
 
 	// UIの背景を回転させる
 	m_uiBackAngle += kUIBackRotateSpeed;
 
 	// Yボタンが押された
-	bool isInput = m_input.IsPressed(XINPUT_BUTTON_Y);
+	bool isInput = m_input.IsTriggerd(XINPUT_BUTTON_Y);
 	// クールダウン中でない
 	bool isNotCooldown = m_cooldown <= 0;
 	// プレイヤーが操作可能な状態
 	bool isPlayerCanControll = m_player.IsCanControll();
 	// 条件を満たしているなら引き寄せを発動させる
-	if (isInput && isNotCooldown && isPlayerCanControll)
+	if (isInput && isPlayerCanControll)
 	{
-		m_coinManager.ActivateAtract();
-		m_cooldown = kCooldownTime; // クールダウンタイムを設定
+		// 引き寄せ発動
+		if (isNotCooldown)
+		{
+			m_coinManager.ActivateAtract();
+			m_cooldown = kCooldownTime; // クールダウンタイムを設定
+			soundManager.PlaySoundGame(L"MagnetActive");
+		}
+		else	// クールタイム中なら発動できない音を鳴らす
+		{
+			soundManager.PlaySoundGame(L"No");
+		}
 	}
 }
 
