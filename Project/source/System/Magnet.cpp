@@ -9,6 +9,14 @@ namespace
 {
 	// 引き寄せのクールダウンタイム
 	constexpr int kCooldownTime = Game::kFPS * 10;
+
+	// UIの画面端からの距離(余白)
+	constexpr int kUIMargin = 50;
+
+	// UIの背景のスケール
+	constexpr float kUIBackScale = 0.3f;
+	// UIの背景の回転速度
+	constexpr float kUIBackRotateSpeed = 0.05f;
 }
 
 Magnet::Magnet(Input& input, Player& player, CoinManager& coinManager):
@@ -25,19 +33,24 @@ Magnet::~Magnet()
 void Magnet::Init()
 {
 	// アイコンの画像をロード
-	m_graphHandle = LoadGraph(L"data/Graphs/magnet_ui.png");
+	m_uiGraphHandle = LoadGraph(L"data/Graphs/magnet_ui.png");
+	m_uiBackGraphHandle = LoadGraph(L"data/Graphs/titleBack.png");
 }
 
 void Magnet::End()
 {
 	// アイコンの画像を削除
-	DeleteGraph(m_graphHandle);
+	DeleteGraph(m_uiGraphHandle);
+	DeleteGraph(m_uiBackGraphHandle);
 }
 
 void Magnet::Update()
 {
 	// クールダウンタイムを減らす
 	if (m_cooldown > 0) m_cooldown--;
+
+	// UIの背景を回転させる
+	m_uiBackAngle += kUIBackRotateSpeed;
 
 	// Yボタンが押された
 	bool isInput = m_input.IsPressed(XINPUT_BUTTON_Y);
@@ -55,34 +68,39 @@ void Magnet::Update()
 
 void Magnet::Draw()
 {
-	// アイコンの描画
-	DrawGraph(Game::kScreenWidth - 200, Game::kScreenHeight - 200, m_graphHandle, true);
+	int w, h;
+	GetGraphSize(m_uiGraphHandle, &w, &h);
 
-	// アイコンの代わりにボックスを描画
-	//DrawBox(Game::kScreenWidth - 50 - 150,
-	//	Game::kScreenHeight - 50 - 150,
-	//	Game::kScreenWidth - 50,
-	//	Game::kScreenHeight - 50,
-	//	0x000088, true);
+	// アイコンを暗く描画
+	SetDrawBright(128, 128, 128);
+	DrawGraph(Game::kScreenWidth - w - kUIMargin, Game::kScreenHeight - h - kUIMargin, m_uiGraphHandle, true);
+	SetDrawBright(255, 255, 255);
 
-	// クールダウンタイムを元に、アイコンの上にクールダウンの残りを示すボックスを描画
+	// 現在のクールタイムの割合を計算
 	float cooldownRate = static_cast<float>(m_cooldown) / static_cast<float>(kCooldownTime);
-	int temp = 150 * cooldownRate;
+
+	// クールタイムが終わっていたら
+	if (cooldownRate <= 0.0f)
+	{
+		// UIの背景を描画
+		DrawRotaGraph(Game::kScreenWidth - w / 2 - kUIMargin,
+			Game::kScreenHeight - h / 2 - kUIMargin,
+			kUIBackScale, m_uiBackAngle, m_uiBackGraphHandle, true);
+	}
+
+	// クールタイムに合わせて扇を大きくするように描画
+	DrawCircleGauge(Game::kScreenWidth - w / 2 - kUIMargin,
+		Game::kScreenHeight - h / 2 - kUIMargin,
+		(1.0f - cooldownRate) * 100,
+		m_uiGraphHandle);
+
 
 #ifdef _DEBUG
 	DrawFormatString(Game::kScreenWidth - 200, Game::kScreenHeight - 50 - 200, 0xffffff, L"cooldownRate:%.2f", cooldownRate);
-	DrawFormatString(Game::kScreenWidth - 200, Game::kScreenHeight - 50 - 200 - 16, 0xffffff, L"temp:%d", temp);
 #endif
-
-	// クールダウンの残りを示すボックスの描画
-	DrawBox(Game::kScreenWidth - 50 - 150,
-		Game::kScreenHeight - 50 - temp,
-		Game::kScreenWidth - 50,
-		Game::kScreenHeight - 50,
-		0x000088, true);
 
 #ifdef _DEBUG
 	// クールダウンタイムを秒数で表示
-	DrawFormatString(Game::kScreenWidth - 80, Game::kScreenHeight - 50, 0xffffff, L"M:%.1f", m_cooldown / static_cast<float>(Game::kFPS));
+	DrawFormatString(Game::kScreenWidth - 80, Game::kScreenHeight - 50, 0xffffff, L"sec:%.1f", m_cooldown / static_cast<float>(Game::kFPS));
 #endif
 }
