@@ -33,6 +33,8 @@ private:
 	int m_scoreFontHandle = -1;
 	int m_fontHandle = -1;
 
+	int m_scoreTextY = 0;
+
 	// 結果画面で表示するコイン
 	std::vector<std::shared_ptr<ResultCoin>> m_pResultCoins;
 	// 背景

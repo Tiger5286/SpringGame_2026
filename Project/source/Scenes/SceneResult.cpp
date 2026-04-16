@@ -3,6 +3,7 @@
 #include <cassert>
 #include <string>
 #include <format>
+#include <cmath>
 #include "../System/Input.h"
 #include "../Game.h"
 #include "../System/SkyBox.h"
@@ -29,9 +30,11 @@ namespace
 	constexpr int kCoinNumCoefficient = 500;
 	// スコアを徐々に上げるための係数
 	constexpr float kScoreLerpCoefficient = 0.05f;
+	// 最終的なスコアUIの位置
+	constexpr int kEndScoreTextY = 100;
 
 	// サブテキストのY位置
-	constexpr int kSubTextY = Game::kScreenHeight / 4 * 3;
+	constexpr int kSubTextY = Game::kScreenHeight / 5 * 4;
 	// テキストの点滅の周期
 	constexpr int kTextFrickerInterval = 30;
 	// Aボタンが押されたあとのテキストの点滅の周期
@@ -88,6 +91,8 @@ void SceneResult::Init()
 
 	// BGMの再生
 	SoundManager::GetInstance().PlaySoundGame(L"ResultBGM", true, true);
+
+	m_scoreTextY = Game::kScreenHeight / 2 - kScoreFontSize / 2;
 }
 
 void SceneResult::End()
@@ -112,10 +117,16 @@ void SceneResult::Update()
 		return;
 	}
 
-	// コインを更新
-	for (auto& pCoin : m_pResultCoins)
+	// スコアの表示がすべて終わっているならコインを降らせる
+	if (m_isDispScoreComplete)
 	{
-		pCoin->Update();
+		for (auto& pCoin : m_pResultCoins)
+		{
+			pCoin->Update();
+		}
+
+		// スコアの位置を上に移動
+		m_scoreTextY = std::lerp(m_scoreTextY, kEndScoreTextY, 0.1f);
 	}
 
 	m_pSkyBox->Update();
@@ -203,7 +214,7 @@ void SceneResult::DrawScoreText()
 	int resultTextWidth = GetDrawStringWidthToHandle(resultText.c_str(), resultText.size(), m_scoreFontHandle);	// スコアのテキストの幅(表示用ではない方のスコアの幅)
 	// スコアのテキストを描画
 	int x = Game::kScreenWidth / 2 - resultTextWidth / 2;
-	int y = Game::kScreenHeight / 2 - kScoreFontSize / 2;
+	int y = m_scoreTextY;
 	DrawStringToHandle(x, y, dispResultText.c_str(), 0xffffff, m_scoreFontHandle);	// 表示用のスコアのテキストを描画
 }
 
