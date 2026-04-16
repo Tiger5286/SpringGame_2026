@@ -82,8 +82,6 @@ namespace
 	// ゲーム終了後、シーンを切り替えるまでの時間(フレーム)
 	constexpr int kFinishInterval = Game::kFPS * 2;
 
-
-
 	// カメラの初期位置
 	const Vector3 kCameraFirstPos = Vector3(0, 400, -1000);
 
@@ -264,7 +262,11 @@ void SceneMain::Update()
 	m_pCoinManager->Update();
 
 	// スコアの更新
-	m_score = m_pCoinManager->GetCoinNum() * kScorePerCoin;
+	int coinNum = m_pCoinManager->GetCoinNum();
+	if (m_score < coinNum * kScorePerCoin)
+	{
+		m_score = coinNum * kScorePerCoin;
+	}
 
 	// 当たり判定の更新
 	m_pCollisionManager->Update();
@@ -315,6 +317,11 @@ void SceneMain::Update()
 	if (CheckHitKey(KEY_INPUT_2))
 	{
 		m_gameCount = kGameTimeLimit * (60 - 1);
+	}
+	// 3キーで適当なスコアにする
+	if (CheckHitKey(KEY_INPUT_3))
+	{
+		m_score = 12300;
 	}
 #endif
 }
