@@ -403,7 +403,11 @@ void SceneMain::DrawUI()
 	m_pMagnet->Draw();
 
 	// 操作説明の画像の描画
-	DrawGraph(kHowToPlayGraphX, kHowToPlayGraphY, m_howToPlayGraphHandle, true);
+	int w, h;
+	GetGraphSize(m_howToPlayGraphHandle, &w ,&h);
+	int x = 20;
+	int y = Game::kScreenHeight - 20 - h;
+	DrawGraph(x, y, m_howToPlayGraphHandle,true);
 
 	// ゲーム開始前のカウントダウンの描画
 	DrawStart();
@@ -421,7 +425,7 @@ void SceneMain::DrawUI()
 	if (sec < 0) sec = 0.0f;
 	std::wstring text = std::format(L"残り時間:{:.1f}", sec);
 	auto strWidth = GetDrawFormatStringWidthToHandle(m_uiFontHandle, L"残り時間:60.0");
-	int x = Game::kScreenWidth / 2 - strWidth / 2;
+	x = Game::kScreenWidth / 2 - strWidth / 2;
 	DrawFormatStringToHandle(x, kTimeY, color, m_uiFontHandle, text.c_str());
 
 	// スコアの描画
