@@ -14,6 +14,19 @@
 #include "SceneManager.h"
 #include "SceneTitle.h"
 
+enum class Rank
+{
+	SSS,
+	SS,
+	S,
+	A,
+	B,
+	C,
+	D,
+
+	Num
+};
+
 namespace
 {
 	// フォントのサイズ
@@ -42,6 +55,28 @@ namespace
 
 	// ボタンが押されてからシーンが切り替わるまでのフレーム数
 	constexpr int kPressButtonFrameCountToChangeScene = 40;
+
+	// ランク画像のファイルパス
+	const std::vector<std::wstring> kRankFileNames = {
+		L"data/Graphs/rank_sss.png",
+		L"data/Graphs/rank_ss.png",
+		L"data/Graphs/rank_s.png",
+		L"data/Graphs/rank_a.png",
+		L"data/Graphs/rank_b.png",
+		L"data/Graphs/rank_c.png",
+		L"data/Graphs/rank_d.png"
+	};
+
+	// ランクの基準点
+	const std::vector<int> kRankScores = {
+		30000,
+		28000,
+		25000,
+		20000,
+		10000,
+		5000,
+		0
+	};
 }
 
 SceneResult::SceneResult(Input& input, SceneManager& sceneManager, int score):
@@ -62,6 +97,17 @@ void SceneResult::Init()
 	assert(m_fontHandle != -1 && "フォントのハンドルの作成に失敗しました");
 	m_scoreFontHandle = CreateFontToHandle(Game::kFontName, kScoreFontSize, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
 	assert(m_scoreFontHandle != -1 && "フォントのハンドルの作成に失敗しました");
+
+	// スコアに応じたランク画像をロード
+	for (int i = 0; i < static_cast<int>(Rank::Num); i++)
+	{
+		if (m_score >= kRankScores[i])
+		{
+			m_rankGraphHandle = LoadGraph(kRankFileNames[i].c_str());
+			assert(m_rankGraphHandle != -1 && "画像が正しくロードされませんでした");
+			break;
+		}
+	}
 
 	// カメラの設定
 	SetCameraPositionAndTarget_UpVecY(kCameraPos.ToDxLib(), VGet(0, 0, 0));
@@ -98,6 +144,8 @@ void SceneResult::Init()
 void SceneResult::End()
 {
 	DeleteFontToHandle(m_fontHandle);
+
+	DeleteGraph(m_rankGraphHandle);
 
 	m_pSkyBox->End();
 }
@@ -178,6 +226,11 @@ void SceneResult::Draw()
 	for (auto& pCoin : m_pResultCoins)
 	{
 		pCoin->Draw();
+	}
+
+	if (m_isDispScoreComplete)
+	{
+		DrawRotaGraph(Game::kScreenWidth / 2, Game::kScreenHeight / 2, 1.0, 0.0, m_rankGraphHandle, true);
 	}
 
 	// スコアを描画
