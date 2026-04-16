@@ -42,7 +42,7 @@ namespace
 		{L"data/Effects/Hit.efkefc",L"Hit",100.0f},
 		{L"data/Effects/fire.efkefc",L"Explosion",100.0f},
 		{L"data/Effects/MagnetActive.efkefc",L"MagnetActive",100.0f},
-		{L"data/Effects/MagnetRecharge.efkefc",L"MagnetRecharge",300.0f}
+		{L"data/Effects/MagnetRecharge.efkefc",L"MagnetRecharge",200.0f}
 	};
 
 	// フォントのサイズ
@@ -441,7 +441,7 @@ void SceneMain::DrawUI()
 	if (m_dispScore < m_score) m_dispScore += kScoreIncreaseSpeed;
 	if (m_dispScore > m_score) m_dispScore = m_score;	// 表示用スコアが実際のスコアを超えないようにする
 	// テキストを描画
-	text = std::format(L"スコア:{:d}", m_dispScore);
+	text = std::format(L"スコア:{:05d}", m_dispScore);
 	DrawFormatStringToHandle(x, kUIFontSize + kTimeY, 0xffffff, m_uiFontHandle, text.c_str());
 }
 

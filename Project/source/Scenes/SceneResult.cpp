@@ -197,8 +197,8 @@ void SceneResult::Draw()
 void SceneResult::DrawScoreText()
 {
 	// テキストを準備
-	std::wstring resultText = std::format(L"スコア:{:d}", m_score);
-	std::wstring dispResultText = std::format(L"スコア:{:d}", static_cast<int>(m_dispScore));
+	std::wstring resultText = std::format(L"スコア:{:05d}", m_score);
+	std::wstring dispResultText = std::format(L"スコア:{:05d}", static_cast<int>(m_dispScore));
 	// テキストの幅を取得
 	int resultTextWidth = GetDrawStringWidthToHandle(resultText.c_str(), resultText.size(), m_scoreFontHandle);	// スコアのテキストの幅(表示用ではない方のスコアの幅)
 	// スコアのテキストを描画
