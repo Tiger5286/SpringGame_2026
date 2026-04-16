@@ -22,7 +22,7 @@ void CoinManager::Init()
 {
 	for (auto& coin : m_coins)
 	{
-		coin = std::make_shared<Coin>();
+		coin = std::make_shared<Coin>(*this);
 		coin->SetHandle(ModelManager::GetInstance().DuplicateModel(L"Coin"));
 		coin->Init();
 	}
@@ -38,6 +38,9 @@ void CoinManager::End()
 
 void CoinManager::Update()
 {
+	// フレームをカウント
+	m_afterPlaySoundFrame++;
+
 	for (auto& coin : m_coins)
 	{
 		// 死んでいるコインは更新しない

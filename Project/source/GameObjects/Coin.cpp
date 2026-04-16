@@ -2,6 +2,7 @@
 #include "../Geometry.h"
 #include <cmath>
 #include "../Managers/SoundManager.h"
+#include "../Managers/CoinManager.h"
 
 namespace
 {
@@ -22,8 +23,9 @@ namespace
 	constexpr float kAtractSpeed = 20.0f;
 }
 
-Coin::Coin():
-	GameObject(kRadius)
+Coin::Coin(CoinManager& coinManager):
+	GameObject(kRadius),
+	m_coinManager(coinManager)
 {
 }
 
@@ -133,7 +135,12 @@ void Coin::OnCollision(const GameObject& other)
 		// すでにプレイヤーと当たっているなら何もしない
 		if (m_isHitPlayer) return;
 
-		SoundManager::GetInstance().PlaySoundGame(L"Coin");
+		if (m_coinManager.GetAfterPlaySoundFrame() > 2)
+		{
+			SoundManager::GetInstance().PlaySoundGame(L"Coin");
+			m_coinManager.ResetAfterPlaySoundFrame();
+		}
+
 		m_isHitPlayer = true;
 		m_isAtract = false;
 		m_vel = kHitPlayerVec;

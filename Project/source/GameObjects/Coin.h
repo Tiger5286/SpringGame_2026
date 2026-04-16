@@ -1,10 +1,13 @@
 ﻿#pragma once
 #include "GameObject.h"
+
+class CoinManager;
+
 class Coin :
     public GameObject
 {
 public:
-    Coin();
+    Coin(CoinManager& coinManager);
     virtual ~Coin() override;
 
     void Init() override;
@@ -31,6 +34,8 @@ public:
     int GetAliveFrame() const { return m_aliveFrame; }
 
 private:
+    CoinManager& m_coinManager;
+
 	Vector3 m_playerPos; // プレイヤーの位置
 
     float m_angle = 0.0f;
