@@ -44,7 +44,7 @@ namespace
 	};
 
 	// フォントのサイズ
-	constexpr int kTitleFontSize = 100;
+	constexpr int kTitleFontSize = 150;
 	constexpr int kUIFontSize = 50;
 
 	// シャドウマップのサイズ
@@ -471,7 +471,7 @@ void SceneMain::DrawStart()
 
 	// 拡大率を計算 60フレームかけて徐々に大きくなるのを繰り返す
 	float scale = (m_startCount % Game::kFPS) / static_cast<float>(Game::kFPS);	// 1.0 ~ 0.0
-	scale *= 1.3f;	// 1.3をかけて0~1.3の値にする
+	scale *= 0.5f;	// 1.3をかけて0~1.3の値にする
 	scale += 1.0f;	// 1.0を足して1.0~1.3の値にする
 
 #ifdef _DEBUG
@@ -503,7 +503,7 @@ void SceneMain::DrawFinish()
 	if (alpha > 255) alpha = 255;	// 255を超えないようにする
 	// 拡大率を計算
 	float scale = m_finishCount / static_cast<float>(Game::kFPS) * 2;	// 0.0~1.0
-	scale *= 0.3f;	// 0.0~0.3
+	scale *= 0.15f;	// 0.0~0.3
 	scale += 1.0f;	// 1.0~1.3
 
 	// テキストを描画
