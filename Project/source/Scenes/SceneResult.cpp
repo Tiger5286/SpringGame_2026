@@ -108,6 +108,8 @@ void SceneResult::Init()
 			break;
 		}
 	}
+	// ランク背景画像をロード
+	m_rankBackGraphHandle = LoadGraph(L"data/Graphs/titleBack.png");
 
 	// カメラの設定
 	SetCameraPositionAndTarget_UpVecY(kCameraPos.ToDxLib(), VGet(0, 0, 0));
@@ -144,8 +146,10 @@ void SceneResult::Init()
 void SceneResult::End()
 {
 	DeleteFontToHandle(m_fontHandle);
+	DeleteFontToHandle(m_scoreFontHandle);
 
 	DeleteGraph(m_rankGraphHandle);
+	DeleteGraph(m_rankBackGraphHandle);
 
 	m_pSkyBox->End();
 }
@@ -175,6 +179,12 @@ void SceneResult::Update()
 
 		// スコアの位置を上に移動
 		m_scoreTextY = std::lerp(m_scoreTextY, kEndScoreTextY, 0.1f);
+
+		// ランク画像を少しずつ大きくする
+		m_rankGraphScale += 0.03f;
+		if (m_rankGraphScale > 1.0f) m_rankGraphScale = 1.0f;	// スケールの上限を設定
+		// ランク背景画像を回す
+		m_rankBackAngle += 0.03f;
 	}
 
 	m_pSkyBox->Update();
@@ -228,10 +238,13 @@ void SceneResult::Draw()
 		pCoin->Draw();
 	}
 
-	if (m_isDispScoreComplete)
+	// ランクS以上なら背景画像を描画
+	if (m_score > kRankScores[static_cast<int>(Rank::S)])
 	{
-		DrawRotaGraph(Game::kScreenWidth / 2, Game::kScreenHeight / 2, 1.0, 0.0, m_rankGraphHandle, true);
+		DrawRotaGraph(Game::kScreenWidth / 2, Game::kScreenHeight / 2, m_rankGraphScale * 0.7f, m_rankBackAngle, m_rankBackGraphHandle, true);
 	}
+	// ランク画像を描画
+	DrawRotaGraph(Game::kScreenWidth / 2, Game::kScreenHeight / 2, m_rankGraphScale, 0.0, m_rankGraphHandle, true);
 
 	// スコアを描画
 	DrawScoreText();

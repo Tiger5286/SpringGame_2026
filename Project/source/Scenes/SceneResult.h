@@ -37,6 +37,13 @@ private:
 
 	// ランク画像のハンドル
 	int m_rankGraphHandle = -1;
+	// ランク画像の描画倍率
+	float m_rankGraphScale = 0.0f;
+
+	// ランク背景画像のハンドル
+	int m_rankBackGraphHandle = -1;
+	// ランク背景画像の角度
+	float m_rankBackAngle = 0.0f;
 
 	// 結果画面で表示するコイン
 	std::vector<std::shared_ptr<ResultCoin>> m_pResultCoins;
