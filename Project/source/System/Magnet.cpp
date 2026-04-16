@@ -4,6 +4,7 @@
 #include "../Managers/CoinManager.h"
 #include "../GameObjects/Player.h"
 #include "../Game.h"
+#include <cassert>
 
 namespace
 {
@@ -17,13 +18,32 @@ namespace
 	constexpr float kUIBackScale = 0.3f;
 	// UIの背景の回転速度
 	constexpr float kUIBackRotateSpeed = 0.05f;
+
+	const std::vector<std::wstring> kGraphFileNames = {
+		L"data/Graphs/magnet_ui.png",
+		L"data/Graphs/titleBack.png",
+		L"data/Graphs/button_y.png",
+		L"data/Graphs/button_y_outline.png"
+	};
 }
+
+enum class GraphType
+{
+	UI,
+	UIBack,
+	YButton,
+	YButtonOutline,
+
+	Num
+};
 
 Magnet::Magnet(Input& input, Player& player, CoinManager& coinManager):
 	m_input(input),
 	m_player(player),
 	m_coinManager(coinManager)
 {
+	// 使用する画像数とロードする画像数が合ってなかったらエラー
+	assert(static_cast<int>(GraphType::Num) == kGraphFileNames.size());
 }
 
 Magnet::~Magnet()
@@ -32,20 +52,28 @@ Magnet::~Magnet()
 
 void Magnet::Init()
 {
-	// アイコンの画像をロード
-	m_uiGraphHandle = LoadGraph(L"data/Graphs/magnet_ui.png");
-	m_uiBackGraphHandle = LoadGraph(L"data/Graphs/titleBack.png");
+	// 画像をロード
+	for (auto& fileName : kGraphFileNames)
+	{
+		auto handle = LoadGraph(fileName.c_str());
+		assert(handle != -1 && "画像が正しくロードされませんでした");
+		m_graphHandles.push_back(handle);
+	}
 }
 
 void Magnet::End()
 {
-	// アイコンの画像を削除
-	DeleteGraph(m_uiGraphHandle);
-	DeleteGraph(m_uiBackGraphHandle);
+	// 画像を削除
+	for (auto& handle : m_graphHandles)
+	{
+		DeleteGraph(handle);
+	}
 }
 
 void Magnet::Update()
 {
+	m_frameCount++;
+
 	// クールダウンタイムを減らす
 	if (m_cooldown > 0) m_cooldown--;
 
@@ -69,11 +97,11 @@ void Magnet::Update()
 void Magnet::Draw()
 {
 	int w, h;
-	GetGraphSize(m_uiGraphHandle, &w, &h);
+	GetGraphSize(m_graphHandles[static_cast<int>(GraphType::UI)], &w, &h);
 
 	// アイコンを暗く描画
 	SetDrawBright(128, 128, 128);
-	DrawGraph(Game::kScreenWidth - w - kUIMargin, Game::kScreenHeight - h - kUIMargin, m_uiGraphHandle, true);
+	DrawGraph(Game::kScreenWidth - w - kUIMargin, Game::kScreenHeight - h - kUIMargin, m_graphHandles[static_cast<int>(GraphType::UI)], true);
 	SetDrawBright(255, 255, 255);
 
 	// 現在のクールタイムの割合を計算
@@ -85,14 +113,34 @@ void Magnet::Draw()
 		// UIの背景を描画
 		DrawRotaGraph(Game::kScreenWidth - w / 2 - kUIMargin,
 			Game::kScreenHeight - h / 2 - kUIMargin,
-			kUIBackScale, m_uiBackAngle, m_uiBackGraphHandle, true);
+			kUIBackScale, m_uiBackAngle, m_graphHandles[static_cast<int>(GraphType::UIBack)], true);
 	}
 
 	// クールタイムに合わせて扇を大きくするように描画
 	DrawCircleGauge(Game::kScreenWidth - w / 2 - kUIMargin,
 		Game::kScreenHeight - h / 2 - kUIMargin,
 		(1.0f - cooldownRate) * 100,
-		m_uiGraphHandle);
+		m_graphHandles[static_cast<int>(GraphType::UI)]);
+
+	// クールタイムが終わっていたら
+	if (cooldownRate <= 0.0f)
+	{
+		// ボタンUIのサイズを取得
+		int buttonW, buttonH;
+		GetGraphSize(m_graphHandles[static_cast<int>(GraphType::YButton)], &buttonW, &buttonH);
+
+		// YボタンのUIを描画
+		int x = Game::kScreenWidth - kUIMargin - w - buttonW / 2 + 20;
+		int y = Game::kScreenHeight - kUIMargin - buttonH / 2 - 20;
+		if (m_frameCount % 20 < 10)
+		{
+			DrawGraph(x, y, m_graphHandles[static_cast<int>(GraphType::YButton)], true);
+		}
+		else
+		{
+			DrawGraph(x, y, m_graphHandles[static_cast<int>(GraphType::YButtonOutline)], true);
+		}
+	}
 
 
 #ifdef _DEBUG

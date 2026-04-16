@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include <vector>
 
 class Input;
 class Player;
@@ -21,8 +22,10 @@ private:
 	Player& m_player;
 	CoinManager& m_coinManager;
 
-	int m_uiGraphHandle = -1;	// 引き寄せのアイコンのグラフィックハンドル
-	int m_uiBackGraphHandle = -1;	// アイコンの背景のグラフィックハンドル
+	int m_frameCount = 0;
+
+	std::vector<int> m_graphHandles;	// グラフィックハンドル
+
 	float m_uiBackAngle = 0.0f;	// アイコンの背景の角度
 
 	int m_cooldown = 0; // 引き寄せのクールダウンタイム
