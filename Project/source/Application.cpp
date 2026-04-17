@@ -9,6 +9,7 @@
 #include "Scenes/SceneManager.h"
 #include "Managers/ModelManager.h"
 #include "Managers/SoundManager.h"
+#include "Managers/HighScoreManager.h"
 
 namespace
 {
@@ -87,6 +88,9 @@ void Application::Run()
 	// サウンドマネージャーの生成と初期化
 	auto& soundManager = SoundManager::GetInstance();
 	soundManager.Init();
+	// ハイスコアマネージャーの生成と初期化
+	auto& highScoreManager = HighScoreManager::GetInstance();
+	highScoreManager.Load();
 
 	// シーンマネージャーの生成と初期化
 	auto pSceneManager = std::make_shared<SceneManager>();

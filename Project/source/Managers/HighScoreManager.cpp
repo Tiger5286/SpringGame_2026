@@ -1,6 +1,7 @@
 #include "HighScoreManager.h"
 #include <fstream>
 #include "Dxlib.h"
+#include <algorithm>
 
 namespace
 {
@@ -44,7 +45,17 @@ void HighScoreManager::Save()
 	fclose(fp);
 }
 
-void HighScoreManager::RecordScore()
+void HighScoreManager::RecordScore(int score)
 {
-	m_highScores[0] = 10000;
+	// 新しいスコアを挿入すべき位置を探す
+	auto it = std::lower_bound(m_highScores.begin(), m_highScores.end(), score, std::greater<int>());
+
+	// もし挿入位置がランキングの範囲内なら更新
+	if (it != m_highScores.end())
+	{
+		// 挿入位置から後ろの要素を一つずつ後ろにずらす(最後の要素は消える)
+		std::copy_backward(it, std::prev(m_highScores.end()), m_highScores.end());
+		// 新しいスコアを適切な位置に格納
+		*it = score;
+	}
 }

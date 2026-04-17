@@ -9,6 +9,7 @@
 #include "../System/SkyBox.h"
 #include "../Managers/SoundManager.h"
 #include "../Managers/ModelManager.h"
+#include "../Managers/HighScoreManager.h"
 #include "../System/ResultCoin.h"
 
 #include "SceneManager.h"
@@ -140,7 +141,13 @@ void SceneResult::Init()
 	// BGMの再生
 	SoundManager::GetInstance().PlaySoundGame(L"ResultBGM", true, true);
 
+	// UIの位置を初期化
 	m_scoreTextY = Game::kScreenHeight / 2 - kScoreFontSize / 2;
+
+	// スコアを記録
+	auto& highScoreManager = HighScoreManager::GetInstance();
+	highScoreManager.RecordScore(m_score);
+	highScoreManager.Save();
 }
 
 void SceneResult::End()
@@ -292,6 +299,13 @@ void SceneResult::Draw()
 #ifdef _DEBUG
 	DrawString(0, 0, L"SceneResult\n1キーでシーンを終わる", 0xffffff);
 	DrawFormatString(100, 100, 0xffffff, L"%f", m_dispScore);
+
+	auto& highScoreManager = HighScoreManager::GetInstance();
+	for (int i = 0; i < 3; i++)
+	{
+		int score = highScoreManager.GetHighScores()[i];
+		DrawFormatString(0, 200 + i * 16, 0xffffff, L"%d", score);
+	}
 #endif
 }
 

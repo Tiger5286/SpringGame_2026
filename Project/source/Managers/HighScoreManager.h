@@ -11,13 +11,13 @@ public:
 	HighScoreManager& operator=(const HighScoreManager&) = delete;
 private:
 	HighScoreManager();
-	static constexpr int kSaveScoreNum = 10;
+	static constexpr int kSaveScoreNum = 3;
 
 public:
 	void Load();
 	void Save();
 
-	void RecordScore();
+	void RecordScore(int score);
 
 	const std::array<int, kSaveScoreNum>& GetHighScores() { return m_highScores; }
 private:
