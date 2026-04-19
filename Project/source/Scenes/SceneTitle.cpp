@@ -8,6 +8,8 @@
 #include "../Managers/ModelManager.h"
 #include "../GameObjects/Player.h"
 #include "../Managers/SoundManager.h"
+#include "../Managers/HighScoreManager.h"
+#include <format>
 #include "SceneManager.h"
 #include "SceneMain.h"
 
@@ -181,6 +183,7 @@ void SceneTitle::Draw()
 	DrawRotaGraph(Game::kScreenWidth / 2, kTitleY, kTitleScale, 0.0, m_titleGraphHandle, true);
 
 	// テキストUIの描画
+	DrawRanking();
 	// Aボタンが押されたあとだったら早く点滅
 	if (m_pressStartFrameCount)
 	{
@@ -199,6 +202,17 @@ void SceneTitle::Draw()
 #ifdef _DEBUG
 	DrawString(0, 0, L"SceneTitle\n1キーでシーンを終わる", 0xffffff);
 #endif
+}
+
+void SceneTitle::DrawRanking()
+{
+	for (int i = 0; i < 3; i++)
+	{
+		int score = HighScoreManager::GetInstance().GetHighScores()[i];
+		std::wstring text = std::format(L"{:d}:{:05d}", i + 1, score);
+		int y = Game::kScreenHeight / 3 * 2 + i * (kFontSize + 5);
+		DrawStringToHandle(20 + i * 10, y, text.c_str(), 0xffffff, m_fontHandle);
+	}
 }
 
 void SceneTitle::DrawStartText()
