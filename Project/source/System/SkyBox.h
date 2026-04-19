@@ -34,7 +34,7 @@ private:
 
 private:
 	int m_graphHandles[static_cast<int>(SkyBoxFace::Num)] = { -1 };
-
+	float m_angle = 0.0f;
 	Vector3 m_pos;
 };
 

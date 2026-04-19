@@ -5,7 +5,7 @@
 #include <cassert>
 
 #include "../Utility/Vector3.h"
-#include "../System/Camera.h"
+#include "../Utility/Matrix4x4.h"
 
 namespace
 {
@@ -46,6 +46,7 @@ void SkyBox::End()
 
 void SkyBox::Update()
 {
+	m_angle += 0.001f;
 }
 
 void SkyBox::Draw()
@@ -55,41 +56,43 @@ void SkyBox::Draw()
 	SetWriteZBuffer3D(false);
 	SetUseLighting(false);
 
+	auto mtx = Matrix4x4::GetRotYMatrix(m_angle);
+
 	// front
-	DrawSquare(m_pos + Vector3(-size, size, size),	// lt
-		m_pos + Vector3(size, size, size),	// rt
-		m_pos + Vector3(size, -size, size),	// rb
-		m_pos + Vector3(-size, -size, size),	// lb
+	DrawSquare(m_pos + mtx * Vector3(-size, size, size),	// lt
+		m_pos + mtx * Vector3(size, size, size),	// rt
+		m_pos + mtx * Vector3(size, -size, size),	// rb
+		m_pos + mtx * Vector3(-size, -size, size),	// lb
 		m_graphHandles[static_cast<int>(SkyBoxFace::Front)]);
 	// back
-	DrawSquare(m_pos + Vector3(size, size, -size),	// lt
-		m_pos + Vector3(-size, size, -size),	// rt
-		m_pos + Vector3(-size, -size, -size),	// rb
-		m_pos + Vector3(size, -size, -size),	// lb
+	DrawSquare(m_pos + mtx * Vector3(size, size, -size),	// lt
+		m_pos + mtx * Vector3(-size, size, -size),	// rt
+		m_pos + mtx * Vector3(-size, -size, -size),	// rb
+		m_pos + mtx * Vector3(size, -size, -size),	// lb
 		m_graphHandles[static_cast<int>(SkyBoxFace::Back)]);
 	// left
-	DrawSquare(m_pos + Vector3(-size, size, -size),	// lt
-		m_pos + Vector3(-size, size, size),	// rt
-		m_pos + Vector3(-size, -size, size),	// rb
-		m_pos + Vector3(-size, -size, -size),	// lb
+	DrawSquare(m_pos + mtx * Vector3(-size, size, -size),	// lt
+		m_pos + mtx * Vector3(-size, size, size),	// rt
+		m_pos + mtx * Vector3(-size, -size, size),	// rb
+		m_pos + mtx * Vector3(-size, -size, -size),	// lb
 		m_graphHandles[static_cast<int>(SkyBoxFace::Left)]);
 	// right
-	DrawSquare(m_pos + Vector3(size, size, size),	// lt
-		m_pos + Vector3(size, size, -size),	// rt
-		m_pos + Vector3(size, -size, -size),	// rb
-		m_pos + Vector3(size, -size, size),	// lb
+	DrawSquare(m_pos + mtx * Vector3(size, size, size),	// lt
+		m_pos + mtx * Vector3(size, size, -size),	// rt
+		m_pos + mtx * Vector3(size, -size, -size),	// rb
+		m_pos + mtx * Vector3(size, -size, size),	// lb
 		m_graphHandles[static_cast<int>(SkyBoxFace::Right)]);
 	// up
-	DrawSquare(m_pos + Vector3(-size, size, -size),	// lt
-		m_pos + Vector3(size, size, -size),	// rt
-		m_pos + Vector3(size, size, size),	// rb
-		m_pos + Vector3(-size, size, size),	// lb
+	DrawSquare(m_pos + mtx * Vector3(-size, size, -size),	// lt
+		m_pos + mtx * Vector3(size, size, -size),	// rt
+		m_pos + mtx * Vector3(size, size, size),	// rb
+		m_pos + mtx * Vector3(-size, size, size),	// lb
 		m_graphHandles[static_cast<int>(SkyBoxFace::Up)]);
 	// down
-	DrawSquare(m_pos + Vector3(-size, -size, size),	// lt
-		m_pos + Vector3(size, -size, size),	// rt
-		m_pos + Vector3(size, -size, -size),	// rb
-		m_pos + Vector3(-size, -size, -size),	// lb
+	DrawSquare(m_pos + mtx * Vector3(-size, -size, size),	// lt
+		m_pos + mtx * Vector3(size, -size, size),	// rt
+		m_pos + mtx * Vector3(size, -size, -size),	// rb
+		m_pos + mtx * Vector3(-size, -size, -size),	// lb
 		m_graphHandles[static_cast<int>(SkyBoxFace::Down)]);
 
 
