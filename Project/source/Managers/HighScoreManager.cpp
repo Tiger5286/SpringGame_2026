@@ -1,4 +1,4 @@
-#include "HighScoreManager.h"
+﻿#include "HighScoreManager.h"
 #include <fstream>
 #include "Dxlib.h"
 #include <algorithm>
