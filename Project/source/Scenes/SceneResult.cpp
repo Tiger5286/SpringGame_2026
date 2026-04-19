@@ -262,12 +262,16 @@ void SceneResult::Update()
 
 void SceneResult::Draw()
 {
+	// スカイボックスを描画
 	m_pSkyBox->Draw();
-
+	// コインを描画
 	for (auto& pCoin : m_pResultCoins)
 	{
 		pCoin->Draw();
 	}
+	
+	// ランキングを描画
+	DrawRanking();
 
 	// ランクS以上なら背景画像を描画
 	if (m_score > kRankScores[static_cast<int>(Rank::S)])
@@ -307,6 +311,17 @@ void SceneResult::Draw()
 		DrawFormatString(0, 200 + i * 16, 0xffffff, L"%d", score);
 	}
 #endif
+}
+
+void SceneResult::DrawRanking()
+{
+	for (int i = 0; i < 3; i++)
+	{
+		int score = HighScoreManager::GetInstance().GetHighScores()[i];
+		std::wstring text = std::format(L"{:d}:{:05d}", i + 1,score);
+		int y = Game::kScreenHeight / 3 + i * (kFontSize + 5);
+		DrawStringToHandle(20 + i * 10, y, text.c_str(), 0xffffff, m_fontHandle);
+	}
 }
 
 void SceneResult::DrawScoreText()
