@@ -315,12 +315,13 @@ void SceneResult::Draw()
 
 void SceneResult::DrawRanking()
 {
+	DrawStringToHandle(20, Game::kScreenHeight / 2 - (kFontSize + 5), L"ハイスコア", 0xffffff, m_fontHandle);
 	for (int i = 0; i < 3; i++)
 	{
 		int score = HighScoreManager::GetInstance().GetHighScores()[i];
 		std::wstring text = std::format(L"{:d}:{:05d}", i + 1,score);
-		int y = Game::kScreenHeight / 3 + i * (kFontSize + 5);
-		DrawStringToHandle(20 + i * 10, y, text.c_str(), 0xffffff, m_fontHandle);
+		int y = Game::kScreenHeight / 2 + i * (kFontSize + 5);
+		DrawStringToHandle(40 + i * 10, y, text.c_str(), 0xffffff, m_fontHandle);
 	}
 }
 
