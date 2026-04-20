@@ -115,7 +115,7 @@ void SceneResult::Init()
 	// カメラの設定
 	SetCameraPositionAndTarget_UpVecY(kCameraPos.ToDxLib(), VGet(0, 0, 0));
 	// ライトの向きを設定
-	SetLightDirection((Vector3(0, 0, 0) - kCameraPos).ToDxLib());
+	SetLightDirection(VGet(0, -1.5f, 1));
 
 	int coinNum = m_score / kCoinNumCoefficient + 1;
 	// ゲームシーンでコインを1枚も取っていなかったら表示するコインも0にする
@@ -262,16 +262,21 @@ void SceneResult::Update()
 
 void SceneResult::Draw()
 {
+	SetWriteZBuffer3D(false);
+
 	// スカイボックスを描画
 	m_pSkyBox->Draw();
+
+	// 環境を描画
+	MV1DrawModel(ModelManager::GetInstance().GetModelHandle(L"Environment"));
+
 	// コインを描画
 	for (auto& pCoin : m_pResultCoins)
 	{
 		pCoin->Draw();
 	}
-	
-	// ランキングを描画
-	DrawRanking();
+
+	SetWriteZBuffer3D(true);
 
 	// ランクS以上なら背景画像を描画
 	if (m_score > kRankScores[static_cast<int>(Rank::S)])
@@ -311,18 +316,6 @@ void SceneResult::Draw()
 		DrawFormatString(0, 200 + i * 16, 0xffffff, L"%d", score);
 	}
 #endif
-}
-
-void SceneResult::DrawRanking()
-{
-	DrawStringToHandle(20, Game::kScreenHeight / 2 - (kFontSize + 5), L"ハイスコア", 0xffffff, m_fontHandle);
-	for (int i = 0; i < 3; i++)
-	{
-		int score = HighScoreManager::GetInstance().GetHighScores()[i];
-		std::wstring text = std::format(L"{:d}:{:05d}", i + 1,score);
-		int y = Game::kScreenHeight / 2 + i * (kFontSize + 5);
-		DrawStringToHandle(40 + i * 10, y, text.c_str(), 0xffffff, m_fontHandle);
-	}
 }
 
 void SceneResult::DrawScoreText()

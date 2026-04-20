@@ -19,7 +19,6 @@ public:
 	virtual void Draw() override;
 
 private:
-	void DrawRanking();
 	void DrawScoreText();
 	void DrawSubText();
 

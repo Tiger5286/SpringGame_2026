@@ -168,12 +168,19 @@ void SceneTitle::Draw()
 
 	// 床だけ特定のライトの方向で描画する
 	SetLightDirection(kLightDirection.ToDxLib());
+
 	// シャドウマップを使用する
 	SetUseShadowMap(0, m_shadowMapHandle);
+
 	// 床の描画
 	MV1DrawModel(ModelManager::GetInstance().GetModelHandle(L"Floor"));
+
 	// シャドウマップの設定を解除
 	SetUseShadowMap(0, -1);
+
+	// 環境の描画
+	MV1DrawModel(ModelManager::GetInstance().GetModelHandle(L"Environment"));
+
 	// ライトを元に戻す
 	auto cameraToPlayer = m_pPlayer->GetPos() - kCameraPos;
 	SetLightDirection(cameraToPlayer.ToDxLib());

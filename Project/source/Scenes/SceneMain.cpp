@@ -359,12 +359,15 @@ void SceneMain::Draw()
 	// 床の描画
 	MV1DrawModel(ModelManager::GetInstance().GetModelHandle(L"Floor"));
 
+	// シャドウマップを使用した描画終了
+	SetUseShadowMap(0, -1);
+
+	// 環境の描画
+	MV1DrawModel(ModelManager::GetInstance().GetModelHandle(L"Environment"));
+
 	// 通常のライトの向きを設定
 	auto cameraToPlayer = m_pPlayer->GetPos() - m_pCamera->GetPos();
 	SetLightDirection(cameraToPlayer.ToDxLib());
-
-	// シャドウマップを使用した描画終了
-	SetUseShadowMap(0, -1);
 
 	// エフェクトの描画
 	m_pEffectManager->Draw();

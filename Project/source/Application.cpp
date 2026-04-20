@@ -19,7 +19,8 @@ namespace
 		{ L"data/Models/Enemy.MV1",  L"Enemy"  },
 		{ L"data/Models/Chest.MV1",  L"Chest"  },
 		{ L"data/Models/Coin.MV1",   L"Coin"   },
-		{ L"data/Models/Floor.MV1",  L"Floor"  }
+		{ L"data/Models/Floor.MV1",  L"Floor"  },
+		{ L"data/Models/Environment.MV1", L"Environment"}
 	};
 }
 
