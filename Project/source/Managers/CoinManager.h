@@ -25,7 +25,7 @@ public:
 	void SetPlayerPos(const Vector3& pos) { m_playerPos = pos; }
 
 	// 有効になっている全てのコインに引き寄せを発動させる
-	void ActivateAtract();
+	void ActivateAtract(const Vector3& playerPos);
 
 	// 取得したコインの数を返す
 	int GetCoinNum() const { return m_getCoinNum; }

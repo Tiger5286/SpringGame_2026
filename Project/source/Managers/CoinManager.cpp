@@ -113,7 +113,7 @@ void CoinManager::Spawn(const Vector3& pos)
 	}
 }
 
-void CoinManager::ActivateAtract()
+void CoinManager::ActivateAtract(const Vector3& playerPos)
 {
 	for (auto& coin : m_coins)
 	{
@@ -122,6 +122,6 @@ void CoinManager::ActivateAtract()
 		{
 			continue;
 		}
-		coin->ActivateAtract();
+		coin->ActivateAtract(playerPos);
 	}
 }

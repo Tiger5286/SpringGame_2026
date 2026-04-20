@@ -20,7 +20,8 @@ namespace
 	constexpr int kStartFrickerFrame = kAliveFrame - 60 * 3;
 	constexpr int kFrickerFrame = 10;
 
-	constexpr float kAtractSpeed = 20.0f;
+	//constexpr float kAtractSpeed = 20.0f;
+	constexpr int kAtractFrame = 60;
 }
 
 Coin::Coin(CoinManager& coinManager):
@@ -61,9 +62,15 @@ void Coin::Update()
 		// 引き寄せが発動しているならプレイヤーの位置に向かって移動する
 		if (m_isAtract)
 		{
+			//Vector3 atractVec = m_playerPos - m_pos;
+			//atractVec.Normalize();
+			//atractVec *= kAtractSpeed;	// 引き寄せの速さ
+			//m_vel = atractVec;
+
 			Vector3 atractVec = m_playerPos - m_pos;
 			atractVec.Normalize();
-			atractVec *= kAtractSpeed;	// 引き寄せの速さ
+			atractVec *= m_toPlayerSquareDist;
+			atractVec *= 1.0f / kAtractFrame;
 			m_vel = atractVec;
 		}
 
@@ -172,8 +179,9 @@ void Coin::Spawn(const Vector3& pos)
 	m_angle = randRad;
 }
 
-void Coin::ActivateAtract()
+void Coin::ActivateAtract(const Vector3& playerPos)
 {
 	m_isAtract = true;
 	m_aliveFrame = 0;	// 引き寄せが発動してからの生存時間をリセット
+	m_toPlayerSquareDist = (m_pos - playerPos).Length();	// プレイヤーとの距離を保存
 }

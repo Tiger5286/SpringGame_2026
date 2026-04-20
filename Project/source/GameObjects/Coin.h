@@ -23,7 +23,7 @@ public:
 	void SetPlayerPos(const Vector3& pos) { m_playerPos = pos; }
 
 	// 引き寄せを発動させる
-    void ActivateAtract();
+    void ActivateAtract(const Vector3& playerPos);
 
     bool IsHit() const { return m_isHitPlayer; }
     bool IsDead() const { return m_isDead; }
@@ -47,4 +47,5 @@ private:
     bool m_isDead = true;
 
 	bool m_isAtract = false; // 引き寄せが発動しているか
+    float m_toPlayerSquareDist = 0.0f;  // 引き寄せ時に使うプレイヤーとの距離の2乗
 };

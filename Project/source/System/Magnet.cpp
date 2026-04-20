@@ -105,7 +105,7 @@ void Magnet::Update()
 		// 引き寄せ発動
 		if (isNotCooldown)
 		{
-			m_coinManager.ActivateAtract();
+			m_coinManager.ActivateAtract(m_player.GetPos());
 			m_cooldown = kCooldownTime; // クールダウンタイムを設定
 			// 音を鳴らし、エフェクトを出す
 			soundManager.PlaySoundGame(L"MagnetActive");
