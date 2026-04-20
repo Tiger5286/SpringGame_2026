@@ -219,7 +219,7 @@ void SceneTitle::DrawRanking()
 		int score = HighScoreManager::GetInstance().GetHighScores()[i];
 		std::wstring text = std::format(L"{:d}:{:05d}", i + 1, score);
 		int y = Game::kScreenHeight / 3 * 2 + i * (kFontSize + 5);
-		DrawStringToHandle(40 + i * 10, y, text.c_str(), 0xffffff, m_fontHandle);
+		DrawStringToHandle(40 + i * 30, y, text.c_str(), 0xffffff, m_fontHandle);
 	}
 }
 
