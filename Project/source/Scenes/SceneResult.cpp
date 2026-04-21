@@ -148,16 +148,26 @@ void SceneResult::Init()
 	auto& highScoreManager = HighScoreManager::GetInstance();
 	highScoreManager.RecordScore(m_score);
 	highScoreManager.Save();
+
+	// 背景モデルの複製を生成
+	m_backModelHandle = ModelManager::GetInstance().DuplicateModel(L"Environment");
+	MV1SetPosition(m_backModelHandle, VGet(0, -500, 0));	// 位置を調整
 }
 
 void SceneResult::End()
 {
+	// フォントの解放
 	DeleteFontToHandle(m_fontHandle);
 	DeleteFontToHandle(m_scoreFontHandle);
 
+	// 画像の解放
 	DeleteGraph(m_rankGraphHandle);
 	DeleteGraph(m_rankBackGraphHandle);
 
+	// 背景モデルの解放
+	MV1DeleteModel(m_backModelHandle);
+
+	// スカイボックスの終了処理
 	m_pSkyBox->End();
 }
 
@@ -268,7 +278,7 @@ void SceneResult::Draw()
 	m_pSkyBox->Draw();
 
 	// 環境を描画
-	MV1DrawModel(ModelManager::GetInstance().GetModelHandle(L"Environment"));
+	MV1DrawModel(m_backModelHandle);
 
 	// コインを描画
 	for (auto& pCoin : m_pResultCoins)

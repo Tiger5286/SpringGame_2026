@@ -46,7 +46,7 @@ void SkyBox::End()
 
 void SkyBox::Update()
 {
-	m_angle += 0.001f;
+	m_angle += 0.0005f;
 }
 
 void SkyBox::Draw()

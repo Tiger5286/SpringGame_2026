@@ -46,6 +46,9 @@ private:
 	// ランク背景画像の角度
 	float m_rankBackAngle = 0.0f;
 
+	// 背景モデルのハンドル
+	int m_backModelHandle = -1;
+
 	// 結果画面で表示するコイン
 	std::vector<std::shared_ptr<ResultCoin>> m_pResultCoins;
 	// 背景
