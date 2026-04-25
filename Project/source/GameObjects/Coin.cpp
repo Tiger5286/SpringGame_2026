@@ -62,15 +62,17 @@ void Coin::Update()
 		// 引き寄せが発動しているならプレイヤーの位置に向かって移動する
 		if (m_isAtract)
 		{
-			//Vector3 atractVec = m_playerPos - m_pos;
-			//atractVec.Normalize();
-			//atractVec *= kAtractSpeed;	// 引き寄せの速さ
-			//m_vel = atractVec;
-
+			// プレイヤーとの距離に応じて移動量を変える
 			Vector3 atractVec = m_playerPos - m_pos;
 			atractVec.Normalize();
-			atractVec *= m_toPlayerSquareDist;
+			atractVec *= m_toPlayerDist;
 			atractVec *= 1.0f / kAtractFrame;
+			// プレイヤーが近すぎるときは移動量を固定する
+			if (atractVec.SquaredLength() < 20.0f * 20.0f)
+			{
+				atractVec.Normalize();
+				atractVec *= 20.0f;
+			}
 			m_vel = atractVec;
 		}
 
@@ -183,5 +185,5 @@ void Coin::ActivateAtract(const Vector3& playerPos)
 {
 	m_isAtract = true;
 	m_aliveFrame = 0;	// 引き寄せが発動してからの生存時間をリセット
-	m_toPlayerSquareDist = (m_pos - playerPos).Length();	// プレイヤーとの距離を保存
+	m_toPlayerDist = (m_pos - playerPos).Length();	// プレイヤーとの距離を保存
 }

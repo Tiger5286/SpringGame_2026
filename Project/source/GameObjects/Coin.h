@@ -47,5 +47,5 @@ private:
     bool m_isDead = true;
 
 	bool m_isAtract = false; // 引き寄せが発動しているか
-    float m_toPlayerSquareDist = 0.0f;  // 引き寄せ時に使うプレイヤーとの距離の2乗
+    float m_toPlayerDist = 0.0f;  // 引き寄せ時に使うプレイヤーとの距離
 };
